@@ -1,0 +1,19 @@
+server:
+  maxHttpHeaderSize: 8KB
+  tomcat:
+    maxHttpFormPostSize: 2MB
+    maxSwallowSize: 2MB
+    maxConnections: 2000
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 读库和写库的地址，目前写库可以配置为一个，读库可配置为多个
+    url: jdbc:mysql://47.94.201.245:3306/tagsystem?useSSL=false&serverTimezone=Asia/Shanghai&autoReconnect=true&characterEncoding=utf8
+    username: root
+    password: Keg2022!
+path:
+  taskBase: C:\\工作资料\\技术相关\\tagsystem\\%s
+  finalTag: C:\\工作资料\\技术相关\\tagsystem\\%s\\finalTag.json
+  subTaskFile: C:\\工作资料\\技术相关\\tagsystem\\%s\\%s.json
+  escapeCheck: C:\\工作资料\\技术相关\\tagsystem\\%s\\escape_check.json
+  checked: C:\\工作资料\\技术相关\\tagsystem\\%s\\checked.json

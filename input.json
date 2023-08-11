@@ -1,0 +1,1 @@
+{"relationNum":10, "relationList":[{"id":0, "sourceStart":0,"sourceEnd":1,"targetStart":3,"targetEnd":6,"predicate":"是股东","text":"张三是平安银行的股东"},{"id":1, "sourceStart":0,"sourceEnd":1,"targetStart":3,"targetEnd":6,"predicate":"是法人代表","text":"李四是东方集团的法人代表"}]}

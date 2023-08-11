@@ -1,0 +1,16 @@
+package com.tsinghua.tagsystem.dao.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tsinghua.tagsystem.dao.entity.Task;
+import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+
+public interface TaskMapper extends BaseMapper<Task> {
+    @Select("select task.*, sub_task.sub_task_id, sub_task.status subTaskStatus from task,sub_task where task.creator_id = #{userId} and task.task_id = sub_task.parent_id")
+    List<ManagerTask> getManagerTaskList(Integer userId);
+
+    @Select("select task.*, sub_task.file_path sub_file_path, sub_task.status subTaskStatus from task,sub_task where task.task_id = #{taskId} and task.task_id = sub_task.parent_id")
+    List<ManagerTask> getManagerCheckTaskList(String taskId);
+}
