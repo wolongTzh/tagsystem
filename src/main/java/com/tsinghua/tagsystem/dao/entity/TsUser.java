@@ -13,9 +13,9 @@ public class TsUser {
 
     private Integer userId;
 
-    private String name;
+    private String username;
 
-    private int phone;
+    private String name;
 
     private String password;
 

@@ -38,13 +38,13 @@ public class WorkerServiceTest {
     }
     @Test
     public void tagTasksTest() throws IOException {
-        String taskId = "755c3d1b-7f36-49ce-8054-48c266d0631b";
+        String taskId = "4b86605e-0a7c-4371-be91-ce1bc24a61fa";
         WorkerTaskMsg workerTaskMsg = workerService.tagTask(taskId);
         log.info(JSON.toJSONString(workerTaskMsg));
     }
     @Test
     public void finishTagTest() throws IOException {
-        String taskId = "831b3ee9-f5a5-49d2-b8e8-ec30ba406d48";
+        String taskId = "faa112e5-dcbc-4cb3-9725-a03ede4f1edb";
         List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray("./test2.json")), Relation.class);
         WorkerTaskMsg workerTaskMsg = WorkerTaskMsg.builder()
                 .relationList(relationList)
@@ -69,5 +69,33 @@ public class WorkerServiceTest {
                 .build();
         boolean ret = workerService.saveTag(workerTaskMsg);
         log.info(JSON.toJSONString(ret));
+    }
+    @Test
+    public void checkTasksTest() throws IOException {
+        String taskId = "4592e355-16c8-45fb-ad94-52acb6454e78";
+        CheckTaskVO checkTaskVO = workerService.checkTask(taskId);
+        log.info(JSON.toJSONString(checkTaskVO));
+    }
+    @Test
+    public void saveCheckTasksTest() throws IOException {
+        String taskId = "1b0519f1-4fcc-49c6-98de-1f93dc3c8a64";
+        List<CheckAtom> checkAtomList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray("./test.json")), CheckAtom.class);
+        SaveCheckParam param = SaveCheckParam.builder()
+                .taskId(taskId)
+                .uncheckedNum(1)
+                .checkList(checkAtomList)
+                .build();
+        workerService.saveCheck(param);
+    }
+    @Test
+    public void finishCheckTasksTest() throws IOException {
+        String taskId = "4592e355-16c8-45fb-ad94-52acb6454e78";
+        List<CheckAtom> checkAtomList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray("./test.json")), CheckAtom.class);
+        SaveCheckParam param = SaveCheckParam.builder()
+                .taskId(taskId)
+                .uncheckedNum(0)
+                .checkList(checkAtomList)
+                .build();
+        workerService.saveCheck(param);
     }
 }

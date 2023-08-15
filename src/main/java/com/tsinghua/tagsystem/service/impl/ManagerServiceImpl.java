@@ -5,16 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.tsinghua.tagsystem.config.AddressConfig;
 import com.tsinghua.tagsystem.dao.entity.SubTask;
 import com.tsinghua.tagsystem.dao.entity.Task;
+import com.tsinghua.tagsystem.dao.entity.TsUser;
 import com.tsinghua.tagsystem.dao.entity.WorkerTaskRela;
 import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
 import com.tsinghua.tagsystem.enums.TaskStateEnum;
 import com.tsinghua.tagsystem.manager.SubTaskManager;
 import com.tsinghua.tagsystem.manager.TaskManager;
+import com.tsinghua.tagsystem.manager.UserManager;
 import com.tsinghua.tagsystem.manager.WorkerTaskRelaManager;
-import com.tsinghua.tagsystem.model.AlgoInput;
-import com.tsinghua.tagsystem.model.CheckAtom;
-import com.tsinghua.tagsystem.model.Relation;
-import com.tsinghua.tagsystem.model.SubTaskMsg;
+import com.tsinghua.tagsystem.model.*;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
@@ -63,6 +62,9 @@ public class ManagerServiceImpl implements ManagerService {
     @Transactional
     public void createTask(CreateTaskParam param) throws IOException {
         AlgoInput algoInput = JSONObject.parseObject(JSONObject.toJSONString(CommonUtil.readJsonOut(param.getFile())), AlgoInput.class);
+        for(Relation relation : algoInput.getRelationList()) {
+            relation.setPredicateOld(relation.getPredicate());
+        }
         String taskId = UUID.randomUUID().toString();
         String filePath = String.format(finalFile, taskId);
         int relationNum = algoInput.getRelationNum();
@@ -81,10 +83,11 @@ public class ManagerServiceImpl implements ManagerService {
                 .filePath(filePath)
                 .relationNum(relationNum)
                 .uncheckedNum(uncheckedNum)
+                .checkWorker(param.getMembers().getCheckingWorker().getName())
                 .build();
         List<WorkerTaskRela> workerTaskRelaList = new ArrayList<>();
         List<SubTask> subTaskList = new ArrayList<>();
-        for(List<Integer> group : param.getMembers()) {
+        for(List<TsUser> group : param.getMembers().getTaggingWorker()) {
             String subTaskId = UUID.randomUUID().toString();
             String subFilePath = String.format(subTaskFile, taskId, subTaskId);
             SubTask subTask = SubTask.builder()
@@ -93,7 +96,6 @@ public class ManagerServiceImpl implements ManagerService {
                     .filePath(subFilePath)
                     .parentId(taskId)
                     .build();
-            subTaskList.add(subTask);
             int personNum = group.size();
             int base = totalNum / personNum;
             int remain = totalNum % personNum;
@@ -103,7 +105,8 @@ public class ManagerServiceImpl implements ManagerService {
             FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
             fileWriter.write(JSON.toJSONString(algoInput.getRelationList()));
             fileWriter.close();
-            for(Integer userId : group) {
+            List<String> taggingWorkerNames = new ArrayList<>();
+            for(TsUser user : group) {
                 start = end;
                 String relaId = UUID.randomUUID().toString();
                 end += base;
@@ -116,13 +119,28 @@ public class ManagerServiceImpl implements ManagerService {
                         .taskId(subTaskId)
                         .start(start)
                         .end(end)
-                        .userId(userId)
+                        .userId(user.getUserId())
                         .status(TaskStateEnum.INIT.getContent())
                         .untaggedNum(end - start)
+                        .taskType("tag")
                         .build();
                 workerTaskRelaList.add(workerTaskRela);
+                taggingWorkerNames.add(user.getName());
             }
+            subTask.setTagWorkers(String.join("，", taggingWorkerNames));
+            subTaskList.add(subTask);
         }
+        String relaId = UUID.randomUUID().toString();
+        workerTaskRelaList.add(WorkerTaskRela.builder()
+                .relaId(relaId)
+                .taskId(taskId)
+                .userId(param.getMembers().getCheckingWorker().getUserId())
+                .status(TaskStateEnum.INIT.getContent())
+                .start(0)
+                .end(totalNum)
+                .untaggedNum(totalNum)
+                .taskType("check")
+                .build());
         taskManager.save(task);
         workerTaskRelaManager.saveBatch(workerTaskRelaList);
         subTaskManager.saveBatch(subTaskList);
@@ -140,6 +158,7 @@ public class ManagerServiceImpl implements ManagerService {
                         .taskId(managerTask.getTaskId())
                         .relationNum(managerTask.getRelationNum())
                         .status(managerTask.getStatus())
+                        .checkingWorker(managerTask.getCheckWorker())
                         .title(managerTask.getTitle())
                         .build();
                 start = false;
@@ -147,6 +166,7 @@ public class ManagerServiceImpl implements ManagerService {
             subTaskMsgList.add(SubTaskMsg.builder()
                     .taskId(managerTask.getSubTaskId())
                     .status(managerTask.getSubTaskStatus())
+                    .taggingWorker(managerTask.getTaggingWorker())
                     .build());
         }
         getTasksVO.setSubTaskMsgs(subTaskMsgList);
@@ -154,101 +174,46 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public CheckTaskVO checkTask(String taskId) throws IOException {
-        List<ManagerTask> managerTaskList = taskManager.getManagerCheckTaskList(taskId);
-        List<CheckAtom> checkAtomList = new ArrayList<>();
-        CheckTaskVO checkTaskVO = new CheckTaskVO();
-        List<Relation> needNotCheck = new ArrayList<>();
-        List<List<Relation>> allRelations = new ArrayList<>();
-        boolean start = true;
-        for(ManagerTask managerTask : managerTaskList) {
-            List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(managerTask.getSubFilePath())), Relation.class);
-            if(start) {
-                checkTaskVO = CheckTaskVO.builder()
-                        .taskId(managerTask.getTaskId())
-                        .relationNum(managerTask.getRelationNum())
-                        .title(managerTask.getTitle())
-                        .build();
-                for(Relation relation : relationList) {
-                    List<Relation> newRelationlist = new ArrayList<>();
-                    newRelationlist.add(relation);
-                    allRelations.add(newRelationlist);
-                }
-                start = false;
-                continue;
-            }
-            int index = 0;
-            for(List<Relation> relations : allRelations) {
-                relations.add(relationList.get(index));
-                index++;
-            }
-        }
-        for(List<Relation> relations : allRelations) {
-            if(judgeNeedCheck(relations)) {
-                checkAtomList.add(CheckAtom.builder()
-                        .relationList(relations)
-                        .status(TaskStateEnum.CHECKING.getContent())
-                        .build());
-            }
-            else {
-                needNotCheck.add(relations.get(0));
-            }
-        }
-        File file = new File(String.format(escapedCheckFile, taskId));
-        FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
-        fileWriter.write(JSON.toJSONString(needNotCheck));
-        fileWriter.close();
-        file = new File(String.format(checkedFile, taskId));
-        fileWriter = new FileWriter(file.getAbsolutePath());
-        fileWriter.write(JSON.toJSONString(checkAtomList));
-        fileWriter.close();
-        checkTaskVO.setCheckList(checkAtomList);
+    public ManagerTaskSupervise checkTask(String taskId) throws IOException {
         Task task = taskManager.getByTaskId(taskId);
-        if(!task.getStatus().equals(TaskStateEnum.CHECKING.getContent())) {
-            task.setStatus(TaskStateEnum.CHECKING.getContent());
-            taskManager.updateByTaskId(task);
+        String path = task.getFilePath();
+        File file = new File(path);
+        List<Relation> taskList = new ArrayList<>();
+        if(!file.exists()) {
+            List<Relation> needNotCheckList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(String.format(escapedCheckFile, taskId))), Relation.class);
+            List<CheckAtom> needCheckList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(String.format(checkedFile, taskId))), CheckAtom.class);
+            for(CheckAtom checkAtom : needCheckList) {
+                Relation relation = Relation.builder()
+                        .id(checkAtom.getId())
+                        .predicate(checkAtom.getPredicate())
+                        .sourceStart(checkAtom.getSourceStart())
+                        .sourceEnd(checkAtom.getSourceEnd())
+                        .targetStart(checkAtom.getTargetStart())
+                        .targetEnd(checkAtom.getTargetEnd())
+                        .status(checkAtom.getStatus())
+                        .text(checkAtom.getText())
+                        .build();
+                taskList.add(relation);
+            }
+            taskList.addAll(needNotCheckList);
         }
-        return checkTaskVO;
+        else {
+            taskList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(path)), Relation.class);
+        }
+        return ManagerTaskSupervise.builder()
+                .taskList(taskList)
+                .taskId(taskId)
+                .build();
     }
 
     @Override
-    public boolean saveCheck(SaveCheckParam param) throws IOException {
-        if(param.getUncheckedNum() == 0) {
-            List<Relation> finalList = new ArrayList<>();
-            List<Relation> needNotCheckList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(String.format(escapedCheckFile, param.getTaskId()))), Relation.class);
-            for(CheckAtom checkAtom : param.getCheckList()) {
-                finalList.add(checkAtom.getRelationList().get(0));
-            }
-            finalList.addAll(needNotCheckList);
-            finalList = finalList.stream().sorted((o1, o2) ->  o1.getId() - o2.getId()).collect(Collectors.toList());
-            File file = new File(String.format(finalFile, param.getTaskId()));
-            FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
-            fileWriter.write(JSON.toJSONString(finalList));
-            fileWriter.close();
-            Task task = taskManager.getByTaskId(param.getTaskId());
-            task.setStatus(TaskStateEnum.FINISHED.getContent());
-            taskManager.updateByTaskId(task);
-        }
-        else {
-            File file = new File(String.format(checkedFile, param.getTaskId()));
-            FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
-            fileWriter.write(JSON.toJSONString(param.getCheckList()));
-            fileWriter.close();
-        }
+    public boolean saveCheck(ManagerTaskSupervise managerTaskSupervise) throws IOException {
+        Task task = taskManager.getByTaskId(managerTaskSupervise.getTaskId());
+        String path = task.getFilePath();
+        File file = new File(path);
+        FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
+        fileWriter.write(JSON.toJSONString(managerTaskSupervise.getTaskList()));
+        fileWriter.close();
         return true;
-    }
-
-    boolean judgeNeedCheck(List<Relation> relationList) {
-        String curStatus = relationList.get(0).getStatus();
-        String predicate = relationList.get(0).getPredicate();
-        for(Relation relation : relationList) {
-            if(!relation.getStatus().equals(curStatus)) {
-                return true;
-            }
-            if(curStatus.equals(TaskStateEnum.EDITED.getContent()) && !relation.getPredicate().equals(predicate)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

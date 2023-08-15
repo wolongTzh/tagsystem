@@ -23,6 +23,8 @@ public class Relation {
 
     int targetEnd;
 
+    String predicateOld;
+
     String predicate;
 
     String status = "UNCHECKED";

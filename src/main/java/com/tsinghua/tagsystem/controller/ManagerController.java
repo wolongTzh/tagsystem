@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.controller;
 
+import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.WebResInfo;
@@ -41,13 +42,13 @@ public class ManagerController {
 
     @GetMapping(value = "checkTask")
     public WebResInfo checkTask(String taskId) throws IOException {
-        CheckTaskVO checkTaskVO = managerService.checkTask(taskId);
-        return WebUtil.successResult(checkTaskVO);
+        ManagerTaskSupervise managerTaskSupervise = managerService.checkTask(taskId);
+        return WebUtil.successResult(managerTaskSupervise);
     }
 
     @PostMapping(value = "saveCheck")
-    public WebResInfo saveCheck(@RequestBody SaveCheckParam param) throws IOException {
-        boolean ret = managerService.saveCheck(param);
+    public WebResInfo saveCheck(@RequestBody ManagerTaskSupervise managerTaskSupervise) throws IOException {
+        boolean ret = managerService.saveCheck(managerTaskSupervise);
         return WebUtil.successResult(ret);
     }
 }

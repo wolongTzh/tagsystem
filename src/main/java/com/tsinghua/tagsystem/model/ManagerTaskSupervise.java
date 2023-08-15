@@ -5,15 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class SubTaskMsg {
+public class ManagerTaskSupervise {
 
     String taskId;
 
-    String status;
-
-    String taggingWorker;
+    List<Relation> taskList;
 }

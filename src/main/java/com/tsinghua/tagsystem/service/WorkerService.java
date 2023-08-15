@@ -18,4 +18,8 @@ public interface WorkerService {
     public WorkerTaskMsg tagTask(String taskId) throws IOException;
 
     public boolean saveTag(WorkerTaskMsg param) throws IOException;
+
+    public CheckTaskVO checkTask(String taskId) throws IOException;
+
+    public boolean saveCheck(SaveCheckParam param) throws IOException;
 }

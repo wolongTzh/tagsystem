@@ -2,7 +2,11 @@ package com.tsinghua.tagsystem;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tsinghua.tagsystem.dao.entity.TsUser;
 import com.tsinghua.tagsystem.model.CheckAtom;
+import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
+import com.tsinghua.tagsystem.model.Member;
+import com.tsinghua.tagsystem.model.Relation;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
@@ -29,14 +33,33 @@ public class ManagerServiceTest {
     @Test
     public void createTaskTest() throws IOException {
         File file = new File("./input.json");
-        List<List<Integer>> members = new ArrayList<>();
-        List<Integer> member1 = Arrays.asList(2, 3);
-        List<Integer> member2 = Arrays.asList(4, 5);
-        members.add(member1);
-        members.add(member2);
+        List<List<TsUser>> taggingWorker = new ArrayList<>();
+        List<TsUser> group1 = Arrays.asList(TsUser.builder()
+                .name("远盈")
+                .userId(2)
+                .build(), TsUser.builder()
+                .name("佳音")
+                .userId(3)
+                .build());
+        List<TsUser> group2 = Arrays.asList(TsUser.builder()
+                .name("浩天")
+                .userId(4)
+                .build(), TsUser.builder()
+                .name("韵嘉")
+                .userId(5)
+                .build());
+        taggingWorker.add(group1);
+        taggingWorker.add(group2);
+        Member members = Member.builder()
+                .checkingWorker(TsUser.builder()
+                        .name("测试人员")
+                        .userId(6)
+                        .build())
+                .taggingWorker(taggingWorker)
+                .build();
         CreateTaskParam param = CreateTaskParam.builder()
                 .file(file)
-                .title("测试1")
+                .title("20230805")
                 .members(members)
                 .userId(1)
                 .build();
@@ -51,32 +74,19 @@ public class ManagerServiceTest {
 
     @Test
     public void checkTasksTest() throws IOException {
-        String taskId = "1b0519f1-4fcc-49c6-98de-1f93dc3c8a64";
-        CheckTaskVO checkTaskVO = managerService.checkTask(taskId);
-        log.info(JSON.toJSONString(checkTaskVO));
-    }
-
-    @Test
-    public void finishCheckTasksTest() throws IOException {
-        String taskId = "1b0519f1-4fcc-49c6-98de-1f93dc3c8a64";
-        List<CheckAtom> checkAtomList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray("./test.json")), CheckAtom.class);
-        SaveCheckParam param = SaveCheckParam.builder()
-                .taskId(taskId)
-                .uncheckedNum(0)
-                .checkList(checkAtomList)
-                .build();
-        managerService.saveCheck(param);
+        String taskId = "4592e355-16c8-45fb-ad94-52acb6454e78";
+        ManagerTaskSupervise managerTaskSupervise = managerService.checkTask(taskId);
+        log.info(JSON.toJSONString(managerTaskSupervise));
     }
 
     @Test
     public void saveCheckTasksTest() throws IOException {
-        String taskId = "1b0519f1-4fcc-49c6-98de-1f93dc3c8a64";
-        List<CheckAtom> checkAtomList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray("./test.json")), CheckAtom.class);
-        SaveCheckParam param = SaveCheckParam.builder()
+        String taskId = "4592e355-16c8-45fb-ad94-52acb6454e78";
+        List<Relation> taskList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray("./test.json")), Relation.class);
+        ManagerTaskSupervise managerTaskSupervise = ManagerTaskSupervise.builder()
                 .taskId(taskId)
-                .uncheckedNum(1)
-                .checkList(checkAtomList)
+                .taskList(taskList)
                 .build();
-        managerService.saveCheck(param);
+        managerService.saveCheck(managerTaskSupervise);
     }
 }

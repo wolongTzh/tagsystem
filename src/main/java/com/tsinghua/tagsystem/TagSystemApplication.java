@@ -17,5 +17,4 @@ public class TagSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(TagSystemApplication.class, args);
     }
-
 }

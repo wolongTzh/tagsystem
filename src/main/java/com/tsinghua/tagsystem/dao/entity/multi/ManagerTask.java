@@ -17,4 +17,6 @@ public class ManagerTask extends Task {
     String subTaskStatus;
 
     String subFilePath;
+
+    String taggingWorker;
 }

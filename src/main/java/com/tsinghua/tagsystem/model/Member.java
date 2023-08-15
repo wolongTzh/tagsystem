@@ -1,19 +1,20 @@
 package com.tsinghua.tagsystem.model;
 
+import com.tsinghua.tagsystem.dao.entity.TsUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class SubTaskMsg {
+public class Member {
 
-    String taskId;
+    TsUser checkingWorker;
 
-    String status;
-
-    String taggingWorker;
+    List<List<TsUser>> taggingWorker;
 }

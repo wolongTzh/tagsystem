@@ -18,4 +18,6 @@ public class SubTask {
     private String parentId;
 
     private String filePath;
+
+    private String tagWorkers;
 }

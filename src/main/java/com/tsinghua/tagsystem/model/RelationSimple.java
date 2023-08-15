@@ -6,14 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class SubTaskMsg {
+public class RelationSimple {
+    String predicate;
 
-    String taskId;
-
-    String status;
-
-    String taggingWorker;
+    String status = "UNCHECKED";
 }

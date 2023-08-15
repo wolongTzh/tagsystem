@@ -22,5 +22,7 @@ public class GetTasksVO {
 
     String status;
 
+    String checkingWorker;
+
     List<SubTaskMsg> subTaskMsgs;
 }

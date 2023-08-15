@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.model.params;
 
+import com.tsinghua.tagsystem.model.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class CreateTaskParam {
 
     String title;
 
-    List<List<Integer>> members;
+    Member members;
 
     File file;
 

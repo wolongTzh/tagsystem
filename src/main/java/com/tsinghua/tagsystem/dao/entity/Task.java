@@ -24,4 +24,6 @@ public class Task {
     private String filePath;
 
     private Integer uncheckedNum;
+
+    private String checkWorker;
 }

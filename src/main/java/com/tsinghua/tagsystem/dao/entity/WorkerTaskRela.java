@@ -24,4 +24,6 @@ public class WorkerTaskRela {
     private String status;
 
     private Integer untaggedNum;
+
+    private String taskType;
 }

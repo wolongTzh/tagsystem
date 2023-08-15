@@ -35,6 +35,12 @@ public class WorkerTaskRelaManager extends ServiceImpl<WorkerTaskRelaMapper, Wor
                 .eq(WorkerTaskRela::getRelaId, taskId));
     }
 
+    public WorkerTaskRela getByTaskId(String taskId) {
+        return this.getOne(new QueryWrapper<WorkerTaskRela>()
+                .lambda()
+                .eq(WorkerTaskRela::getTaskId, taskId));
+    }
+
     public boolean updateByRelaId(WorkerTaskRela workerTaskRela) {
         return this.update(workerTaskRela, new QueryWrapper<WorkerTaskRela>()
                 .lambda()

@@ -1,4 +1,4 @@
-package com.tsinghua.tagsystem.model;
+package com.tsinghua.tagsystem.model.params;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class SubTaskMsg {
+public class UserParam {
 
-    String taskId;
+    String username;
 
-    String status;
+    String password;
 
-    String taggingWorker;
+    String name;
 }

@@ -15,5 +15,19 @@ public class CheckAtom {
 
     String status;
 
-    List<Relation> relationList;
+    Integer id;
+
+    String text;
+
+    int sourceStart;
+
+    int sourceEnd;
+
+    int targetStart;
+
+    int targetEnd;
+
+    String predicate;
+
+    List<RelationSimple> relationList;
 }

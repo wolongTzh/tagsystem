@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.service;
 
+import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
@@ -15,7 +16,7 @@ public interface ManagerService {
 
     public GetTasksVO getTasks(Integer userId);
 
-    public CheckTaskVO checkTask(String taskId) throws IOException;
+    public ManagerTaskSupervise checkTask(String taskId) throws IOException;
 
-    public boolean saveCheck(SaveCheckParam param) throws IOException;
+    public boolean saveCheck(ManagerTaskSupervise managerTaskSupervise) throws IOException;
 }
