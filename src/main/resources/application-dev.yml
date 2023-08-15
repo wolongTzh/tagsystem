@@ -12,8 +12,8 @@ spring:
     username: root
     password: Keg2022!
 path:
-  taskBase: /data/tagsystem/%s
-  finalTag: /data/tagsystem/%s/finalTag.json
-  subTaskFile: /data/tagsystem/%s/%s.json
-  escapeCheck: /data/tagsystem/%s/escape_check.json
-  checked: /data/tagsystem/%s/checked.json
+  taskBase: C:\\工作资料\\技术相关\\tagsystem\\%s
+  finalTag: C:\\工作资料\\技术相关\\tagsystem\\%s\\finalTag.json
+  subTaskFile: C:\\工作资料\\技术相关\\tagsystem\\%s\\%s.json
+  escapeCheck: C:\\工作资料\\技术相关\\tagsystem\\%s\\escape_check.json
+  checked: C:\\工作资料\\技术相关\\tagsystem\\%s\\checked.json
