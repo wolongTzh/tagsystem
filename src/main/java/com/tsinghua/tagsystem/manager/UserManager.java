@@ -18,6 +18,12 @@ public class UserManager extends ServiceImpl<UserMapper, TsUser> implements ISer
                 .eq(TsUser::getUserId, userId));
     }
 
+    public TsUser getByUserName(String username) {
+        return this.getOne(new QueryWrapper<TsUser>()
+                .lambda()
+                .eq(TsUser::getUsername, username));
+    }
+
     public TsUser getByUserMsg(String username, String password) {
         return this.getOne(new QueryWrapper<TsUser>()
                 .lambda()
