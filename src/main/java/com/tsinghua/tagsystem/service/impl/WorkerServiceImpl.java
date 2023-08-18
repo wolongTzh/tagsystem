@@ -248,9 +248,10 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public boolean saveCheck(SaveCheckParam param) throws IOException {
+        WorkerTaskRela workerTaskRela = workerTaskRelaManager.getByRelaId(param.getTaskId());
         if(param.getUncheckedNum() == 0) {
             List<Relation> finalList = new ArrayList<>();
-            List<Relation> needNotCheckList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(String.format(escapedCheckFile, param.getTaskId()))), Relation.class);
+            List<Relation> needNotCheckList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(String.format(escapedCheckFile, workerTaskRela.getTaskId()))), Relation.class);
             for(CheckAtom checkAtom : param.getCheckList()) {
                 Relation relation = Relation.builder()
                         .id(checkAtom.getId())
@@ -266,19 +267,19 @@ public class WorkerServiceImpl implements WorkerService {
             }
             finalList.addAll(needNotCheckList);
             finalList = finalList.stream().sorted((o1, o2) ->  o1.getId() - o2.getId()).collect(Collectors.toList());
-            File file = new File(String.format(finalFile, param.getTaskId()));
+            File file = new File(String.format(finalFile, workerTaskRela.getTaskId()));
             FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
             fileWriter.write(JSON.toJSONString(finalList));
             fileWriter.close();
             WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(param.getTaskId());
             workerTaskCheck.setStatus(TaskStateEnum.FINISHED.getContent());
             workerTaskRelaManager.updateByRelaId(workerTaskCheck);
-            Task task = taskManager.getByTaskId(param.getTaskId());
+            Task task = taskManager.getByTaskId(workerTaskRela.getTaskId());
             task.setStatus(TaskStateEnum.FINISHED.getContent());
             taskManager.updateByTaskId(task);
         }
         else {
-            File file = new File(String.format(checkedFile, param.getTaskId()));
+            File file = new File(String.format(checkedFile, workerTaskRela.getTaskId()));
             FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
             fileWriter.write(JSON.toJSONString(param.getCheckList()));
             fileWriter.close();
