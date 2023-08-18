@@ -52,7 +52,7 @@ public class ExceptionController {
         String msg = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.error(msg);
         log.error("BindException params={}", JSON.toJSONString(parameterMap), ex);
-        String reason = "Internal Server Error";
+        String reason = ex.getMessage();
         return WebUtil.errResult(WebConstant.RESULT_SERVER_ERROR_CODE, reason);
     }
 
@@ -65,7 +65,7 @@ public class ExceptionController {
         } else {
             log.error("ServerException! params={}", request.getDescription(true), exception);
         }
-        String reason = "Internal Server Error";
+        String reason = exception.getMessage();
         return WebUtil.errResult(WebConstant.RESULT_SERVER_ERROR_CODE, reason);
     }
 

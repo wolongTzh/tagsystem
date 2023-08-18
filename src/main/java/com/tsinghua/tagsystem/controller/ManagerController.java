@@ -1,11 +1,10 @@
 package com.tsinghua.tagsystem.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
-import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
-import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import com.tsinghua.tagsystem.service.ManagerService;
 import com.tsinghua.tagsystem.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +24,10 @@ public class ManagerController {
     ManagerService managerService;
 
     @PostMapping(value = "createTask")
-    public WebResInfo createTask(@RequestBody CreateTaskParam param) throws IOException {
+    public WebResInfo createTask(@RequestParam("file") MultipartFile rawFile, @RequestParam("param") String rawParam) throws IOException {
+        CreateTaskParam param = JSON.parseObject(rawParam, CreateTaskParam.class);
         File file = File.createTempFile("temp", "json");
-        MultipartFile multipartFile = param.getRawFile();
-        multipartFile.transferTo(file);
+        rawFile.transferTo(file);
         param.setFile(file);
         managerService.createTask(param);
         return WebUtil.successResult(null);

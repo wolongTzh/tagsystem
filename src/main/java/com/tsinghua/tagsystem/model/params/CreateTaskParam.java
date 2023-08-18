@@ -22,6 +22,4 @@ public class CreateTaskParam {
     Member members;
 
     File file;
-
-    MultipartFile rawFile;
 }
