@@ -151,8 +151,8 @@ public class WorkerServiceImpl implements WorkerService {
         WorkerTask workerTask = workerTaskRelaManager.getTask(param.getTaskId());
         String curSubTaskFile = String.format(subTaskFile, workerTask.getTaskId(), workerTask.getSubTaskId());
         List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(curSubTaskFile)), Relation.class);
-        List<Relation> headList = relationList.subList(0, param.getStart());
-        List<Relation> tailList = relationList.subList(param.getEnd(), relationList.size());
+        List<Relation> headList = relationList.subList(0, workerTask.getStart());
+        List<Relation> tailList = relationList.subList(workerTask.getEnd(), relationList.size());
         List<Relation> finalList = new ArrayList<>();
         finalList.addAll(headList);
         finalList.addAll(param.getRelationList());
