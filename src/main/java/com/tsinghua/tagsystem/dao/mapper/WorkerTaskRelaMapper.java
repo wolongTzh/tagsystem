@@ -22,7 +22,7 @@ public interface WorkerTaskRelaMapper extends BaseMapper<WorkerTaskRela> {
             "and worker_task_rela.task_id = task.task_id")
     List<WorkerTask> getManagerTaskListCheck(Integer userId);
 
-    @Select("SELECT task.task_id, sub_task.sub_task_id, title, relation_num \n" +
+    @Select("SELECT task.task_id, worker_task_rela.start start, worker_task_rela.end end, sub_task.sub_task_id, title, relation_num \n" +
             "from task,sub_task,worker_task_rela\n" +
             "where worker_task_rela.rela_id = #{relaId}\n" +
             "and worker_task_rela.task_id = sub_task.sub_task_id\n" +
