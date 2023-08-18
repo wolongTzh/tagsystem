@@ -40,7 +40,7 @@ public class WorkerController {
     }
 
     @PostMapping(value = "saveCheck")
-    public WebResInfo saveCheck(SaveCheckParam param) throws IOException {
+    public WebResInfo saveCheck(@RequestBody SaveCheckParam param) throws IOException {
         boolean ret = workerService.saveCheck(param);
         return WebUtil.successResult(ret);
     }
