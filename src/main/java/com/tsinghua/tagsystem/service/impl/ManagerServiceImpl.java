@@ -17,6 +17,7 @@ import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
 import com.tsinghua.tagsystem.service.ManagerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class ManagerServiceImpl implements ManagerService {
 
     @Autowired
@@ -68,7 +70,9 @@ public class ManagerServiceImpl implements ManagerService {
         int totalNum = algoInput.getRelationList().size();
         taskBase = String.format(taskBase, taskId);
         File dir = new File(taskBase);
+        log.info("taskBase = " + taskBase);
         if(!dir.exists()) {
+            log.info("enter create file!!!");
             dir.mkdir();
         }
         Task task = Task.builder()
@@ -86,6 +90,7 @@ public class ManagerServiceImpl implements ManagerService {
         for(List<TsUser> group : param.getMembers().getTaggingWorker()) {
             String subTaskId = UUID.randomUUID().toString();
             String subFilePath = String.format(subTaskFile, taskId, subTaskId);
+            log.info("subFilePath = " + subFilePath);
             SubTask subTask = SubTask.builder()
                     .subTaskId(subTaskId)
                     .status(TaskStateEnum.INIT.getContent())
