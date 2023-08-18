@@ -3,14 +3,11 @@ package com.tsinghua.tagsystem;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tsinghua.tagsystem.dao.entity.TsUser;
-import com.tsinghua.tagsystem.model.CheckAtom;
 import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
 import com.tsinghua.tagsystem.model.Member;
 import com.tsinghua.tagsystem.model.Relation;
-import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
-import com.tsinghua.tagsystem.model.VO.GetTasksVO;
+import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
-import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import com.tsinghua.tagsystem.service.ManagerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +56,7 @@ public class ManagerServiceTest {
                 .build();
         CreateTaskParam param = CreateTaskParam.builder()
                 .file(file)
-                .title("20230805")
+                .title("20230818")
                 .members(members)
                 .userId(1)
                 .build();
@@ -68,8 +65,8 @@ public class ManagerServiceTest {
     @Test
     public void getTasksTest() {
         Integer userId = 1;
-        GetTasksVO getTasksVO = managerService.getTasks(userId);
-        log.info(JSON.toJSONString(getTasksVO));
+        ManagerTasksVO managerTasksVO = managerService.getTasks(userId);
+        log.info(JSON.toJSONString(managerTasksVO));
     }
 
     @Test

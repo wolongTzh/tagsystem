@@ -1,10 +1,8 @@
 package com.tsinghua.tagsystem.service;
 
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
-import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.VO.WorkerTasksVO;
 import com.tsinghua.tagsystem.model.WorkerTaskMsg;
-import com.tsinghua.tagsystem.model.params.CreateTaskParam;
 import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import org.springframework.stereotype.Service;
 

@@ -5,12 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.tsinghua.tagsystem.model.CheckAtom;
 import com.tsinghua.tagsystem.model.Relation;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
-import com.tsinghua.tagsystem.model.VO.GetTasksVO;
 import com.tsinghua.tagsystem.model.VO.WorkerTasksVO;
 import com.tsinghua.tagsystem.model.WorkerTaskMsg;
-import com.tsinghua.tagsystem.model.params.CreateTaskParam;
 import com.tsinghua.tagsystem.model.params.SaveCheckParam;
-import com.tsinghua.tagsystem.service.ManagerService;
 import com.tsinghua.tagsystem.service.WorkerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest

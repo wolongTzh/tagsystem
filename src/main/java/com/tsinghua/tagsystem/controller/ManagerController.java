@@ -2,7 +2,7 @@ package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
-import com.tsinghua.tagsystem.model.VO.GetTasksVO;
+import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
 import com.tsinghua.tagsystem.service.ManagerService;
@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/manager")
@@ -35,8 +36,8 @@ public class ManagerController {
 
     @GetMapping(value = "getTasks")
     public WebResInfo getTasks(Integer userId) throws IOException {
-        GetTasksVO getTasksVO = managerService.getTasks(userId);
-        return WebUtil.successResult(getTasksVO);
+        ManagerTasksVO managerTasksVO = managerService.getTasks(userId);
+        return WebUtil.successResult(managerTasksVO);
     }
 
     @GetMapping(value = "checkTask")

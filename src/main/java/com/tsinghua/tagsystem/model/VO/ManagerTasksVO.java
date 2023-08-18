@@ -1,6 +1,6 @@
 package com.tsinghua.tagsystem.model.VO;
 
-import com.tsinghua.tagsystem.model.SubTaskMsg;
+import com.tsinghua.tagsystem.model.ManagerTaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class GetTasksVO {
+public class ManagerTasksVO {
 
-    String taskId;
-
-    String title;
-
-    Integer relationNum;
-
-    String status;
-
-    String checkingWorker;
-
-    List<SubTaskMsg> subTaskMsgs;
+    List<ManagerTaskDTO> managerTaskList;
 }

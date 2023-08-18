@@ -11,13 +11,10 @@ import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
 import com.tsinghua.tagsystem.enums.TaskStateEnum;
 import com.tsinghua.tagsystem.manager.SubTaskManager;
 import com.tsinghua.tagsystem.manager.TaskManager;
-import com.tsinghua.tagsystem.manager.UserManager;
 import com.tsinghua.tagsystem.manager.WorkerTaskRelaManager;
 import com.tsinghua.tagsystem.model.*;
-import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
-import com.tsinghua.tagsystem.model.VO.GetTasksVO;
+import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
-import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import com.tsinghua.tagsystem.service.ManagerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
@@ -147,21 +143,25 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public GetTasksVO getTasks(Integer userId) {
+    public ManagerTasksVO getTasks(Integer userId) {
         List<ManagerTask> taskList = taskManager.getManagerTaskList(userId);
-        GetTasksVO getTasksVO = new GetTasksVO();
         List<SubTaskMsg> subTaskMsgList = new ArrayList<>();
-        boolean start = true;
+        String taskId = "";
+        List<ManagerTaskDTO> mmanagerTaskDTOList = new ArrayList<>();
+        ManagerTaskDTO managerTaskDTO = new ManagerTaskDTO();
         for(ManagerTask managerTask : taskList) {
-            if(start) {
-                getTasksVO = GetTasksVO.builder()
+            if(!managerTask.getTaskId().equals(taskId)) {
+                subTaskMsgList = new ArrayList<>();
+                taskId = managerTask.getTaskId();
+                managerTaskDTO = ManagerTaskDTO.builder()
                         .taskId(managerTask.getTaskId())
                         .relationNum(managerTask.getRelationNum())
                         .status(managerTask.getStatus())
                         .checkingWorker(managerTask.getCheckWorker())
                         .title(managerTask.getTitle())
+                        .subTaskMsgs(subTaskMsgList)
                         .build();
-                start = false;
+                mmanagerTaskDTOList.add(managerTaskDTO);
             }
             subTaskMsgList.add(SubTaskMsg.builder()
                     .taskId(managerTask.getSubTaskId())
@@ -169,8 +169,9 @@ public class ManagerServiceImpl implements ManagerService {
                     .taggingWorker(managerTask.getTaggingWorker())
                     .build());
         }
-        getTasksVO.setSubTaskMsgs(subTaskMsgList);
-        return getTasksVO;
+        return ManagerTasksVO.builder()
+                .managerTaskList(mmanagerTaskDTOList)
+                .build();
     }
 
     @Override
