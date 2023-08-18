@@ -1,8 +1,10 @@
 package com.tsinghua.tagsystem.controller;
 
+import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.WorkerTasksVO;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.WorkerTaskMsg;
+import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import com.tsinghua.tagsystem.service.WorkerService;
 import com.tsinghua.tagsystem.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,18 @@ public class WorkerController {
     public WebResInfo tagTask(String taskId) throws IOException {
         WorkerTaskMsg workerTaskMsg = workerService.tagTask(taskId);
         return WebUtil.successResult(workerTaskMsg);
+    }
+
+    @GetMapping(value = "checkTask")
+    public WebResInfo checkTask(String taskId) throws IOException {
+        CheckTaskVO checkTaskVO = workerService.checkTask(taskId);
+        return WebUtil.successResult(checkTaskVO);
+    }
+
+    @PostMapping(value = "saveCheck")
+    public WebResInfo saveCheck(SaveCheckParam param) throws IOException {
+        boolean ret = workerService.saveCheck(param);
+        return WebUtil.successResult(ret);
     }
 
     @PostMapping(value = "saveTag")
