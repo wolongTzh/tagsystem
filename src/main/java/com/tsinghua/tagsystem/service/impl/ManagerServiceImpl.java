@@ -68,9 +68,9 @@ public class ManagerServiceImpl implements ManagerService {
         int relationNum = algoInput.getRelationNum();
         int uncheckedNum = algoInput.getRelationList().size();
         int totalNum = algoInput.getRelationList().size();
-        taskBase = String.format(taskBase, taskId);
-        File dir = new File(taskBase);
-        log.info("taskBase = " + taskBase);
+        String curTaskBase = String.format(taskBase, taskId);
+        File dir = new File(curTaskBase);
+        log.info("taskBase = " + curTaskBase);
         if(!dir.exists()) {
             log.info("enter create file!!!");
             dir.mkdir();
