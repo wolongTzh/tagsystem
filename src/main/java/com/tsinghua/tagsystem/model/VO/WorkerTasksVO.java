@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.model.VO;
 
 import com.tsinghua.tagsystem.dao.entity.multi.WorkerTask;
+import com.tsinghua.tagsystem.model.WorkerTaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,5 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class WorkerTasksVO {
 
-    List<WorkerTask> workerTasks;
+    List<WorkerTaskDTO> workerTasks;
 }

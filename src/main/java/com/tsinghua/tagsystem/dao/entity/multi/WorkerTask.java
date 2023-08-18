@@ -21,5 +21,11 @@ public class WorkerTask {
 
     Integer untaggedNum;
 
+    String taskType;
+
+    Integer start;
+
+    Integer end;
+
     String status;
 }

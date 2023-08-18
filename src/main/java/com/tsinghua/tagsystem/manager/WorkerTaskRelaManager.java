@@ -17,8 +17,12 @@ public class WorkerTaskRelaManager extends ServiceImpl<WorkerTaskRelaMapper, Wor
     @Autowired
     WorkerTaskRelaMapper workerTaskRelaMapper;
 
-    public List<WorkerTask> getTasks(Integer userId) {
-        return workerTaskRelaMapper.getManagerTaskList(userId);
+    public List<WorkerTask> getTasksTag(Integer userId) {
+        return workerTaskRelaMapper.getManagerTaskListTag(userId);
+    }
+
+    public List<WorkerTask> getTasksCheck(Integer userId) {
+        return workerTaskRelaMapper.getManagerTaskListCheck(userId);
     }
 
     public WorkerTask getTask(String taskId) {

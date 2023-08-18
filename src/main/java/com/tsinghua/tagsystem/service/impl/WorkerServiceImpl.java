@@ -13,12 +13,9 @@ import com.tsinghua.tagsystem.enums.TaskStateEnum;
 import com.tsinghua.tagsystem.manager.SubTaskManager;
 import com.tsinghua.tagsystem.manager.TaskManager;
 import com.tsinghua.tagsystem.manager.WorkerTaskRelaManager;
-import com.tsinghua.tagsystem.model.CheckAtom;
-import com.tsinghua.tagsystem.model.Relation;
-import com.tsinghua.tagsystem.model.RelationSimple;
+import com.tsinghua.tagsystem.model.*;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.WorkerTasksVO;
-import com.tsinghua.tagsystem.model.WorkerTaskMsg;
 import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import com.tsinghua.tagsystem.service.WorkerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
@@ -60,9 +57,24 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public WorkerTasksVO getTasks(Integer userId) {
-        List<WorkerTask> workerTaskList = workerTaskRelaManager.getTasks(userId);
+        List<WorkerTask> workerTaskList = workerTaskRelaManager.getTasksTag(userId);
+        workerTaskList.addAll(workerTaskRelaManager.getTasksCheck(userId));
+        List<WorkerTaskDTO> workerTaskDTOList = new ArrayList<>();
+        for(WorkerTask workerTask : workerTaskList) {
+            Integer taskType = workerTask.getTaskType().equals("tag") ? 0 : 1;
+            Integer dataNum = workerTask.getEnd() - workerTask.getStart();
+            workerTaskDTOList.add(WorkerTaskDTO.builder()
+                    .taskId(workerTask.getTaskId())
+                    .taskType(taskType)
+                    .dataNum(dataNum)
+                    .relationNum(workerTask.getRelationNum())
+                    .status(workerTask.getStatus())
+                    .title(workerTask.getTitle())
+                    .untaggedNum(workerTask.getUntaggedNum())
+                    .build());
+        }
         return WorkerTasksVO.builder()
-                .workerTasks(workerTaskList)
+                .workerTasks(workerTaskDTOList)
                 .build();
     }
 
