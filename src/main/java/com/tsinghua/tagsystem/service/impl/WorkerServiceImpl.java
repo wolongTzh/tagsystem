@@ -161,6 +161,9 @@ public class WorkerServiceImpl implements WorkerService {
         FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
         fileWriter.write(JSON.toJSONString(finalList));
         fileWriter.close();
+        WorkerTaskRela workerTaskRela = workerTaskRelaManager.getByRelaId(param.getTaskId());
+        workerTaskRela.setUntaggedNum(param.getUnTaggedNum());
+        workerTaskRelaManager.updateByRelaId(workerTaskRela);
         return true;
     }
 
