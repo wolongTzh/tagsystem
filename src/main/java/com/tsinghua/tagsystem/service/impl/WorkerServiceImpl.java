@@ -175,9 +175,11 @@ public class WorkerServiceImpl implements WorkerService {
         List<Relation> needNotCheck = new ArrayList<>();
         List<List<Relation>> allRelations = new ArrayList<>();
         boolean start = true;
+        String parentTaskId = "";
         for(ManagerTask managerTask : managerTaskList) {
             List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(managerTask.getSubFilePath())), Relation.class);
             if(start) {
+                parentTaskId = managerTask.getTaskId();
                 checkTaskVO = CheckTaskVO.builder()
                         .taskId(managerTask.getTaskId())
                         .relationNum(managerTask.getRelationNum())
@@ -224,16 +226,16 @@ public class WorkerServiceImpl implements WorkerService {
                 needNotCheck.add(relation);
             }
         }
-        File file = new File(String.format(escapedCheckFile, taskId));
+        File file = new File(String.format(escapedCheckFile, parentTaskId));
         FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
         fileWriter.write(JSON.toJSONString(needNotCheck));
         fileWriter.close();
-        file = new File(String.format(checkedFile, taskId));
+        file = new File(String.format(checkedFile, parentTaskId));
         fileWriter = new FileWriter(file.getAbsolutePath());
         fileWriter.write(JSON.toJSONString(checkAtomList));
         fileWriter.close();
         checkTaskVO.setCheckList(checkAtomList);
-        Task task = taskManager.getByTaskId(taskId);
+        Task task = taskManager.getByTaskId(parentTaskId);
         if(!task.getStatus().equals(TaskStateEnum.CHECKING.getContent())) {
             task.setStatus(TaskStateEnum.CHECKING.getContent());
             taskManager.updateByTaskId(task);
