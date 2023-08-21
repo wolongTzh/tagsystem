@@ -245,7 +245,7 @@ public class WorkerServiceImpl implements WorkerService {
         if(!task.getStatus().equals(TaskStateEnum.CHECKING.getContent())) {
             task.setStatus(TaskStateEnum.CHECKING.getContent());
             taskManager.updateByTaskId(task);
-            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(taskId);
+            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByRelaId(taskId);
             workerTaskCheck.setStatus(TaskStateEnum.CHECKING.getContent());
             workerTaskRelaManager.updateByRelaId(workerTaskCheck);
         }
@@ -277,7 +277,7 @@ public class WorkerServiceImpl implements WorkerService {
             FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
             fileWriter.write(JSON.toJSONString(finalList));
             fileWriter.close();
-            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(param.getTaskId());
+            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByRelaId(param.getTaskId());
             workerTaskCheck.setUntaggedNum(param.getUncheckedNum());
             workerTaskCheck.setStatus(TaskStateEnum.FINISHED.getContent());
             workerTaskRelaManager.updateByRelaId(workerTaskCheck);
@@ -286,7 +286,7 @@ public class WorkerServiceImpl implements WorkerService {
             taskManager.updateByTaskId(task);
         }
         else {
-            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(param.getTaskId());
+            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByRelaId(param.getTaskId());
             workerTaskCheck.setUntaggedNum(param.getUncheckedNum());
             workerTaskRelaManager.updateByRelaId(workerTaskCheck);
         }
