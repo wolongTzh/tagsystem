@@ -180,6 +180,12 @@ public class WorkerServiceImpl implements WorkerService {
             List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(managerTask.getSubFilePath())), Relation.class);
             if(start) {
                 parentTaskId = managerTask.getTaskId();
+                File file = new File(String.format(checkedFile, parentTaskId));
+                if(file.exists()) {
+                    List<CheckAtom> checkAtoms = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(String.format(checkedFile, parentTaskId))), CheckAtom.class);
+                    checkTaskVO.setCheckList(checkAtoms);
+                    return checkTaskVO;
+                }
                 checkTaskVO = CheckTaskVO.builder()
                         .taskId(managerTask.getTaskId())
                         .relationNum(managerTask.getRelationNum())
