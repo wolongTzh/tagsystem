@@ -289,11 +289,11 @@ public class WorkerServiceImpl implements WorkerService {
             WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(param.getTaskId());
             workerTaskCheck.setUntaggedNum(param.getUncheckedNum());
             workerTaskRelaManager.updateByRelaId(workerTaskCheck);
-            File file = new File(String.format(checkedFile, workerTaskRela.getTaskId()));
-            FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
-            fileWriter.write(JSON.toJSONString(param.getCheckList()));
-            fileWriter.close();
         }
+        File file = new File(String.format(checkedFile, workerTaskRela.getTaskId()));
+        FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
+        fileWriter.write(JSON.toJSONString(param.getCheckList()));
+        fileWriter.close();
         return true;
     }
 
