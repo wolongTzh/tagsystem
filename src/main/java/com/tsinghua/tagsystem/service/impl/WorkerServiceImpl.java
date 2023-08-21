@@ -278,6 +278,7 @@ public class WorkerServiceImpl implements WorkerService {
             fileWriter.write(JSON.toJSONString(finalList));
             fileWriter.close();
             WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(param.getTaskId());
+            workerTaskCheck.setUntaggedNum(param.getUncheckedNum());
             workerTaskCheck.setStatus(TaskStateEnum.FINISHED.getContent());
             workerTaskRelaManager.updateByRelaId(workerTaskCheck);
             Task task = taskManager.getByTaskId(workerTaskRela.getTaskId());
@@ -285,6 +286,9 @@ public class WorkerServiceImpl implements WorkerService {
             taskManager.updateByTaskId(task);
         }
         else {
+            WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByTaskId(param.getTaskId());
+            workerTaskCheck.setUntaggedNum(param.getUncheckedNum());
+            workerTaskRelaManager.updateByRelaId(workerTaskCheck);
             File file = new File(String.format(checkedFile, workerTaskRela.getTaskId()));
             FileWriter fileWriter = new FileWriter(file.getAbsolutePath());
             fileWriter.write(JSON.toJSONString(param.getCheckList()));
