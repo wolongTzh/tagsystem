@@ -1,0 +1,23 @@
+server:
+  maxHttpHeaderSize: 8KB
+  tomcat:
+    maxHttpFormPostSize: 2MB
+    maxSwallowSize: 2MB
+    maxConnections: 2000
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 读库和写库的地址，目前写库可以配置为一个，读库可配置为多个
+    url: jdbc:mysql://21.33.193.23:3306/tagsystem?useSSL=false&serverTimezone=Asia/Shanghai&autoReconnect=true&characterEncoding=utf8
+    username: thu
+    password: Nlp0807!
+path:
+  taskBase: /home/Tsinghua/tag_system/data/%s
+  finalTag: /home/Tsinghua/tag_system/data/%s/finalTag.json
+  subTaskFile: /home/Tsinghua/tag_system/data/%s/%s.json
+  escapeCheck: /home/Tsinghua/tag_system/data/%s/escape_check.json
+  checked: /home/Tsinghua/tag_system/data/%s/checked.json
