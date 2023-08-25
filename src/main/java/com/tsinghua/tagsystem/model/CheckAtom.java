@@ -23,9 +23,21 @@ public class CheckAtom {
 
     int sourceEnd;
 
+    int source_id;
+
+    String head;
+
+    List<String> source_type;
+
     int targetStart;
 
     int targetEnd;
+
+    int target_id;
+
+    String tail;
+
+    List<String> target_type;
 
     String predicate;
 

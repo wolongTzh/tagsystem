@@ -224,6 +224,12 @@ public class WorkerServiceImpl implements WorkerService {
                         .targetEnd(relation.getTargetEnd())
                         .predicate(relation.getPredicateOld())
                         .status(TaskStateEnum.UNCHECKED.getContent())
+                        .source_id(relation.getSource_id())
+                        .source_type(relation.getSource_type())
+                        .target_id(relation.getTarget_id())
+                        .target_type(relation.getTarget_type())
+                        .head(relation.getHead())
+                        .tail(relation.getTail())
                         .build());
             }
             else {
@@ -267,6 +273,12 @@ public class WorkerServiceImpl implements WorkerService {
                         .targetEnd(checkAtom.getTargetEnd())
                         .status(checkAtom.getStatus())
                         .text(checkAtom.getText())
+                        .source_id(checkAtom.getSource_id())
+                        .source_type(checkAtom.getSource_type())
+                        .target_id(checkAtom.getTarget_id())
+                        .target_type(checkAtom.getTarget_type())
+                        .head(checkAtom.getHead())
+                        .tail(checkAtom.getTail())
                         .build();
                 finalList.add(relation);
             }
