@@ -2,7 +2,6 @@ package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.tsinghua.tagsystem.config.AddressConfig;
 import com.tsinghua.tagsystem.dao.entity.SubTask;
 import com.tsinghua.tagsystem.dao.entity.Task;

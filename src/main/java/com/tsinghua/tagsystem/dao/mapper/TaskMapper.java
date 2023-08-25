@@ -3,7 +3,6 @@ package com.tsinghua.tagsystem.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tsinghua.tagsystem.dao.entity.Task;
 import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
-import com.tsinghua.tagsystem.model.ManagerTaskDTO;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

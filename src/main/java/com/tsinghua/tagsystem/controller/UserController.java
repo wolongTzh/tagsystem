@@ -1,12 +1,9 @@
 package com.tsinghua.tagsystem.controller;
 
 import com.tsinghua.tagsystem.dao.entity.TsUser;
-import com.tsinghua.tagsystem.model.VO.WorkerTasksVO;
 import com.tsinghua.tagsystem.model.WebResInfo;
-import com.tsinghua.tagsystem.model.WorkerTaskMsg;
 import com.tsinghua.tagsystem.model.params.UserParam;
 import com.tsinghua.tagsystem.service.UserService;
-import com.tsinghua.tagsystem.service.WorkerService;
 import com.tsinghua.tagsystem.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

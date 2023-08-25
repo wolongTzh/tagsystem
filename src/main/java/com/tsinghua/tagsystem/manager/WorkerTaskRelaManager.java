@@ -3,7 +3,6 @@ package com.tsinghua.tagsystem.manager;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tsinghua.tagsystem.dao.entity.Task;
 import com.tsinghua.tagsystem.dao.entity.WorkerTaskRela;
 import com.tsinghua.tagsystem.dao.entity.multi.WorkerTask;
 import com.tsinghua.tagsystem.dao.mapper.WorkerTaskRelaMapper;

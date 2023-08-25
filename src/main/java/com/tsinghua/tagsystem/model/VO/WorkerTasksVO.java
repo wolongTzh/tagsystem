@@ -1,6 +1,5 @@
 package com.tsinghua.tagsystem.model.VO;
 
-import com.tsinghua.tagsystem.dao.entity.multi.WorkerTask;
 import com.tsinghua.tagsystem.model.WorkerTaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;

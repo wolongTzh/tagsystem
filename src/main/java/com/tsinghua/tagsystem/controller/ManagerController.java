@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
 import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
 import com.tsinghua.tagsystem.model.WebResInfo;
@@ -49,6 +50,12 @@ public class ManagerController {
     @PostMapping(value = "saveCheck")
     public WebResInfo saveCheck(@RequestBody ManagerTaskSupervise managerTaskSupervise) throws IOException {
         boolean ret = managerService.saveCheck(managerTaskSupervise);
+        return WebUtil.successResult(ret);
+    }
+
+    @GetMapping(value = "exportTask")
+    public WebResInfo exportTask(String taskId) throws IOException {
+        JSONArray ret = managerService.exportTask(taskId);
         return WebUtil.successResult(ret);
     }
 }

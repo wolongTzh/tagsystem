@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tsinghua.tagsystem.config.AddressConfig;
 import com.tsinghua.tagsystem.dao.entity.SubTask;
@@ -14,6 +15,9 @@ import com.tsinghua.tagsystem.manager.TaskManager;
 import com.tsinghua.tagsystem.manager.WorkerTaskRelaManager;
 import com.tsinghua.tagsystem.model.*;
 import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
+import com.tsinghua.tagsystem.model.export.Entity;
+import com.tsinghua.tagsystem.model.export.EntityValue;
+import com.tsinghua.tagsystem.model.export.ExportRelation;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
 import com.tsinghua.tagsystem.service.ManagerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
@@ -25,9 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -221,5 +224,74 @@ public class ManagerServiceImpl implements ManagerService {
         fileWriter.write(JSON.toJSONString(managerTaskSupervise.getTaskList()));
         fileWriter.close();
         return true;
+    }
+
+    @Override
+    public JSONArray exportTask(String taskId) throws IOException {
+        Task task = taskManager.getByTaskId(taskId);
+        String path = task.getFilePath();
+        List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(path)), Relation.class);
+        relationList = relationList.stream().sorted((o1, o2) ->  o1.getId() - o2.getId()).collect(Collectors.toList());
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        int curId = -1;
+        Set<Integer> alreadyCheck = new HashSet<>();
+        JSONArray result = new JSONArray();
+        for(Relation relation : relationList) {
+            if(relation.getId() != curId) {
+                if(curId != -1) {
+                    jsonArray.add(jsonObject);
+                }
+                alreadyCheck = new HashSet<>();
+                jsonObject = new JSONObject();
+                result = new JSONArray();
+                List<String> outText = new ArrayList<>();
+                outText.add(relation.getText());
+                jsonObject.put("data", outText);
+                jsonObject.put("result", result);
+                curId = relation.getId();
+            }
+            if(!alreadyCheck.contains(relation.getSource_id())) {
+                alreadyCheck.add(relation.getSource_id());
+                EntityValue entityValue = EntityValue.builder()
+                        .start(relation.getSourceStart())
+                        .end(relation.getSourceEnd())
+                        .text(relation.getHead())
+                        .lables(relation.getSource_type())
+                        .build();
+                Entity entity = Entity.builder()
+                        .id(relation.getSource_id())
+                        .value(entityValue)
+                        .type("lables")
+                        .build();
+                result.add(entity);
+            }
+            if(!alreadyCheck.contains(relation.getTarget_id())) {
+                alreadyCheck.add(relation.getTarget_id());
+                EntityValue entityValue = EntityValue.builder()
+                        .start(relation.getTargetStart())
+                        .end(relation.getTargetEnd())
+                        .text(relation.getTail())
+                        .lables(relation.getTarget_type())
+                        .build();
+                Entity entity = Entity.builder()
+                        .id(relation.getTarget_id())
+                        .value(entityValue)
+                        .type("lables")
+                        .build();
+                result.add(entity);
+            }
+            List<String> lables = new ArrayList<>();
+            lables.add(relation.getPredicate());
+            ExportRelation exportRelation = ExportRelation.builder()
+                    .from_id(relation.getSource_id())
+                    .to_id(relation.getTarget_id())
+                    .lables(lables)
+                    .type("relation")
+                    .build();
+            result.add(exportRelation);
+        }
+        jsonArray.add(jsonObject);
+        return jsonArray;
     }
 }

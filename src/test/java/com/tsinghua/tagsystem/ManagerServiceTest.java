@@ -86,4 +86,9 @@ public class ManagerServiceTest {
                 .build();
         managerService.saveCheck(managerTaskSupervise);
     }
+
+    @Test
+    public void exportTaskTest() throws IOException {
+        log.info(JSON.toJSONString(managerService.exportTask("111")));
+    }
 }

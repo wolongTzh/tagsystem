@@ -1,6 +1,5 @@
 package com.tsinghua.tagsystem;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tsinghua.tagsystem.dao.entity.TsUser;
 import com.tsinghua.tagsystem.dao.mapper.UserMapper;

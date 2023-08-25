@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
 import com.tsinghua.tagsystem.model.VO.ManagerTasksVO;
 import com.tsinghua.tagsystem.model.params.CreateTaskParam;
@@ -18,4 +19,6 @@ public interface ManagerService {
     public ManagerTaskSupervise checkTask(String taskId) throws IOException;
 
     public boolean saveCheck(ManagerTaskSupervise managerTaskSupervise) throws IOException;
+
+    public JSONArray exportTask(String taskId) throws IOException;
 }
