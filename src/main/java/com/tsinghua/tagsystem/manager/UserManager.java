@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tsinghua.tagsystem.dao.entity.TsUser;
+import com.tsinghua.tagsystem.dao.entity.WorkerTaskRela;
 import com.tsinghua.tagsystem.dao.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
@@ -35,5 +36,11 @@ public class UserManager extends ServiceImpl<UserMapper, TsUser> implements ISer
         return this.list(new QueryWrapper<TsUser>()
                 .lambda()
                 .eq(TsUser::getIdentity, "worker"));
+    }
+
+    public boolean updateByUserId(TsUser tsUser) {
+        return this.update(tsUser, new QueryWrapper<TsUser>()
+                .lambda()
+                .eq(TsUser::getUserId, tsUser.getUserId()));
     }
 }
