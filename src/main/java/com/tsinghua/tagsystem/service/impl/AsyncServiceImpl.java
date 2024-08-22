@@ -2,6 +2,7 @@ package com.tsinghua.tagsystem.service.impl;
 
 import com.tsinghua.tagsystem.service.AsyncService;
 import com.tsinghua.tagsystem.service.ModelService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 public class AsyncServiceImpl implements AsyncService {
 
     @Override
+    @Async
     public void asyncTrain() {
         try {
             String cmd = "sh cmd.sh";
