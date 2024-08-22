@@ -13,6 +13,7 @@ public class AsyncServiceImpl implements AsyncService {
 
     @Override
     public void asyncTrain() {
+        System.out.println("开始执行异步方法");
         try {
             String cmd = "sh cmd.sh";
             Process process = Runtime.getRuntime().exec(cmd);
@@ -26,5 +27,6 @@ public class AsyncServiceImpl implements AsyncService {
         catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("结束执行异步方法");
     }
 }
