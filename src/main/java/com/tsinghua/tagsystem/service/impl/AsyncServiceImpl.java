@@ -2,6 +2,7 @@ package com.tsinghua.tagsystem.service.impl;
 
 import com.tsinghua.tagsystem.service.AsyncService;
 import com.tsinghua.tagsystem.service.ModelService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 public class AsyncServiceImpl implements AsyncService {
 
     @Override
+    @Async
     public void asyncTrain() {
         System.out.println("开始执行异步方法");
         try {
