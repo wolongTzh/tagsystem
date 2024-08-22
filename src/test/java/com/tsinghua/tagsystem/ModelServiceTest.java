@@ -1,6 +1,5 @@
 package com.tsinghua.tagsystem;
 
-import com.tsinghua.tagsystem.service.AsyncService;
 import com.tsinghua.tagsystem.service.ModelService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -15,11 +14,10 @@ public class ModelServiceTest {
 
     @Autowired
     ModelService modelService;
-    @Autowired
-    AsyncService asyncService;
 
     @Test
-    public void trainTest() throws IOException {
-        asyncService.asyncTrain();
+    public void trainTest() throws IOException, InterruptedException {
+        modelService.train();
+        Thread.sleep(10);
     }
 }

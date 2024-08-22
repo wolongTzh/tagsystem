@@ -16,9 +16,7 @@ public class AsyncServiceImpl implements AsyncService {
         System.out.println("开始执行异步方法");
         try {
             String cmd = "sh /home/tz/tagsystem/cmd.sh";
-            ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("bash", "-c", cmd);
-            Process process = processBuilder.start();
+            Process process = Runtime.getRuntime().exec(cmd);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
