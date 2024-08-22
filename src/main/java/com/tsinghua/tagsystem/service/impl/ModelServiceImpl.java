@@ -15,7 +15,9 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public void train() {
+        long start = System.currentTimeMillis();
         asyncService.asyncTrain();
-        System.out.println("算法开始训练中，请稍后");
+        long end = System.currentTimeMillis();
+        System.out.println("算法开始训练中，请稍后，消耗时间为：" + (end - start) + "ms");
     }
 }
