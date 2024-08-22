@@ -14,7 +14,7 @@ public class ModelServiceImpl implements ModelService {
     public void train() {
         try{
             String[] cmd = {"cmd", "/c", "echo Hello, World!"};
-            Process process = Runtime.getRuntime().exec(cmd);
+            Process process = Runtime.getRuntime().exec("echo Hello, World!");
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
