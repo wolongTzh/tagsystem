@@ -13,8 +13,8 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public void train() {
         try{
-            String[] cmd = {"cmd", "/c", "echo Hello, World!"};
-            Process process = Runtime.getRuntime().exec("echo Hello, World!");
+            String cmd = "cd /home/tz/copy-code/W2NER-main && /home/tz/miniconda3/envs/pufa/bin/python3.8 predict_for_test.py'";
+            Process process = Runtime.getRuntime().exec(cmd);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
