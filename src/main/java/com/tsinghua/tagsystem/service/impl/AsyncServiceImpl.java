@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 public class AsyncServiceImpl implements AsyncService {
 
     @Override
-    @Async
     public void asyncTrain() {
         try {
             String cmd = "sh cmd.sh";
