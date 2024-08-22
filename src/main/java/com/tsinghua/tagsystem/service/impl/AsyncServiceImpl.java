@@ -34,7 +34,7 @@ public class AsyncServiceImpl implements AsyncService {
             e.printStackTrace();
         }
         System.out.println("结束执行异步方法");
-        TsUser tsUser = userManager.getByUserName("谭峥");
+        TsUser tsUser = userManager.getByUserName("tanzheng");
         tsUser.setIdentity("async");
         userManager.updateByUserId(tsUser);
         System.out.println("结束执行更细数据库");
