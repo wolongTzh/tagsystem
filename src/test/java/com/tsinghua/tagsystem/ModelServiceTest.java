@@ -18,6 +18,6 @@ public class ModelServiceTest {
     @Test
     public void trainTest() throws IOException, InterruptedException {
         modelService.train();
-        Thread.sleep(10);
+        Thread.sleep(10000);
     }
 }
