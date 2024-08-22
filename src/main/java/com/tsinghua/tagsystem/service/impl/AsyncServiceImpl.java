@@ -2,7 +2,6 @@ package com.tsinghua.tagsystem.service.impl;
 
 import com.tsinghua.tagsystem.service.AsyncService;
 import com.tsinghua.tagsystem.service.ModelService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +12,13 @@ import java.io.InputStreamReader;
 public class AsyncServiceImpl implements AsyncService {
 
     @Override
-    @Async
     public void asyncTrain() {
         System.out.println("开始执行异步方法");
         try {
             String cmd = "sh /home/tz/tagsystem/cmd.sh";
-            Process process = Runtime.getRuntime().exec(cmd);
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("bash", "-c", cmd);
+            Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
