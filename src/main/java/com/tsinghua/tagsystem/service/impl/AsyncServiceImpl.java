@@ -25,6 +25,7 @@ public class AsyncServiceImpl implements AsyncService {
             reader.close();
         }
         catch (Exception e) {
+            System.out.println("失败执行异步方法");
             e.printStackTrace();
         }
         System.out.println("结束执行异步方法");
