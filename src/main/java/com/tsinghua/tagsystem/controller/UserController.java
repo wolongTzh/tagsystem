@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping(value = "testModel")
     public WebResInfo testModel() throws IOException {
         try {
-            String cmd = "sh /home/tz/tagsystem/cmd.sh";
+            String cmd = "python /home/tz/copy-code/W2NER-main/test_train.py";
             Process process = Runtime.getRuntime().exec(cmd);
             process.waitFor();
         }
