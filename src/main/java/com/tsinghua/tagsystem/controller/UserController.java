@@ -53,7 +53,7 @@ public class UserController {
 
     @GetMapping(value = "testModel")
     public WebResInfo testModel() throws IOException {
-        asyncService.asyncTrain();
+        modelService.train();
         return WebUtil.successResult("sccess");
     }
 }

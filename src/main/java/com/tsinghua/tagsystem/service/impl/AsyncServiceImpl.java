@@ -22,17 +22,7 @@ public class AsyncServiceImpl implements AsyncService {
         try {
             String cmd = "sh /home/tz/tagsystem/cmd.sh";
             Process process = Runtime.getRuntime().exec(cmd);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-            reader.close();
-            while ((line = errorReader.readLine()) != null) {
-                System.out.println(line);
-            }
-            reader.close();
+            process.waitFor();
         }
         catch (Exception e) {
             System.out.println("失败执行异步方法");
