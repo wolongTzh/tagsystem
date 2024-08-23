@@ -53,7 +53,15 @@ public class UserController {
 
     @GetMapping(value = "testModel")
     public WebResInfo testModel() throws IOException {
-        modelService.train();
+        try {
+            String cmd = "sh /home/tz/tagsystem/cmd.sh";
+            Process process = Runtime.getRuntime().exec(cmd);
+            process.waitFor();
+        }
+        catch (Exception e) {
+            System.out.println("失败执行异步方法");
+            e.printStackTrace();
+        }
         return WebUtil.successResult("sccess");
     }
 }
