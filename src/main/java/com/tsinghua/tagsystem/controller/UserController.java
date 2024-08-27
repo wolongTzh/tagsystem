@@ -25,8 +25,6 @@ public class UserController {
     @Autowired
     ModelService modelService;
 
-    @Autowired
-    AsyncService asyncService;
 
     @PostMapping(value = "signup")
     public WebResInfo getTasks(@RequestBody UserParam param) throws IOException {
@@ -57,5 +55,11 @@ public class UserController {
         String url = "http://192.168.3.39:8081/algo_start";
         HttpUtil.sendGetData(url);
         return WebUtil.successResult("sccess");
+    }
+
+    @GetMapping(value = "updateDB")
+    public WebResInfo updateDB() throws IOException {
+       modelService.train();
+       return WebUtil.successResult("sccess");
     }
 }
