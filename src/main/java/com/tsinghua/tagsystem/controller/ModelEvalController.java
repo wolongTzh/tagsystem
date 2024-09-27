@@ -30,6 +30,7 @@ public class ModelEvalController {
     @PostMapping(value = "createModelEval")
     public WebResInfo createModelEval(@RequestBody ModelEval modelEval) throws IOException {
         modelEvalService.createModelEval(modelEval);
+        System.out.println(modelEval);
         return WebUtil.successResult("success");
     }
 
