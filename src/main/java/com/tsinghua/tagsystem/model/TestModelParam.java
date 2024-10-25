@@ -36,6 +36,8 @@ public class TestModelParam {
 
     Integer evalDataId;
 
+    String evalDataName;
+
     Integer evalUserId;
 
     String evalUserName;
