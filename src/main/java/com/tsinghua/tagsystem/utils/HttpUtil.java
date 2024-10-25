@@ -95,6 +95,7 @@ public class HttpUtil {
 
         // 执行请求操作，并拿到结果（同步阻塞）
         CloseableHttpResponse response = httpClient.execute(httpPost);
+        System.out.println(response);
 
         // 获取结果实体
         // 判断网络连接状态码是否正常(0--200都是正常)
