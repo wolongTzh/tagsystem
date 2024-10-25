@@ -11,6 +11,10 @@ spring:
     url: jdbc:mysql://47.94.201.245:3306/tagsystem?useSSL=false&serverTimezone=Asia/Shanghai&autoReconnect=true&characterEncoding=utf8
     username: root
     password: Keg2022!
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 10
+      max-lifetime: 30000   #不能小于30秒，否则默认回到1800秒
 path:
   taskBase: /data/tagsystem/%s
   finalTag: /data/tagsystem/%s/finalTag.json
