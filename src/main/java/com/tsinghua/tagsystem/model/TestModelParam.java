@@ -38,6 +38,8 @@ public class TestModelParam {
 
     String evalDataName;
 
+    String dataPath;
+
     Integer evalUserId;
 
     String evalUserName;
