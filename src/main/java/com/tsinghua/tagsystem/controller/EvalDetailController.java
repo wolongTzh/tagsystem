@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.model.TestModelParam;
@@ -36,7 +37,7 @@ public class EvalDetailController {
     @PostMapping(value = "runTest")
     public WebResInfo testModel(@RequestBody TestModelParam testModelParam) throws IOException {
         String url = "http://192.168.3.39:8081/algo_start";
-        HttpUtil.sendPostDataByJson(url, testModelParam.toString());
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(testModelParam));
         return WebUtil.successResult("success");
     }
 
