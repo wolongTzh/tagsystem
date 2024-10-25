@@ -12,6 +12,7 @@ import com.tsinghua.tagsystem.service.EvalOverviewService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -62,12 +63,18 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         String newTestIds = evalDetailDecorate.getEvalTestIds();
         String oldAlgoIds = oldEvalOverview.getEvalAlgoIds();
         String newAlgoIds = evalDetailDecorate.getEvalAlgoIds();
-        List<String> oldTestIdList = Arrays.asList(oldTestIds.split(","));
+        List<String> oldTestIdList = new ArrayList<>();
+        if(!StringUtils.isEmpty(oldTestIds)) {
+            oldTestIdList = Arrays.asList(oldTestIds.split(","));
+        }
         List<String> newTestIdList = Arrays.asList(newTestIds.split(","));
         //在newTestIdList中寻找oldTestIdList的每一个元素，如果不存在，则输出
         List<String> diffTestIdList = oldTestIdList.stream().filter(item -> !newTestIdList.contains(item)).collect(Collectors.toList());
         // 对于algoId做相同的操作
-        List<String> oldAlgoIdList = Arrays.asList(oldAlgoIds.split(","));
+        List<String> oldAlgoIdList = new ArrayList<>();
+        if(!StringUtils.isEmpty(oldAlgoIds)) {
+            oldAlgoIdList = Arrays.asList(oldAlgoIds.split(","));
+        }
         List<String> newAlgoIdList = Arrays.asList(newAlgoIds.split(","));
         List<String> diffAlgoIdList = oldAlgoIdList.stream().filter(item -> !newAlgoIdList.contains(item)).collect(Collectors.toList());
         // 通过使用evalDetailMapper删除所有其testId在diffTestIdList中的记录，还有一个条件是evalOverviewId
