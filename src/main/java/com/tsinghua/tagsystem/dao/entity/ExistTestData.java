@@ -30,5 +30,6 @@ public class ExistTestData extends DataInfo implements Serializable {
     public ExistTestData(DataInfo dataInfo) {
         this.setDataId(dataInfo.getDataId());
         this.setDataName(dataInfo.getDataName());
+        this.setDataPath(dataInfo.getDataPath());
     }
 }
