@@ -20,13 +20,13 @@ public interface EvalOverviewService {
      * @Param("taskName") String taskName, @Param("taskIntro") String taskIntro
      * @return
      */
-    int addEvalOverview(String taskName, String taskIntro, int userId, String userName);
+    int addEvalOverview(EvalOverview evalOverview);
 
     /** 更新评估总览数据，传参为任务名称（taskName）还有任务介绍（taskIntro）还有任务id（taskId）
      * @Param("taskName") String taskName, @Param("taskIntro") String taskIntro, @Param("taskId") int taskId
      * @return
      */
-    int updateEvalOverview(String taskName, String taskIntro, int taskId);
+    int updateEvalOverview(EvalOverview evalOverview);
 
     /** 删除评估总览数据，传参为任务id（taskId）
      * @Param("taskId") int taskId

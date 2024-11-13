@@ -43,4 +43,12 @@ public class TestModelParam {
     Integer evalUserId;
 
     String evalUserName;
+
+    String modelPath;
+
+    String codeName;
+
+    String envPath;
+
+    String cmd;
 }

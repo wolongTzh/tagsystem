@@ -1,8 +1,7 @@
 package com.tsinghua.tagsystem.service;
 
-import com.tsinghua.tagsystem.dao.entity.EvalDetail;
-import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
-import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
+import com.tsinghua.tagsystem.dao.entity.*;
+import com.tsinghua.tagsystem.model.TestModelParam;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,6 +26,12 @@ public interface EvalDetailService {
 
     int delTestResult(int evalDetailId);
 
-    int AddNewScore(EvalDetail evalDetail);
+    int addNewScore(EvalDetail evalDetail);
+
+    int uploadTestData(UploadTestDataParam param) throws IOException;
+
+    int uploadModel(UploadModelParam param) throws IOException;
+
+    int runTest(TestModelParam param) throws IOException;
 
 }

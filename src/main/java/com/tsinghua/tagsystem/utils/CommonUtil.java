@@ -95,6 +95,7 @@ public class CommonUtil {
         }
         reader.close();
         String jsonStr = sb.toString();
+        System.out.println(jsonStr);
         return JSON.parseObject(jsonStr);
     }
 

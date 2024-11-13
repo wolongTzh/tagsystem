@@ -1,10 +1,12 @@
 package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.tsinghua.tagsystem.controller.utils.EvalDetailControllerUtil;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
+import com.tsinghua.tagsystem.dao.entity.UploadModelParam;
+import com.tsinghua.tagsystem.dao.entity.UploadTestDataParam;
 import com.tsinghua.tagsystem.model.TestModelParam;
-import com.tsinghua.tagsystem.model.UpdateTestDataParam;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
@@ -25,31 +27,50 @@ public class EvalDetailController {
 
     @GetMapping(value = "display")
     public WebResInfo display(int evalOverviewId) throws IOException {
+//        EvalDetailControllerUtil.validDisplayParam(evalOverviewId);
         return WebUtil.successResult(evalDetailService.getEvalDetail(evalOverviewId));
     }
 
     @PostMapping(value = "updateTable")
     public WebResInfo updateTable(@RequestBody EvalDetailDecorate evalDetailDecorate) throws IOException {
+//        EvalDetailControllerUtil.validUpdateTableParam(evalDetailDecorate);
         evalDetailService.updateEvalDetail(evalDetailDecorate);
         return WebUtil.successResult("success");
     }
 
     @PostMapping(value = "runTest")
     public WebResInfo testModel(@RequestBody TestModelParam testModelParam) throws IOException {
-        String url = "http://192.168.3.39:8081/algo_start";
-        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(testModelParam));
+
+//        EvalDetailControllerUtil.validTestModelParam(testModelParam);
+        evalDetailService.runTest(testModelParam);
         return WebUtil.successResult("success");
     }
 
     @PostMapping(value = "deleteTestResult")
     public WebResInfo deleteTestResult(@RequestBody EvalDetail evalDetail) throws IOException {
+//        EvalDetailControllerUtil.validDeleteTestResultParam(evalDetail);
         evalDetailService.delTestResult(evalDetail.getEvalDetailId());
         return WebUtil.successResult("success");
     }
 
     @PostMapping(value = "updateScore")
     public WebResInfo updateScore(@RequestBody EvalDetail evalDetail) throws IOException {
-        evalDetailService.AddNewScore(evalDetail);
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.addNewScore(evalDetail);
         return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "uploadTestData")
+    public WebResInfo uploadTestData(UploadTestDataParam uploadTestDataParam) throws IOException {
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int testDataId = evalDetailService.uploadTestData(uploadTestDataParam);
+        return WebUtil.successResult(testDataId);
+    }
+
+    @PostMapping(value = "uploadModelData")
+    public WebResInfo uploadTestData(UploadModelParam uploadModelParam) throws IOException {
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int modelId = evalDetailService.uploadModel(uploadModelParam);
+        return WebUtil.successResult(modelId);
     }
 }

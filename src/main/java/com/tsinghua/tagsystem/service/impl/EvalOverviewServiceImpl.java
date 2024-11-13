@@ -49,12 +49,12 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
      * @param taskIntro 任务简介
      * @param userId 用户id
      */
-    public int addEvalOverview(String taskName, String taskIntro, int userId, String userName) {
+    public int addEvalOverview(EvalOverview evalOverviewParam) {
         EvalOverview evalOverview = EvalOverview.builder()
-                .evalOverviewName(taskName)
-                .evalOverviewIntro(taskIntro)
-                .evalOverviewUserId(userId)
-                .evalOverviewUserName(userName)
+                .evalOverviewName(evalOverviewParam.getEvalOverviewName())
+                .evalOverviewIntro(evalOverviewParam.getEvalOverviewIntro())
+                .evalOverviewUserId(evalOverviewParam.getEvalOverviewUserId())
+                .evalOverviewUserName(evalOverviewParam.getEvalOverviewUserName())
                 // 使用当前时间赋值OverviewTime
                 .evalOverviewTime(LocalDateTime.now())
                 .build();
@@ -63,13 +63,13 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     }
 
     @Override
-    public int updateEvalOverview(String taskName, String taskIntro, int taskId) {
+    public int updateEvalOverview(EvalOverview evalOverview) {
         QueryWrapper<EvalOverview> param = new QueryWrapper<>();
         // 判断需要taskId相同的条件
-        param.eq("eval_overview_id", taskId);
+        param.eq("eval_overview_id", evalOverview.getEvalOverviewId());
         return evalOverviewMapper.update(EvalOverview.builder()
-                .evalOverviewName(taskName)
-                .evalOverviewIntro(taskIntro)
+                .evalOverviewName(evalOverview.getEvalOverviewName())
+                .evalOverviewIntro(evalOverview.getEvalOverviewIntro())
                 .build(), param);
     }
 

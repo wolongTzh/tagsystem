@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
+
 import com.tsinghua.tagsystem.constant.WebConstant;
 import com.tsinghua.tagsystem.exception.BusinessException;
 import com.tsinghua.tagsystem.utils.WebUtil;
@@ -52,7 +53,7 @@ public class ExceptionController {
         String msg = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.error(msg);
         log.error("BindException params={}", JSON.toJSONString(parameterMap), ex);
-        String reason = ex.getMessage();
+        String reason = "Internal Server Error";
         return WebUtil.errResult(WebConstant.RESULT_SERVER_ERROR_CODE, reason);
     }
 
@@ -65,7 +66,7 @@ public class ExceptionController {
         } else {
             log.error("ServerException! params={}", request.getDescription(true), exception);
         }
-        String reason = exception.getMessage();
+        String reason = "Internal Server Error";
         return WebUtil.errResult(WebConstant.RESULT_SERVER_ERROR_CODE, reason);
     }
 

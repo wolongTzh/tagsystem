@@ -7,13 +7,16 @@ import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalDetailMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.dao.mapper.ModelInfoMapper;
+import com.tsinghua.tagsystem.model.TestModelParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -106,10 +109,63 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int AddNewScore(EvalDetail evalDetail) {
+    public int addNewScore(EvalDetail evalDetail) {
         // 设置当前时间置evalDetail的evalTime字段
         evalDetail.setEvalTime(LocalDateTime.now());
         evalDetailMapper.insert(evalDetail);
         return evalDetail.getEvalDetailId();
+    }
+
+    @Override
+    public int uploadTestData(UploadTestDataParam param) throws IOException {
+        String dataName = param.getDataName();
+        File destFile = new File("/home/tz/copy-code/docker-pytorch/input/" + dataName + ".json");
+        MultipartFile multipartFile = param.getFile();
+        multipartFile.transferTo(destFile);
+        DataInfo dataInfo = new DataInfo();
+        dataInfo.setDataName(dataName);
+        dataInfo.setDataCreatorId(param.getEvalUserId());
+        dataInfo.setDataCreatorName(param.getEvalUserName());
+        dataInfo.setDataPath("/home/tz/copy-code/docker-pytorch/input/" + dataName + ".json");
+        dataInfo.setDataGenTime(LocalDateTime.now());
+        dataInfo.setDataType("EVAL");
+        dataInfo.setDataRelaInfo("");
+        dataInfoMapper.insert(dataInfo);
+        return dataInfo.getDataId();
+    }
+
+    @Override
+    public int uploadModel(UploadModelParam param) throws IOException {
+        String modelName = param.getModelName();
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + modelName + ".tar.gz");
+        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch/" + modelName + "-env.tar.gz");
+        MultipartFile modelFile = param.getCode();
+        MultipartFile envFile = param.getEnv();
+        modelFile.transferTo(destModelFile);
+        envFile.transferTo(destEnvFile);
+        ModelInfo modelInfo = new ModelInfo();
+        modelInfo.setModelCreator(param.getEvalUserName());
+        modelInfo.setModelCreatorId(param.getEvalUserId());
+        modelInfo.setModelGenTime(LocalDateTime.now());
+        modelInfo.setModelName(modelName);
+        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + modelName + ".tar.gz");
+        modelInfo.setEnvPath("/home/tz/copy-code/docker-pytorch/" + modelName + "-env.tar.gz");
+        modelInfo.setCodeName(param.getCodeName());
+        modelInfo.setCmd(param.getCmd());
+        modelInfo.setModelVersion("V1");
+        modelInfoMapper.insert(modelInfo);
+        return modelInfo.getModelId();
+    }
+
+    @Override
+    public int runTest(TestModelParam param) throws IOException {
+        String url = "http://192.168.3.39:8081/eval_upload_model";
+        ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
+        param.setCmd(modelInfo.getCmd());
+        param.setCodeName(param.getCodeName());
+        param.setEnvPath(param.getEnvPath());
+        param.setModelPath(param.getModelPath());
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
     }
 }

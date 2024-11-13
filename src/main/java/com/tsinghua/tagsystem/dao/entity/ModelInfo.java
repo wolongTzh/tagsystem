@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -52,6 +53,12 @@ public class ModelInfo implements Serializable {
     private String modelF1Detail;
 
     private String modelVersion;
+
+    private String codeName;
+
+    private String envPath;
+
+    private String cmd;
 
 
 }
