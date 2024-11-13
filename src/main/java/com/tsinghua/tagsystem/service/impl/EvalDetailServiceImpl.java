@@ -160,12 +160,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int runTest(TestModelParam param) throws IOException {
         String url = "http://192.168.3.39:8081/eval_upload_model";
-        System.out.println(JSON.toJSONString(param));
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCmd(modelInfo.getCmd());
         param.setCodeName(param.getCodeName());
         param.setEnvPath(param.getEnvPath());
         param.setModelPath(param.getModelPath());
+        System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
     }
