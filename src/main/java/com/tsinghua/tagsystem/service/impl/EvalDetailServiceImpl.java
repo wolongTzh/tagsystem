@@ -119,14 +119,14 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int uploadTestData(UploadTestDataParam param) throws IOException {
         String dataName = param.getDataName();
-        File destFile = new File("/home/tz/copy-code/docker-pytorch/input/" + dataName + ".json");
+        File destFile = new File("/home/tz/copy-code/docker-pytorch/input/" + param.getEvalUserName() + "-" + dataName + ".json");
         MultipartFile multipartFile = param.getFile();
         multipartFile.transferTo(destFile);
         DataInfo dataInfo = new DataInfo();
         dataInfo.setDataName(dataName);
         dataInfo.setDataCreatorId(param.getEvalUserId());
         dataInfo.setDataCreatorName(param.getEvalUserName());
-        dataInfo.setDataPath("/home/tz/copy-code/docker-pytorch/input/" + dataName + ".json");
+        dataInfo.setDataPath("/home/tz/copy-code/docker-pytorch/input/" + param.getEvalUserName() + "-" + dataName + ".json");
         dataInfo.setDataGenTime(LocalDateTime.now());
         dataInfo.setDataType("EVAL");
         dataInfo.setDataRelaInfo("");
@@ -137,8 +137,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int uploadModel(UploadModelParam param) throws IOException {
         String modelName = param.getModelName();
-        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + modelName + ".tar.gz");
-        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch/" + modelName + "-env.tar.gz");
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
+        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + "-env.tar.gz");
         MultipartFile modelFile = param.getCode();
         MultipartFile envFile = param.getEnv();
         modelFile.transferTo(destModelFile);
@@ -148,8 +148,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelCreatorId(param.getEvalUserId());
         modelInfo.setModelGenTime(LocalDateTime.now());
         modelInfo.setModelName(modelName);
-        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + modelName + ".tar.gz");
-        modelInfo.setEnvPath("/home/tz/copy-code/docker-pytorch/" + modelName + "-env.tar.gz");
+        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
+        modelInfo.setEnvPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + "-env.tar.gz");
         modelInfo.setCodeName(param.getCodeName());
         modelInfo.setCmd(param.getCmd());
         modelInfo.setModelVersion("V1");
