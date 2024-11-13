@@ -162,9 +162,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         String url = "http://192.168.3.39:8081/eval_upload_model";
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCmd(modelInfo.getCmd());
-        param.setCodeName(param.getCodeName());
-        param.setEnvPath(param.getEnvPath());
-        param.setModelPath(param.getModelPath());
+        param.setCodeName(modelInfo.getCodeName());
+        param.setEnvPath(modelInfo.getEnvPath());
+        param.setModelPath(modelInfo.getModelPath());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
