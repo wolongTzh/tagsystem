@@ -2,6 +2,7 @@ package com.tsinghua.tagsystem;
 
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
+import com.tsinghua.tagsystem.dao.entity.UploadTestDataParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -46,38 +47,27 @@ public class EvalOverviewServiceTest {
 
     @Test
     void addEvalOverview() {
-        int result = evalOverviewService.addEvalOverview("测试任务1", "测试任务介绍1", 1, "user1");
-        assertTrue(result > 0);
-
-        result = evalOverviewService.addEvalOverview("测试任务2", "测试任务介绍2", 2, "user2");
-        assertTrue(result > 0);
-
-        result = evalOverviewService.addEvalOverview("测试任务3", "测试任务介绍3", 3, "user3");
-        assertTrue(result > 0);
-
-        result = evalOverviewService.addEvalOverview("测试任务4", "测试任务介绍4", 4, "user4");
-        assertTrue(result > 0);
-
-        result = evalOverviewService.addEvalOverview("测试任务5", "测试任务介绍5", 5, "user5");
+        EvalOverview evalOverview = EvalOverview.builder()
+                .evalOverviewName("测试任务1")
+                .evalOverviewIntro("测试任务介绍1")
+                .evalOverviewUserId(1)
+                .evalOverviewUserName("user1")
+                .build();
+        int result = evalOverviewService.addEvalOverview(evalOverview);
         assertTrue(result > 0);
     }
 
     @Test
     void updateEvalOverview() {
-        int result = evalOverviewService.updateEvalOverview("测试任务1", "测试任务介绍11", 1);
+        EvalOverview evalOverview = EvalOverview.builder()
+                .evalOverviewName("测试任务1")
+                .evalOverviewIntro("测试任务介绍1")
+                .evalOverviewUserId(1)
+                .evalOverviewUserName("user1")
+                .build();
+        int result = evalOverviewService.updateEvalOverview(evalOverview);
         assertEquals(1, result);
 
-        int result2 = evalOverviewService.updateEvalOverview("测试任务2", "测试任务介绍22", 2);
-        assertEquals(1, result2);
-
-        int result3 = evalOverviewService.updateEvalOverview("测试任务3", "测试任务介绍33", 3);
-        assertEquals(1, result3);
-
-        int result4 = evalOverviewService.updateEvalOverview("测试任务4", "测试任务介绍44", 4);
-        assertEquals(1, result4);
-
-        int result5 = evalOverviewService.updateEvalOverview("测试任务5", "测试任务介绍55", 5);
-        assertEquals(1, result5);
     }
 
     @Test

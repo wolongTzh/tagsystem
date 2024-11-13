@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -91,5 +92,11 @@ public class WorkerServiceTest {
                 .checkList(checkAtomList)
                 .build();
         workerService.saveCheck(param);
+    }
+
+    @Test
+    public void testJSONParser() throws IOException {
+        File file = new File("input.json");
+        CommonUtil.readJsonOut(file);
     }
 }

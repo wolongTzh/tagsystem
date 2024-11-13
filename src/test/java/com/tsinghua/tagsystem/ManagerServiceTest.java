@@ -2,7 +2,9 @@ package com.tsinghua.tagsystem;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tsinghua.tagsystem.dao.entity.ModelEval;
 import com.tsinghua.tagsystem.dao.entity.TsUser;
+import com.tsinghua.tagsystem.manager.ModelEvalManager;
 import com.tsinghua.tagsystem.model.ManagerTaskSupervise;
 import com.tsinghua.tagsystem.model.Member;
 import com.tsinghua.tagsystem.model.Relation;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +30,25 @@ public class ManagerServiceTest {
 
     @Autowired
     ManagerService managerService;
+
+    @Autowired
+    ModelEvalManager modelEvalManager;
+
+    @Test
+    public void createModelEval() {
+        ModelEval modelEval = ModelEval.builder()
+                .modelEvalId(1)
+                .modelId(1001)
+                .modelEvalDataName("测试集1")
+                .modelEvalTime(LocalDateTime.now())
+                .modelName("W2NER")
+                .modelScore("pre:80%;recall:80%;f1:80%")
+                .modelUserId(1001)
+                .modelScoreDetail("")
+                .build();
+
+        modelEvalManager.saveOrUpdate(modelEval);
+    }
     @Test
     public void createTaskTest() throws IOException {
         File file = new File("./input.json");
