@@ -2,8 +2,10 @@ package com.tsinghua.tagsystem.service;
 
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
+import com.tsinghua.tagsystem.model.params.UploadAlgoParam;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -33,4 +35,6 @@ public interface EvalOverviewService {
      * @return
      */
     int deleteEvalOverview(int taskId);
+
+    int uploadAlgo(UploadAlgoParam param) throws IOException;
 }

@@ -1,4 +1,4 @@
-package com.tsinghua.tagsystem.model;
+package com.tsinghua.tagsystem.model.params;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

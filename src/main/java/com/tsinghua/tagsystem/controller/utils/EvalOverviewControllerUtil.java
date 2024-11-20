@@ -1,12 +1,9 @@
 package com.tsinghua.tagsystem.controller.utils;
 
 import com.tsinghua.tagsystem.constant.WebConstant;
-import com.tsinghua.tagsystem.dao.entity.EvalDetail;
-import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.enums.BusinessExceptionEnum;
 import com.tsinghua.tagsystem.exception.BusinessException;
-import com.tsinghua.tagsystem.model.TestModelParam;
 import org.springframework.util.StringUtils;
 
 public class EvalOverviewControllerUtil {

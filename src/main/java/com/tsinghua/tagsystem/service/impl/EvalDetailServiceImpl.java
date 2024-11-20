@@ -3,13 +3,9 @@ package com.tsinghua.tagsystem.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tsinghua.tagsystem.dao.entity.*;
-import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
-import com.tsinghua.tagsystem.dao.mapper.EvalDetailMapper;
-import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
-import com.tsinghua.tagsystem.dao.mapper.ModelInfoMapper;
-import com.tsinghua.tagsystem.model.TestModelParam;
+import com.tsinghua.tagsystem.dao.mapper.*;
+import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.service.EvalDetailService;
-import com.tsinghua.tagsystem.service.EvalOverviewService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +34,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Autowired
     DataInfoMapper dataInfoMapper;
+    @Autowired
+    AlgoInfoMapper algoInfoMapper;
 
 
     @Override
@@ -150,9 +148,26 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelName(modelName);
         modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
         modelInfo.setEnvPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + "-env.tar.gz");
-        modelInfo.setCodeName(param.getCodeName());
         modelInfo.setCmd(param.getCmd());
         modelInfo.setModelVersion("V1");
+        modelInfoMapper.insert(modelInfo);
+        return modelInfo.getModelId();
+    }
+
+    @Override
+    public int uploadModelFile(UploadModelFileParam param) throws IOException {
+        String modelName = param.getModelParamFileName();
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
+        MultipartFile modelFile = param.getFile();
+        modelFile.transferTo(destModelFile);
+        ModelInfo modelInfo = new ModelInfo();
+        modelInfo.setModelCreator(param.getEvalUserName());
+        modelInfo.setModelCreatorId(param.getEvalUserId());
+        modelInfo.setModelGenTime(LocalDateTime.now());
+        modelInfo.setModelName(modelName);
+        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
+        modelInfo.setModelVersion("V1");
+        modelInfo.setAlgoId(param.getAlgoId());
         modelInfoMapper.insert(modelInfo);
         return modelInfo.getModelId();
     }
@@ -162,9 +177,23 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         String url = "http://192.168.3.39:8081/eval_upload_model";
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCmd(modelInfo.getCmd());
-        param.setCodeName(modelInfo.getCodeName());
         param.setEnvPath(modelInfo.getEnvPath());
         param.setModelPath(modelInfo.getModelPath());
+        System.out.println(JSON.toJSONString(param));
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
+    }
+
+    @Override
+    public int runTestModel(TestModelParam param) throws IOException {
+        String url = "http://192.168.3.39:8081/eval_upload_model_file";
+        AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
+        ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
+        System.out.println(JSON.toJSONString(algoInfo));
+        param.setCmd(algoInfo.getCmd());
+        param.setEnvPath(algoInfo.getEnvPath());
+        param.setModelPath(algoInfo.getAlgoPath());
+        param.setModelFilePath(modelInfo.getModelPath());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;

@@ -1,4 +1,4 @@
-package com.tsinghua.tagsystem.dao.entity;
+package com.tsinghua.tagsystem.model.params;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,13 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class UploadModelParam {
+public class UploadTestDataParam {
 
     int evalUserId;
+
     String evalUserName;
-    String modelName;
-    MultipartFile code;
-    MultipartFile env;
-    String codeName;
-    String cmd;
+
+    String dataName;
+
+    MultipartFile file;
 }

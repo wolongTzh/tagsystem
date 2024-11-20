@@ -4,6 +4,8 @@ import com.tsinghua.tagsystem.controller.utils.EvalOverviewControllerUtil;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.ModelEval;
 import com.tsinghua.tagsystem.model.WebResInfo;
+import com.tsinghua.tagsystem.model.params.UploadAlgoParam;
+import com.tsinghua.tagsystem.model.params.UploadModelParam;
 import com.tsinghua.tagsystem.service.ModelEvalService;
 import com.tsinghua.tagsystem.service.impl.EvalOverviewServiceImpl;
 import com.tsinghua.tagsystem.utils.HttpUtil;
@@ -54,5 +56,13 @@ public class EvalOverviewController {
 //        EvalOverviewControllerUtil.validDeleteTaskParam(evalOverview);
         evalOverviewService.deleteEvalOverview(evalOverview.getEvalOverviewId());
         return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "uploadAlgoData")
+    public WebResInfo uploadTestData(UploadAlgoParam uploadAlgoParam) throws IOException {
+        log.info("into uploadAlgoData");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int algoId = evalOverviewService.uploadAlgo(uploadAlgoParam);
+        return WebUtil.successResult(algoId);
     }
 }

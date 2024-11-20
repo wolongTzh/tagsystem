@@ -1,11 +1,10 @@
 package com.tsinghua.tagsystem.service;
 
 import com.tsinghua.tagsystem.dao.entity.*;
-import com.tsinghua.tagsystem.model.TestModelParam;
+import com.tsinghua.tagsystem.model.params.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public interface EvalDetailService {
@@ -32,6 +31,10 @@ public interface EvalDetailService {
 
     int uploadModel(UploadModelParam param) throws IOException;
 
+    int uploadModelFile(UploadModelFileParam param) throws IOException;
+
     int runTest(TestModelParam param) throws IOException;
+
+    int runTestModel(TestModelParam param) throws IOException;
 
 }

@@ -2,9 +2,10 @@ package com.tsinghua.tagsystem.controller;
 
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
-import com.tsinghua.tagsystem.dao.entity.UploadModelParam;
-import com.tsinghua.tagsystem.dao.entity.UploadTestDataParam;
-import com.tsinghua.tagsystem.model.TestModelParam;
+import com.tsinghua.tagsystem.model.params.UploadModelFileParam;
+import com.tsinghua.tagsystem.model.params.UploadModelParam;
+import com.tsinghua.tagsystem.model.params.UploadTestDataParam;
+import com.tsinghua.tagsystem.model.params.TestModelParam;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.WebUtil;
@@ -38,10 +39,18 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "runTest")
-    public WebResInfo testModel(@RequestBody TestModelParam testModelParam) throws IOException {
+    public WebResInfo runTest(@RequestBody TestModelParam testModelParam) throws IOException {
         log.info("into runTest");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
         evalDetailService.runTest(testModelParam);
+        return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "runTestModel")
+    public WebResInfo runTestModel(@RequestBody TestModelParam testModelParam) throws IOException {
+        log.info("into runTest");
+//        EvalDetailControllerUtil.validTestModelParam(testModelParam);
+        evalDetailService.runTestModel(testModelParam);
         return WebUtil.successResult("success");
     }
 
@@ -74,6 +83,14 @@ public class EvalDetailController {
         log.info("into uploadModelData");
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int modelId = evalDetailService.uploadModel(uploadModelParam);
+        return WebUtil.successResult(modelId);
+    }
+
+    @PostMapping(value = "uploadModelParamFileData")
+    public WebResInfo uploadModelParamFileData(UploadModelFileParam uploadModelFileParam) throws IOException {
+        log.info("into uploadModelData");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int modelId = evalDetailService.uploadModelFile(uploadModelFileParam);
         return WebUtil.successResult(modelId);
     }
 }

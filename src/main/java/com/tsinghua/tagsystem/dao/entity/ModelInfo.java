@@ -54,11 +54,10 @@ public class ModelInfo implements Serializable {
 
     private String modelVersion;
 
-    private String codeName;
-
     private String envPath;
 
     private String cmd;
 
+    private int algoId;
 
 }

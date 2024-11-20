@@ -1,4 +1,4 @@
-package com.tsinghua.tagsystem.model;
+package com.tsinghua.tagsystem.model.params;
 
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
@@ -45,6 +45,8 @@ public class TestModelParam {
     String evalUserName;
 
     String modelPath;
+
+    String modelFilePath;
 
     String codeName;
 

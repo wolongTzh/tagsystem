@@ -1,22 +1,12 @@
 package com.tsinghua.tagsystem.controller.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.constant.WebConstant;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.enums.BusinessExceptionEnum;
 import com.tsinghua.tagsystem.exception.BusinessException;
-import com.tsinghua.tagsystem.model.TestModelParam;
-import com.tsinghua.tagsystem.model.WebResInfo;
-import com.tsinghua.tagsystem.service.EvalDetailService;
-import com.tsinghua.tagsystem.utils.HttpUtil;
-import com.tsinghua.tagsystem.utils.WebUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tsinghua.tagsystem.model.params.TestModelParam;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 public class EvalDetailControllerUtil {
 

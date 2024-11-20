@@ -1,13 +1,19 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tsinghua.tagsystem.dao.entity.AlgoInfo;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
+import com.tsinghua.tagsystem.dao.mapper.AlgoInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
+import com.tsinghua.tagsystem.model.params.UploadAlgoParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +24,8 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
 
     @Autowired
     EvalOverviewMapper evalOverviewMapper;
+    @Autowired
+    AlgoInfoMapper algoInfoMapper;
 
 
     @Override
@@ -76,5 +84,28 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     @Override
     public int deleteEvalOverview(int taskId) {
         return evalOverviewMapper.deleteById(taskId);
+    }
+
+    @Override
+    public int uploadAlgo(UploadAlgoParam param) throws IOException {
+        String algoName = param.getAlgoName();
+        File destModelFile = new File("C:\\工作资料\\" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
+        File destEnvFile = new File("C:\\工作资料\\" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
+        MultipartFile modelFile = param.getCode();
+        MultipartFile envFile = param.getEnv();
+        modelFile.transferTo(destModelFile);
+        envFile.transferTo(destEnvFile);
+        AlgoInfo algoInfo = new AlgoInfo();
+        algoInfo.setAlgoCreatorName(param.getEvalUserName());
+        algoInfo.setAlgoCreatorId(param.getEvalUserId());
+        algoInfo.setAlgoGenTime(LocalDateTime.now());
+        algoInfo.setAlgoName(algoName);
+        algoInfo.setAlgoPath("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
+        algoInfo.setEnvPath("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
+        algoInfo.setCmd(param.getCmd());
+        algoInfo.setAlgoVersion("V1");
+        algoInfo.setEvalOverviewId(param.getEvalOverviewId());
+        algoInfoMapper.insert(algoInfo);
+        return algoInfo.getAlgoId();
     }
 }

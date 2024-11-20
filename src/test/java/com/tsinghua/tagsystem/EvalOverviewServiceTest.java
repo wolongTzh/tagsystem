@@ -2,7 +2,6 @@ package com.tsinghua.tagsystem;
 
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
-import com.tsinghua.tagsystem.dao.entity.UploadTestDataParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
