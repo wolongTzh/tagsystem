@@ -1,3 +1,8 @@
+server:
+  maxHttpHeaderSize: 8KB
+  tomcat:
+    maxHttpFormPostSize: 10240MB
+    maxConnections: 2000
 spring:
   servlet:
     multipart:
