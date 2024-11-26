@@ -1,10 +1,8 @@
-server:
-  maxHttpHeaderSize: 8KB
-  tomcat:
-    maxHttpFormPostSize: 2MB
-    maxSwallowSize: 2MB
-    maxConnections: 2000
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 读库和写库的地址，目前写库可以配置为一个，读库可配置为多个
