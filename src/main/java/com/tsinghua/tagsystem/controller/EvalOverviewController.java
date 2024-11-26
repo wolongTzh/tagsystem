@@ -60,7 +60,7 @@ public class EvalOverviewController {
     }
 
     @PostMapping(value = "createPromoteTask")
-    public WebResInfo uploadTestData(@RequestBody BuildPromoteTaskParam buildPromoteTaskParam) throws IOException {
+    public WebResInfo uploadTestData(BuildPromoteTaskParam buildPromoteTaskParam) throws IOException {
         log.info("into createPromoteTask");
         log.info(JSON.toJSONString(buildPromoteTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
