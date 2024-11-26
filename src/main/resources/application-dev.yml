@@ -1,19 +1,25 @@
-server:
-  maxHttpHeaderSize: 8KB
-  tomcat:
-    maxHttpFormPostSize: 2MB
-    maxSwallowSize: 2MB
-    maxConnections: 2000
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 读库和写库的地址，目前写库可以配置为一个，读库可配置为多个
     url: jdbc:mysql://47.94.201.245:3306/tagsystem?useSSL=false&serverTimezone=Asia/Shanghai&autoReconnect=true&characterEncoding=utf8
     username: root
     password: Keg2022!
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 10
+      max-lifetime: 30000   #不能小于30秒，否则默认回到1800秒
+
 path:
   taskBase: C:\\工作资料\\技术相关\\tagsystem\\%s
   finalTag: C:\\工作资料\\技术相关\\tagsystem\\%s\\finalTag.json
   subTaskFile: C:\\工作资料\\技术相关\\tagsystem\\%s\\%s.json
   escapeCheck: C:\\工作资料\\技术相关\\tagsystem\\%s\\escape_check.json
   checked: C:\\工作资料\\技术相关\\tagsystem\\%s\\checked.json
+  modelInfo: C:\\工作资料\\技术相关\\vulcan\\model_info\\%s
+  trainData: C:\\工作资料\\技术相关\\vulcan\\train_data\\%s
+  pendingData: C:\\工作资料\\技术相关\\vulcan\\pending_data\\%s
