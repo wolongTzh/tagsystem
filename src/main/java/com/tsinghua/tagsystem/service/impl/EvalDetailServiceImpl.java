@@ -157,7 +157,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int uploadCheckpoint(UploadCheckpointParam param) throws IOException {
         String checkpointName = param.getCheckpointName();
-        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch-promote/model/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
         MultipartFile modelFile = param.getFile();
         modelFile.transferTo(destModelFile);
         ModelInfo modelInfo = new ModelInfo();
@@ -165,7 +165,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelCreatorId(param.getEvalUserId());
         modelInfo.setModelGenTime(LocalDateTime.now());
         modelInfo.setModelName(checkpointName);
-        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
+        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch-promote/model/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
         modelInfo.setModelVersion("V1");
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         modelInfo.setAlgoId(algoInfo.getAlgoId());

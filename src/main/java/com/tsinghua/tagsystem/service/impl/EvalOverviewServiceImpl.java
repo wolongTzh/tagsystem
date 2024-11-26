@@ -99,8 +99,8 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
         String algoName = param.getEvalOverviewName();
-        File destModelFile = new File("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
-        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
+        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
         MultipartFile modelFile = param.getCode();
         MultipartFile envFile = param.getEnv();
         modelFile.transferTo(destModelFile);
@@ -110,8 +110,8 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         algoInfo.setAlgoCreatorId(param.getEvalUserId());
         algoInfo.setAlgoGenTime(LocalDateTime.now());
         algoInfo.setAlgoName(algoName);
-        algoInfo.setAlgoPath("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
-        algoInfo.setEnvPath("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
+        algoInfo.setAlgoPath("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
+        algoInfo.setEnvPath("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
         algoInfo.setCmd(param.getCmd());
         algoInfo.setAlgoVersion("V1");
         algoInfo.setEvalOverviewId(evalOverviewId);
