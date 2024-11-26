@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class buildPromoteTaskParam {
+public class BuildPromoteTaskParam {
 
     String evalOverviewName;
     String evalOverviewIntro;

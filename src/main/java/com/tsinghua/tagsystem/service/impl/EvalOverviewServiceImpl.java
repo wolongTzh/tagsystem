@@ -6,7 +6,8 @@ import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
 import com.tsinghua.tagsystem.dao.mapper.AlgoInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
-import com.tsinghua.tagsystem.model.params.buildPromoteTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,13 +89,13 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     }
 
     @Override
-    public int buildPromoteTask(buildPromoteTaskParam param) throws IOException {
+    public int buildPromoteTask(BuildPromoteTaskParam param) throws IOException {
         EvalOverview evalOverview = EvalOverview.builder()
                 .evalOverviewName(param.getEvalOverviewName())
                 .evalOverviewIntro(param.getEvalOverviewIntro())
                 .evalOverviewUserId(param.getEvalUserId())
                 .evalOverviewUserName(param.getEvalUserName())
-                .evalOverviewType("算法（模型）优化任务")
+                .evalOverviewType("优化任务")
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
         String algoName = param.getAlgoName();
@@ -115,6 +116,19 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         algoInfo.setAlgoVersion("V1");
         algoInfo.setEvalOverviewId(evalOverviewId);
         algoInfoMapper.insert(algoInfo);
-        return algoInfo.getAlgoId();
+        return evalOverviewId;
+    }
+
+    @Override
+    public int buildCompareTask(BuildCompareTaskParam param) throws IOException {
+        EvalOverview evalOverview = EvalOverview.builder()
+                .evalOverviewName(param.getEvalOverviewName())
+                .evalOverviewIntro(param.getEvalOverviewIntro())
+                .evalOverviewUserId(param.getEvalUserId())
+                .evalOverviewUserName(param.getEvalUserName())
+                .evalOverviewType("对比任务-" + param.getSource())
+                .build();
+        int evalOverviewId = addEvalOverview(evalOverview);
+        return evalOverviewId;
     }
 }

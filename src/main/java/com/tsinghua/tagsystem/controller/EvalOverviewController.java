@@ -3,7 +3,8 @@ package com.tsinghua.tagsystem.controller;
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.model.WebResInfo;
-import com.tsinghua.tagsystem.model.params.buildPromoteTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.impl.EvalOverviewServiceImpl;
 import com.tsinghua.tagsystem.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -59,11 +60,20 @@ public class EvalOverviewController {
     }
 
     @PostMapping(value = "createPromoteTask")
-    public WebResInfo uploadTestData(buildPromoteTaskParam buildPromoteTaskParam) throws IOException {
-        log.info("into createPromoteTask");
+    public WebResInfo uploadTestData(BuildPromoteTaskParam buildPromoteTaskParam) throws IOException {
+        log.info("into buildPromoteTaskParam");
         log.info(JSON.toJSONString(buildPromoteTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int algoId = evalOverviewService.buildPromoteTask(buildPromoteTaskParam);
         return WebUtil.successResult(algoId);
+    }
+
+    @PostMapping(value = "createCompareTask")
+    public WebResInfo createCompareTask(BuildCompareTaskParam buildCompareTaskParam) throws IOException {
+        log.info("into createCompareTask");
+        log.info(JSON.toJSONString(buildCompareTaskParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int evalOverviewId = evalOverviewService.buildCompareTask(buildCompareTaskParam);
+        return WebUtil.successResult(evalOverviewId);
     }
 }
