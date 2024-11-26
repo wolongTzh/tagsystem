@@ -35,6 +35,7 @@ public class EvalOverviewController {
     public WebResInfo addTask(@RequestBody EvalOverview evalOverview) throws IOException {
         log.info("into overview addTask");
         log.info(JSON.toJSONString(evalOverview));
+        evalOverview.setEvalOverviewType("自定义任务");
 //        EvalOverviewControllerUtil.validAddTaskParam(evalOverview);
         return WebUtil.successResult(evalOverviewService.addEvalOverview(evalOverview));
     }

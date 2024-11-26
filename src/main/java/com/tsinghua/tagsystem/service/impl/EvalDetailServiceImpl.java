@@ -181,6 +181,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelGenTime(LocalDateTime.now());
         modelInfo.setModelName(param.getHugModelName());
         modelInfo.setModelPath(param.getHugModelPath());
+        modelInfo.setAlgoId(null);
         modelInfoMapper.insert(modelInfo);
         return modelInfo.getModelId();
     }

@@ -58,6 +58,6 @@ public class ModelInfo implements Serializable {
 
     private String cmd;
 
-    private int algoId;
+    private Integer algoId;
 
 }
