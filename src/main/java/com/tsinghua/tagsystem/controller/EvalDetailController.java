@@ -86,7 +86,7 @@ public class EvalDetailController {
     @PostMapping(value = "uploadTestData")
     public WebResInfo uploadTestData(UploadTestDataParam uploadTestDataParam) throws IOException {
         log.info("into uploadTestData");
-        log.info(JSON.toJSONString(uploadTestDataParam));
+//        log.info(JSON.toJSONString(uploadTestDataParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int testDataId = evalDetailService.uploadTestData(uploadTestDataParam);
         return WebUtil.successResult(testDataId);
@@ -95,7 +95,7 @@ public class EvalDetailController {
     @PostMapping(value = "uploadModelData")
     public WebResInfo uploadTestData(UploadModelParam uploadModelParam) throws IOException {
         log.info("into uploadModelData");
-        log.info(JSON.toJSONString(uploadModelParam));
+//        log.info(JSON.toJSONString(uploadModelParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int modelId = evalDetailService.uploadModel(uploadModelParam);
         return WebUtil.successResult(modelId);
