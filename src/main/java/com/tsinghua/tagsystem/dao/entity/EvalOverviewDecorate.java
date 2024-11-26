@@ -1,9 +1,7 @@
 package com.tsinghua.tagsystem.dao.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
@@ -33,6 +31,7 @@ public class EvalOverviewDecorate extends EvalOverview {
         this.setEvalOverviewTime(evalOverview.getEvalOverviewTime());
         this.setEvalTestIds(evalOverview.getEvalTestIds());
         this.setEvalAlgoIds(evalOverview.getEvalAlgoIds());
+        this.setEvalOverviewType(evalOverview.getEvalOverviewType());
     }
 
     //重写它的toString方法，使得其可以输出所继承的EvalOverview类里面的全部属性

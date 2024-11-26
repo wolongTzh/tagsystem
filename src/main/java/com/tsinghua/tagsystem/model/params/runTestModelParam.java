@@ -1,16 +1,10 @@
 package com.tsinghua.tagsystem.model.params;
 
-import com.tsinghua.tagsystem.dao.entity.EvalDetail;
-import com.tsinghua.tagsystem.dao.entity.EvalOverview;
-import com.tsinghua.tagsystem.dao.entity.ExistModel;
-import com.tsinghua.tagsystem.dao.entity.ExistTestData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 /**
  * <p>
@@ -25,7 +19,7 @@ import java.util.List;
 @Accessors(chain = true)
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class TestModelParam {
+public class runTestModelParam {
     private static final long serialVersionUID=1L;
 
     Integer evalOverviewId;

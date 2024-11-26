@@ -31,10 +31,10 @@ public interface EvalDetailService {
 
     int uploadModel(UploadModelParam param) throws IOException;
 
-    int uploadModelFile(UploadModelFileParam param) throws IOException;
+    int uploadCheckpoint(uploadCheckpointParam param) throws IOException;
 
-    int runTest(TestModelParam param) throws IOException;
+    int runTest(runTestModelParam param) throws IOException;
 
-    int runTestModel(TestModelParam param) throws IOException;
+    int runTestPromote(runTestModelParam param) throws IOException;
 
 }

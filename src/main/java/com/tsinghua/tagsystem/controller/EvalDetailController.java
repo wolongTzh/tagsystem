@@ -1,11 +1,12 @@
 package com.tsinghua.tagsystem.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
-import com.tsinghua.tagsystem.model.params.UploadModelFileParam;
+import com.tsinghua.tagsystem.model.params.uploadCheckpointParam;
 import com.tsinghua.tagsystem.model.params.UploadModelParam;
 import com.tsinghua.tagsystem.model.params.UploadTestDataParam;
-import com.tsinghua.tagsystem.model.params.TestModelParam;
+import com.tsinghua.tagsystem.model.params.runTestModelParam;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.WebUtil;
@@ -39,18 +40,19 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "runTest")
-    public WebResInfo runTest(@RequestBody TestModelParam testModelParam) throws IOException {
+    public WebResInfo runTest(@RequestBody runTestModelParam runTestModelParam) throws IOException {
         log.info("into runTest");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
-        evalDetailService.runTest(testModelParam);
+        evalDetailService.runTest(runTestModelParam);
         return WebUtil.successResult("success");
     }
 
-    @PostMapping(value = "runTestModel")
-    public WebResInfo runTestModel(@RequestBody TestModelParam testModelParam) throws IOException {
-        log.info("into runTest");
+    @PostMapping(value = "runTestPromote")
+    public WebResInfo runTestModel(@RequestBody runTestModelParam runTestModelParam) throws IOException {
+        log.info("into runTestPromote");
+        log.info(JSON.toJSONString(runTestModelParam));
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
-        evalDetailService.runTestModel(testModelParam);
+        evalDetailService.runTestPromote(runTestModelParam);
         return WebUtil.successResult("success");
     }
 
@@ -86,11 +88,12 @@ public class EvalDetailController {
         return WebUtil.successResult(modelId);
     }
 
-    @PostMapping(value = "uploadModelParamFileData")
-    public WebResInfo uploadModelParamFileData(UploadModelFileParam uploadModelFileParam) throws IOException {
-        log.info("into uploadModelData");
+    @PostMapping(value = "uploadCheckpoint")
+    public WebResInfo uploadCheckpoint(uploadCheckpointParam uploadCheckpointParam) throws IOException {
+        log.info("into uploadCheckpoint");
+        log.info(JSON.toJSONString(uploadCheckpointParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
-        int modelId = evalDetailService.uploadModelFile(uploadModelFileParam);
+        int modelId = evalDetailService.uploadCheckpoint(uploadCheckpointParam);
         return WebUtil.successResult(modelId);
     }
 }

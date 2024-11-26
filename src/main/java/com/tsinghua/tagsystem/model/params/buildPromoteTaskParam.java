@@ -10,11 +10,15 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class UploadModelFileParam {
+public class buildPromoteTaskParam {
 
+    String evalOverviewName;
+    String evalOverviewIntro;
     int evalUserId;
     String evalUserName;
-    String modelParamFileName;
-    MultipartFile file;
-    int algoId;
+    String algoName;
+    MultipartFile code;
+    MultipartFile env;
+    String cmd;
+    int evalOverviewId;
 }

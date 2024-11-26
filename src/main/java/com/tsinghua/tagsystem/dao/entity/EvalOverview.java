@@ -53,5 +53,7 @@ public class EvalOverview implements Serializable {
 
     public String evalOverviewUserName;
 
+    public String evalOverviewType;
+
 
 }

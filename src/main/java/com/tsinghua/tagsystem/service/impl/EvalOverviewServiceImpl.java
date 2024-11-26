@@ -6,7 +6,7 @@ import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
 import com.tsinghua.tagsystem.dao.mapper.AlgoInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
-import com.tsinghua.tagsystem.model.params.UploadAlgoParam;
+import com.tsinghua.tagsystem.model.params.buildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +63,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewIntro(evalOverviewParam.getEvalOverviewIntro())
                 .evalOverviewUserId(evalOverviewParam.getEvalOverviewUserId())
                 .evalOverviewUserName(evalOverviewParam.getEvalOverviewUserName())
+                .evalOverviewType(evalOverviewParam.getEvalOverviewType())
                 // 使用当前时间赋值OverviewTime
                 .evalOverviewTime(LocalDateTime.now())
                 .build();
@@ -87,10 +88,18 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     }
 
     @Override
-    public int uploadAlgo(UploadAlgoParam param) throws IOException {
+    public int buildPromoteTask(buildPromoteTaskParam param) throws IOException {
+        EvalOverview evalOverview = EvalOverview.builder()
+                .evalOverviewName(param.getEvalOverviewName())
+                .evalOverviewIntro(param.getEvalOverviewIntro())
+                .evalOverviewUserId(param.getEvalUserId())
+                .evalOverviewUserName(param.getEvalUserName())
+                .evalOverviewType("算法（模型）优化任务")
+                .build();
+        int evalOverviewId = addEvalOverview(evalOverview);
         String algoName = param.getAlgoName();
-        File destModelFile = new File("C:\\工作资料\\" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
-        File destEnvFile = new File("C:\\工作资料\\" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
+        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
         MultipartFile modelFile = param.getCode();
         MultipartFile envFile = param.getEnv();
         modelFile.transferTo(destModelFile);
@@ -104,7 +113,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         algoInfo.setEnvPath("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
         algoInfo.setCmd(param.getCmd());
         algoInfo.setAlgoVersion("V1");
-        algoInfo.setEvalOverviewId(param.getEvalOverviewId());
+        algoInfo.setEvalOverviewId(evalOverviewId);
         algoInfoMapper.insert(algoInfo);
         return algoInfo.getAlgoId();
     }

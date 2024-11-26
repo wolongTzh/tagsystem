@@ -5,7 +5,7 @@ import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.enums.BusinessExceptionEnum;
 import com.tsinghua.tagsystem.exception.BusinessException;
-import com.tsinghua.tagsystem.model.params.TestModelParam;
+import com.tsinghua.tagsystem.model.params.runTestModelParam;
 import org.springframework.util.StringUtils;
 
 public class EvalDetailControllerUtil {
@@ -39,35 +39,35 @@ public class EvalDetailControllerUtil {
         }
     }
 
-    public static void validTestModelParam(TestModelParam testModelParam) {
-        if (testModelParam == null) {
+    public static void validTestModelParam(runTestModelParam runTestModelParam) {
+        if (runTestModelParam == null) {
             throw new BusinessException(BusinessExceptionEnum.PARAMETER_MISSING_ERROR);
         }
         // 将判断条件修改为StringUtils.isEmpty()
-        if (testModelParam.getEvalOverviewId() == null) {
+        if (runTestModelParam.getEvalOverviewId() == null) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "evalOverviewId不能为空");
         }
-        if (StringUtils.isEmpty(testModelParam.getModelId())) {
+        if (StringUtils.isEmpty(runTestModelParam.getModelId())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "modelId不能为空");
         }
         // 对于如下参数：modelName，evalDataId，evalDataName，dataPath，evalUserId，evalUserName 做相同操作
-        if (StringUtils.isEmpty(testModelParam.getModelName())) {
+        if (StringUtils.isEmpty(runTestModelParam.getModelName())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "modelName不能为空");
         }
-        if (StringUtils.isEmpty(testModelParam.getEvalDataId())) {
+        if (StringUtils.isEmpty(runTestModelParam.getEvalDataId())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "evalDataId不能为空");
         }
-        if (StringUtils.isEmpty(testModelParam.getEvalDataName())) {
+        if (StringUtils.isEmpty(runTestModelParam.getEvalDataName())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "evalDataName不能为空");
         }
-        if (StringUtils.isEmpty(testModelParam.getDataPath())) {
+        if (StringUtils.isEmpty(runTestModelParam.getDataPath())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "dataPath不能为空");
         }
 
-        if (StringUtils.isEmpty(testModelParam.getEvalUserId())) {
+        if (StringUtils.isEmpty(runTestModelParam.getEvalUserId())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "evalUserId不能为空");
         }
-        if (StringUtils.isEmpty(testModelParam.getEvalUserName())) {
+        if (StringUtils.isEmpty(runTestModelParam.getEvalUserName())) {
             throw new BusinessException(WebConstant.RESULT_PARAMETER_ILLEGAL, "evalUserName不能为空");
         }
     }

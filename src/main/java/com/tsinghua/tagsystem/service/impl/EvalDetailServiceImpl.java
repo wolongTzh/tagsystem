@@ -155,17 +155,17 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int uploadModelFile(UploadModelFileParam param) throws IOException {
-        String modelName = param.getModelParamFileName();
-        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
+    public int uploadCheckpoint(uploadCheckpointParam param) throws IOException {
+        String checkpointName = param.getCheckpointName();
+        File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
         MultipartFile modelFile = param.getFile();
         modelFile.transferTo(destModelFile);
         ModelInfo modelInfo = new ModelInfo();
         modelInfo.setModelCreator(param.getEvalUserName());
         modelInfo.setModelCreatorId(param.getEvalUserId());
         modelInfo.setModelGenTime(LocalDateTime.now());
-        modelInfo.setModelName(modelName);
-        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + modelName + ".tar.gz");
+        modelInfo.setModelName(checkpointName);
+        modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
         modelInfo.setModelVersion("V1");
         modelInfo.setAlgoId(param.getAlgoId());
         modelInfoMapper.insert(modelInfo);
@@ -173,7 +173,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int runTest(TestModelParam param) throws IOException {
+    public int runTest(runTestModelParam param) throws IOException {
         String url = "http://192.168.3.39:8081/eval_upload_model";
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCmd(modelInfo.getCmd());
@@ -185,7 +185,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int runTestModel(TestModelParam param) throws IOException {
+    public int runTestPromote(runTestModelParam param) throws IOException {
         String url = "http://192.168.3.39:8081/eval_upload_model_file";
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());

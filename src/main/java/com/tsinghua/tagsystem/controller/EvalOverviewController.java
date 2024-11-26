@@ -1,14 +1,10 @@
 package com.tsinghua.tagsystem.controller;
 
-import com.tsinghua.tagsystem.controller.utils.EvalOverviewControllerUtil;
+import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
-import com.tsinghua.tagsystem.dao.entity.ModelEval;
 import com.tsinghua.tagsystem.model.WebResInfo;
-import com.tsinghua.tagsystem.model.params.UploadAlgoParam;
-import com.tsinghua.tagsystem.model.params.UploadModelParam;
-import com.tsinghua.tagsystem.service.ModelEvalService;
+import com.tsinghua.tagsystem.model.params.buildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.impl.EvalOverviewServiceImpl;
-import com.tsinghua.tagsystem.utils.HttpUtil;
 import com.tsinghua.tagsystem.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +54,12 @@ public class EvalOverviewController {
         return WebUtil.successResult("success");
     }
 
-    @PostMapping(value = "uploadAlgoData")
-    public WebResInfo uploadTestData(UploadAlgoParam uploadAlgoParam) throws IOException {
-        log.info("into uploadAlgoData");
+    @PostMapping(value = "createPromoteTask")
+    public WebResInfo uploadTestData(buildPromoteTaskParam buildPromoteTaskParam) throws IOException {
+        log.info("into createPromoteTask");
+        log.info(JSON.toJSONString(buildPromoteTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
-        int algoId = evalOverviewService.uploadAlgo(uploadAlgoParam);
+        int algoId = evalOverviewService.buildPromoteTask(buildPromoteTaskParam);
         return WebUtil.successResult(algoId);
     }
 }
