@@ -3,7 +3,7 @@ server:
   tomcat:
     maxHttpFormPostSize: 10240MB
     maxConnections: 2000
-    maxParameterCount: 10000
+    maxParameterCount: 100000
 spring:
   servlet:
     multipart:
