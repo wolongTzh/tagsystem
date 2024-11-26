@@ -24,6 +24,7 @@ public class EvalOverviewController {
     @CrossOrigin
     public WebResInfo display(int userId) throws IOException {
         log.info("into overview display");
+        log.info("userId: " + userId);
 //        EvalOverviewControllerUtil.validDisplayParam(userId);
         return WebUtil.successResult(evalOverviewService.getEvalOverview(userId));
     }
@@ -32,6 +33,7 @@ public class EvalOverviewController {
     @CrossOrigin
     public WebResInfo addTask(@RequestBody EvalOverview evalOverview) throws IOException {
         log.info("into overview addTask");
+        log.info(JSON.toJSONString(evalOverview));
 //        EvalOverviewControllerUtil.validAddTaskParam(evalOverview);
         return WebUtil.successResult(evalOverviewService.addEvalOverview(evalOverview));
     }
@@ -40,6 +42,7 @@ public class EvalOverviewController {
     @CrossOrigin
     public WebResInfo updateTask(@RequestBody EvalOverview evalOverview) throws IOException {
         log.info("into overview updateTask");
+        log.info(JSON.toJSONString(evalOverview));
 //        EvalOverviewControllerUtil.validUpdateTaskParam(evalOverview);
         evalOverviewService.updateEvalOverview(evalOverview);
         return WebUtil.successResult("success");
@@ -49,6 +52,7 @@ public class EvalOverviewController {
     @CrossOrigin
     public WebResInfo deleteTask(@RequestBody EvalOverview evalOverview) throws IOException {
         log.info("into overview deleteTask");
+        log.info(JSON.toJSONString(evalOverview));
 //        EvalOverviewControllerUtil.validDeleteTaskParam(evalOverview);
         evalOverviewService.deleteEvalOverview(evalOverview.getEvalOverviewId());
         return WebUtil.successResult("success");

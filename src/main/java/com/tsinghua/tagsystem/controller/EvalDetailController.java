@@ -27,6 +27,7 @@ public class EvalDetailController {
     @GetMapping(value = "display")
     public WebResInfo display(int evalOverviewId) throws IOException {
         log.info("into detail display");
+        log.info("evalOverviewId: " + evalOverviewId);
 //        EvalDetailControllerUtil.validDisplayParam(evalOverviewId);
         return WebUtil.successResult(evalDetailService.getEvalDetail(evalOverviewId));
     }
@@ -34,6 +35,7 @@ public class EvalDetailController {
     @PostMapping(value = "updateTable")
     public WebResInfo updateTable(@RequestBody EvalDetailDecorate evalDetailDecorate) throws IOException {
         log.info("into updateTable");
+        log.info(JSON.toJSONString(evalDetailDecorate));
 //        EvalDetailControllerUtil.validUpdateTableParam(evalDetailDecorate);
         evalDetailService.updateEvalDetail(evalDetailDecorate);
         return WebUtil.successResult("success");
@@ -42,6 +44,7 @@ public class EvalDetailController {
     @PostMapping(value = "runTest")
     public WebResInfo runTest(@RequestBody runTestModelParam runTestModelParam) throws IOException {
         log.info("into runTest");
+        log.info(JSON.toJSONString(runTestModelParam));
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
         evalDetailService.runTest(runTestModelParam);
         return WebUtil.successResult("success");
@@ -59,6 +62,7 @@ public class EvalDetailController {
     @PostMapping(value = "deleteTestResult")
     public WebResInfo deleteTestResult(@RequestBody EvalDetail evalDetail) throws IOException {
         log.info("into deleteTestResult");
+        log.info(JSON.toJSONString(evalDetail));
 //        EvalDetailControllerUtil.validDeleteTestResultParam(evalDetail);
         evalDetailService.delTestResult(evalDetail.getEvalDetailId());
         return WebUtil.successResult("success");
@@ -67,6 +71,7 @@ public class EvalDetailController {
     @PostMapping(value = "updateScore")
     public WebResInfo updateScore(@RequestBody EvalDetail evalDetail) throws IOException {
         log.info("into updateScore");
+        log.info(JSON.toJSONString(evalDetail));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         evalDetailService.addNewScore(evalDetail);
         return WebUtil.successResult("success");
@@ -75,6 +80,7 @@ public class EvalDetailController {
     @PostMapping(value = "uploadTestData")
     public WebResInfo uploadTestData(UploadTestDataParam uploadTestDataParam) throws IOException {
         log.info("into uploadTestData");
+        log.info(JSON.toJSONString(uploadTestDataParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int testDataId = evalDetailService.uploadTestData(uploadTestDataParam);
         return WebUtil.successResult(testDataId);
@@ -83,6 +89,7 @@ public class EvalDetailController {
     @PostMapping(value = "uploadModelData")
     public WebResInfo uploadTestData(UploadModelParam uploadModelParam) throws IOException {
         log.info("into uploadModelData");
+        log.info(JSON.toJSONString(uploadModelParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int modelId = evalDetailService.uploadModel(uploadModelParam);
         return WebUtil.successResult(modelId);
