@@ -98,7 +98,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewType("优化任务")
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
-        String algoName = param.getAlgoName();
+        String algoName = param.getEvalOverviewName();
         File destModelFile = new File("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + ".tar.gz");
         File destEnvFile = new File("/home/tz/copy-code/docker-pytorch-model/" + param.getEvalUserName() + "-" + algoName + "-env.tar.gz");
         MultipartFile modelFile = param.getCode();

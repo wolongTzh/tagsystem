@@ -155,7 +155,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int uploadCheckpoint(uploadCheckpointParam param) throws IOException {
+    public int uploadCheckpoint(UploadCheckpointParam param) throws IOException {
         String checkpointName = param.getCheckpointName();
         File destModelFile = new File("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
         MultipartFile modelFile = param.getFile();
@@ -167,13 +167,26 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelName(checkpointName);
         modelInfo.setModelPath("/home/tz/copy-code/docker-pytorch/" + param.getEvalUserName() + "-" + checkpointName + ".tar.gz");
         modelInfo.setModelVersion("V1");
-        modelInfo.setAlgoId(param.getAlgoId());
+        AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
+        modelInfo.setAlgoId(algoInfo.getAlgoId());
         modelInfoMapper.insert(modelInfo);
         return modelInfo.getModelId();
     }
 
     @Override
-    public int runTest(runTestModelParam param) throws IOException {
+    public int uploadHugModel(UploadHugModelParam param) throws IOException {
+        ModelInfo modelInfo = new ModelInfo();
+        modelInfo.setModelCreator(param.getEvalUserName());
+        modelInfo.setModelCreatorId(param.getEvalUserId());
+        modelInfo.setModelGenTime(LocalDateTime.now());
+        modelInfo.setModelName(param.getHugModelName());
+        modelInfo.setModelPath(param.getHugModelPath());
+        modelInfoMapper.insert(modelInfo);
+        return modelInfo.getModelId();
+    }
+
+    @Override
+    public int runTest(RunTestModelParam param) throws IOException {
         String url = "http://192.168.3.39:8081/eval_upload_model";
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCmd(modelInfo.getCmd());
@@ -185,8 +198,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int runTestPromote(runTestModelParam param) throws IOException {
-        String url = "http://192.168.3.39:8081/eval_upload_model_file";
+    public int runTestPromote(RunTestModelParam param) throws IOException {
+        String url = "http://192.168.3.39:8081/eval_promote_task";
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         System.out.println(JSON.toJSONString(algoInfo));
@@ -194,6 +207,16 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         param.setEnvPath(algoInfo.getEnvPath());
         param.setModelPath(algoInfo.getAlgoPath());
         param.setModelFilePath(modelInfo.getModelPath());
+        System.out.println(JSON.toJSONString(param));
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
+    }
+
+    @Override
+    public int runTestHug(RunTestModelParam param) throws IOException {
+        String url = "http://192.168.3.39:8081/eval_hug_task";
+        ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
+        param.setModelPath(modelInfo.getModelPath());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;

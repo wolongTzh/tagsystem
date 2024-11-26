@@ -3,10 +3,7 @@ package com.tsinghua.tagsystem.controller;
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
-import com.tsinghua.tagsystem.model.params.uploadCheckpointParam;
-import com.tsinghua.tagsystem.model.params.UploadModelParam;
-import com.tsinghua.tagsystem.model.params.UploadTestDataParam;
-import com.tsinghua.tagsystem.model.params.runTestModelParam;
+import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.WebUtil;
@@ -42,7 +39,7 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "runTest")
-    public WebResInfo runTest(@RequestBody runTestModelParam runTestModelParam) throws IOException {
+    public WebResInfo runTest(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTest");
         log.info(JSON.toJSONString(runTestModelParam));
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
@@ -51,11 +48,20 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "runTestPromote")
-    public WebResInfo runTestModel(@RequestBody runTestModelParam runTestModelParam) throws IOException {
+    public WebResInfo runTestModel(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTestPromote");
         log.info(JSON.toJSONString(runTestModelParam));
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
         evalDetailService.runTestPromote(runTestModelParam);
+        return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "runTestHug")
+    public WebResInfo runTestCompare(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
+        log.info("into runTestHug");
+        log.info(JSON.toJSONString(runTestModelParam));
+//        EvalDetailControllerUtil.validTestModelParam(testModelParam);
+        evalDetailService.runTestHug(runTestModelParam);
         return WebUtil.successResult("success");
     }
 
@@ -78,7 +84,7 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "uploadTestData")
-    public WebResInfo uploadTestData(UploadTestDataParam uploadTestDataParam) throws IOException {
+    public WebResInfo uploadTestData(@RequestBody UploadTestDataParam uploadTestDataParam) throws IOException {
         log.info("into uploadTestData");
         log.info(JSON.toJSONString(uploadTestDataParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
@@ -87,7 +93,7 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "uploadModelData")
-    public WebResInfo uploadTestData(UploadModelParam uploadModelParam) throws IOException {
+    public WebResInfo uploadTestData(@RequestBody UploadModelParam uploadModelParam) throws IOException {
         log.info("into uploadModelData");
         log.info(JSON.toJSONString(uploadModelParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
@@ -96,11 +102,20 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "uploadCheckpoint")
-    public WebResInfo uploadCheckpoint(uploadCheckpointParam uploadCheckpointParam) throws IOException {
+    public WebResInfo uploadCheckpoint(@RequestBody UploadCheckpointParam uploadCheckpointParam) throws IOException {
         log.info("into uploadCheckpoint");
         log.info(JSON.toJSONString(uploadCheckpointParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int modelId = evalDetailService.uploadCheckpoint(uploadCheckpointParam);
+        return WebUtil.successResult(modelId);
+    }
+
+    @PostMapping(value = "uploadHugModel")
+    public WebResInfo uploadHugModel(@RequestBody UploadHugModelParam uploadHugModelParam) throws IOException {
+        log.info("into uploadHugModel");
+        log.info(JSON.toJSONString(uploadHugModelParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int modelId = evalDetailService.uploadHugModel(uploadHugModelParam);
         return WebUtil.successResult(modelId);
     }
 }

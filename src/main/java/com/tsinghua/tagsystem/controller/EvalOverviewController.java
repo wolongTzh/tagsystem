@@ -60,8 +60,8 @@ public class EvalOverviewController {
     }
 
     @PostMapping(value = "createPromoteTask")
-    public WebResInfo uploadTestData(BuildPromoteTaskParam buildPromoteTaskParam) throws IOException {
-        log.info("into buildPromoteTaskParam");
+    public WebResInfo uploadTestData(@RequestBody BuildPromoteTaskParam buildPromoteTaskParam) throws IOException {
+        log.info("into createPromoteTask");
         log.info(JSON.toJSONString(buildPromoteTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int algoId = evalOverviewService.buildPromoteTask(buildPromoteTaskParam);
@@ -69,7 +69,7 @@ public class EvalOverviewController {
     }
 
     @PostMapping(value = "createCompareTask")
-    public WebResInfo createCompareTask(BuildCompareTaskParam buildCompareTaskParam) throws IOException {
+    public WebResInfo createCompareTask(@RequestBody BuildCompareTaskParam buildCompareTaskParam) throws IOException {
         log.info("into createCompareTask");
         log.info(JSON.toJSONString(buildCompareTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);

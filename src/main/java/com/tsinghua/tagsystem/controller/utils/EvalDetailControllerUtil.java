@@ -5,7 +5,7 @@ import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.enums.BusinessExceptionEnum;
 import com.tsinghua.tagsystem.exception.BusinessException;
-import com.tsinghua.tagsystem.model.params.runTestModelParam;
+import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import org.springframework.util.StringUtils;
 
 public class EvalDetailControllerUtil {
@@ -39,7 +39,7 @@ public class EvalDetailControllerUtil {
         }
     }
 
-    public static void validTestModelParam(runTestModelParam runTestModelParam) {
+    public static void validTestModelParam(RunTestModelParam runTestModelParam) {
         if (runTestModelParam == null) {
             throw new BusinessException(BusinessExceptionEnum.PARAMETER_MISSING_ERROR);
         }

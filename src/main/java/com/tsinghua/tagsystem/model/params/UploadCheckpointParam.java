@@ -10,11 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class uploadCheckpointParam {
+public class UploadCheckpointParam {
 
     int evalUserId;
     String evalUserName;
     String checkpointName;
     MultipartFile file;
-    int algoId;
+    int evalOverviewId;
 }

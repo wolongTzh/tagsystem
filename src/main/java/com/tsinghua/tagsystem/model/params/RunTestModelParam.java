@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @Accessors(chain = true)
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class runTestModelParam {
+public class RunTestModelParam {
     private static final long serialVersionUID=1L;
 
     Integer evalOverviewId;
