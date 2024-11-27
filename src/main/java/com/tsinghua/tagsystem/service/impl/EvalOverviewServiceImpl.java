@@ -1,11 +1,14 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.AlgoInfo;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
+import com.tsinghua.tagsystem.dao.entity.OverviewUserRela;
 import com.tsinghua.tagsystem.dao.mapper.AlgoInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
+import com.tsinghua.tagsystem.dao.mapper.OverviewUserRelaMapper;
 import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
 import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
@@ -28,13 +31,33 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     @Autowired
     AlgoInfoMapper algoInfoMapper;
 
+    @Autowired
+    OverviewUserRelaMapper overviewUserRelaMapper;
+
+    String modelCodePath;
+    String checkpointPath;
+    String testDataPath;
+    String customizeModeModelPath;
+
+    EvalOverviewServiceImpl(AlchemistPathConfig config) {
+        modelCodePath = config.getModelCodePath();
+        checkpointPath = config.getCheckpointPath();
+        testDataPath = config.getTestDataPath();
+        customizeModeModelPath = config.getCustomizeModeModelPath();
+    }
+
 
     @Override
     public List<EvalOverviewDecorate> getEvalOverview(int userId) {
-        QueryWrapper<EvalOverview> param = new QueryWrapper<>();
-        param.eq("eval_overview_user_id", userId);
-        // 使用evalOverviewMapper中的方法来帮助我返回需要的数据，参数为userId
-        List<EvalOverview> evalOverviewList = evalOverviewMapper.selectList(param);
+        QueryWrapper<OverviewUserRela> relaParam = new QueryWrapper<>();
+        relaParam.eq("user_id", userId);
+        List<OverviewUserRela> overviewUserRelaList = overviewUserRelaMapper.selectList(relaParam);
+        // 以overviewUserRelaList中的overviewId作为条件，查询符合条件的所有EvalOverview，一条语句完成
+        List<EvalOverview> evalOverviewList = evalOverviewMapper.selectBatchIds(overviewUserRelaList.stream().map(OverviewUserRela::getOverviewId).collect(Collectors.toList()));
+//        QueryWrapper<EvalOverview> param = new QueryWrapper<>();
+//        param.eq("eval_overview_user_id", userId);
+//        // 使用evalOverviewMapper中的方法来帮助我返回需要的数据，参数为userId
+//        List<EvalOverview> evalOverviewList = evalOverviewMapper.selectList(param);
         List<EvalOverviewDecorate> evalOverviewDecorateList = new ArrayList<>();
         // 将evalOverviewList中的每一条数据来构造evalOverviewDecorateList的数据
         evalOverviewDecorateList = evalOverviewList.stream().map(EvalOverviewDecorate::new).collect(Collectors.toList());
@@ -69,6 +92,12 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewTime(LocalDateTime.now())
                 .build();
         evalOverviewMapper.insert(evalOverview);
+        OverviewUserRela overviewUserRela = OverviewUserRela.builder()
+                .overviewId(evalOverview.getEvalOverviewId())
+                .userId(evalOverview.getEvalOverviewUserId())
+                .userName(evalOverview.getEvalOverviewUserName())
+                .build();
+        overviewUserRelaMapper.insert(overviewUserRela);
         return evalOverview.getEvalOverviewId();
     }
 
@@ -85,6 +114,9 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
 
     @Override
     public int deleteEvalOverview(int taskId) {
+        // OverviewUserRela中所有overview_id为taskId的数据记录，使用overviewUserRelaMapper，一条语句完成
+        overviewUserRelaMapper.delete(new QueryWrapper<OverviewUserRela>().eq("overview_id", taskId));
+        algoInfoMapper.delete(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", taskId));
         return evalOverviewMapper.deleteById(taskId);
     }
 
@@ -98,12 +130,17 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewType("优化任务")
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
+        OverviewUserRela overviewUserRela = OverviewUserRela.builder()
+                .overviewId(evalOverviewId)
+                .userId(param.getWorkerId())
+                .userName(param.getWorkerName())
+                .build();
+        overviewUserRelaMapper.insert(overviewUserRela);
         String algoName = param.getEvalOverviewName();
         MultipartFile modelFile = param.getCode();
         MultipartFile envFile = param.getEnv();
-        File destModelFile = new File("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
-        File destEnvFile = new File("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
-
+        File destModelFile = new File(modelCodePath + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
+        File destEnvFile = new File(modelCodePath + param.getEvalUserName() + "-env-" + modelFile.getOriginalFilename());
         modelFile.transferTo(destModelFile);
         envFile.transferTo(destEnvFile);
         AlgoInfo algoInfo = new AlgoInfo();
@@ -111,8 +148,8 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         algoInfo.setAlgoCreatorId(param.getEvalUserId());
         algoInfo.setAlgoGenTime(LocalDateTime.now());
         algoInfo.setAlgoName(algoName);
-        algoInfo.setAlgoPath("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
-        algoInfo.setEnvPath("/home/tz/copy-code/docker-pytorch-promote/" + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
+        algoInfo.setAlgoPath(modelCodePath + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
+        algoInfo.setEnvPath(modelCodePath + param.getEvalUserName() + "-env-" + modelFile.getOriginalFilename());
         algoInfo.setCmd(param.getCmd());
         algoInfo.setAlgoVersion("V1");
         algoInfo.setEvalOverviewId(evalOverviewId);

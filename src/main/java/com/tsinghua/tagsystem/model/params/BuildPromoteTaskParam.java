@@ -19,4 +19,6 @@ public class BuildPromoteTaskParam {
     MultipartFile code;
     MultipartFile env;
     String cmd;
+    int workerId;
+    String workerName;
 }

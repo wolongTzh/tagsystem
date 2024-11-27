@@ -23,3 +23,11 @@ path:
   modelInfo: C:\\工作资料\\技术相关\\vulcan\\model_info\\%s
   trainData: C:\\工作资料\\技术相关\\vulcan\\train_data\\%s
   pendingData: C:\\工作资料\\技术相关\\vulcan\\pending_data\\%s
+AlchemistPath:
+  modelCodePath: C:\\工作资料\\文档相关\\火神项目\\系统测试文件\\
+  checkpointPath: C:\\工作资料\\文档相关\\火神项目\\系统测试文件\\
+  testDataPath: C:\\工作资料\\文档相关\\火神项目\\系统测试文件\\
+  customizeModeModelPath: C:\\工作资料\\文档相关\\火神项目\\系统测试文件\\
+  customizeInterface: http://192.168.3.39:8081/eval_upload_model
+  promoteInterface: http://192.168.3.39:8081/eval_promote_task
+  hgfInterface: http://192.168.3.39:8081/eval_hug_task

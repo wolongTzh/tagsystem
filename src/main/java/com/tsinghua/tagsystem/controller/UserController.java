@@ -54,12 +54,12 @@ public class UserController {
     public WebResInfo testModel() throws IOException {
         String url = "http://192.168.3.39:8081/algo_start";
         HttpUtil.sendGetData(url);
-        return WebUtil.successResult("sccess");
+        return WebUtil.successResult("success");
     }
 
     @GetMapping(value = "updateDB")
     public WebResInfo updateDB() throws IOException {
        modelService.train();
-       return WebUtil.successResult("sccess");
+       return WebUtil.successResult("success");
     }
 }
