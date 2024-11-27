@@ -16,8 +16,8 @@ public class BuildPromoteTaskParam {
     String evalOverviewIntro;
     int evalUserId;
     String evalUserName;
-    MultipartFile code;
-    MultipartFile env;
+    String originCodeName;
+    String originEnvName;
     String cmd;
     int workerId;
     String workerName;

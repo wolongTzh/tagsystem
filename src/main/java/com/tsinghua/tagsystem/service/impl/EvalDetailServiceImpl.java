@@ -176,15 +176,15 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int uploadCheckpoint(UploadCheckpointParam param) throws IOException {
         String checkpointName = param.getCheckpointName();
-        MultipartFile modelFile = param.getFile();
-        File destModelFile = new File(checkpointPath + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
-        modelFile.transferTo(destModelFile);
+//        MultipartFile modelFile = param.getFile();
+//        File destModelFile = new File(checkpointPath + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
+//        modelFile.transferTo(destModelFile);
         ModelInfo modelInfo = new ModelInfo();
         modelInfo.setModelCreator(param.getEvalUserName());
         modelInfo.setModelCreatorId(param.getEvalUserId());
         modelInfo.setModelGenTime(LocalDateTime.now());
         modelInfo.setModelName(checkpointName);
-        modelInfo.setModelPath(checkpointPath + param.getEvalUserName() + "-" + modelFile.getOriginalFilename());
+        modelInfo.setModelPath(checkpointPath + param.getEvalUserName() + "-" + param.getOriginName());
         modelInfo.setModelVersion("V1");
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         modelInfo.setAlgoId(algoInfo.getAlgoId());

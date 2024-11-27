@@ -15,6 +15,6 @@ public class UploadCheckpointParam {
     int evalUserId;
     String evalUserName;
     String checkpointName;
-    MultipartFile file;
     int evalOverviewId;
+    String originName;
 }
