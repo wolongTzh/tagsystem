@@ -2,13 +2,8 @@ package com.tsinghua.tagsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
-import com.tsinghua.tagsystem.dao.entity.AlgoInfo;
-import com.tsinghua.tagsystem.dao.entity.EvalOverview;
-import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
-import com.tsinghua.tagsystem.dao.entity.OverviewUserRela;
-import com.tsinghua.tagsystem.dao.mapper.AlgoInfoMapper;
-import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
-import com.tsinghua.tagsystem.dao.mapper.OverviewUserRelaMapper;
+import com.tsinghua.tagsystem.dao.entity.*;
+import com.tsinghua.tagsystem.dao.mapper.*;
 import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
 import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
@@ -30,6 +25,11 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     EvalOverviewMapper evalOverviewMapper;
     @Autowired
     AlgoInfoMapper algoInfoMapper;
+    @Autowired
+    EvalDetailMapper evalDetailMapper;
+
+    @Autowired
+    ModelInfoMapper modelInfoMapper;
 
     @Autowired
     OverviewUserRelaMapper overviewUserRelaMapper;
@@ -52,6 +52,9 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         QueryWrapper<OverviewUserRela> relaParam = new QueryWrapper<>();
         relaParam.eq("user_id", userId);
         List<OverviewUserRela> overviewUserRelaList = overviewUserRelaMapper.selectList(relaParam);
+        if(overviewUserRelaList == null || overviewUserRelaList.size() == 0) {
+            return new ArrayList<>();
+        }
         // 以overviewUserRelaList中的overviewId作为条件，查询符合条件的所有EvalOverview，一条语句完成
         List<EvalOverview> evalOverviewList = evalOverviewMapper.selectBatchIds(overviewUserRelaList.stream().map(OverviewUserRela::getOverviewId).collect(Collectors.toList()));
 //        QueryWrapper<EvalOverview> param = new QueryWrapper<>();
@@ -115,8 +118,13 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
     @Override
     public int deleteEvalOverview(int taskId) {
         // OverviewUserRela中所有overview_id为taskId的数据记录，使用overviewUserRelaMapper，一条语句完成
+        evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("eval_overview_id", taskId));
         overviewUserRelaMapper.delete(new QueryWrapper<OverviewUserRela>().eq("overview_id", taskId));
-        algoInfoMapper.delete(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", taskId));
+        AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", taskId));
+        if (algoInfo != null) {
+            modelInfoMapper.delete(new QueryWrapper<ModelInfo>().eq("algo_id", algoInfo.getAlgoId()));
+            algoInfoMapper.delete(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", taskId));
+        }
         return evalOverviewMapper.deleteById(taskId);
     }
 
