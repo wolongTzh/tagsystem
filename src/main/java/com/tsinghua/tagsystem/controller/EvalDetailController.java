@@ -98,8 +98,8 @@ public class EvalDetailController {
         log.info("into addScore");
         log.info(JSON.toJSONString(evalDetail));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
-        evalDetailService.addNewScore(evalDetail);
-        return WebUtil.successResult("success");
+        Integer evalDetailId = evalDetailService.addNewScore(evalDetail);
+        return WebUtil.successResult(evalDetailId);
     }
 
     @PostMapping(value = "uploadTestData")
