@@ -28,4 +28,7 @@ public class AlchemistPathConfig {
 
     @Value("${AlchemistPath.hgfInterface}")
     private String hgfInterface;
+
+    @Value("${AlchemistPath.stopTaskInterface}")
+    private String stopTaskInterface;
 }

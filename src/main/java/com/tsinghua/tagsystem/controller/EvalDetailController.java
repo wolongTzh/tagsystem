@@ -137,4 +137,13 @@ public class EvalDetailController {
         int modelId = evalDetailService.uploadHugModel(uploadHugModelParam);
         return WebUtil.successResult(modelId);
     }
+
+    @PostMapping(value = "stopTask")
+    public WebResInfo stopTask(@RequestBody StopTaskParam param) throws IOException {
+        log.info("into stopTask");
+        log.info(JSON.toJSONString(param));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int modelId = evalDetailService.stopTask(param);
+        return WebUtil.successResult(modelId);
+    }
 }

@@ -43,6 +43,8 @@ public interface EvalDetailService {
 
     int runTestPromote(RunTestModelParam param) throws IOException;
 
+    int stopTask(StopTaskParam param);
+
     int runTestHug(RunTestModelParam param) throws IOException;
 
 }

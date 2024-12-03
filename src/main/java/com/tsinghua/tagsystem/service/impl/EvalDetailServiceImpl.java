@@ -46,6 +46,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String promoteInterface;
     String hgfInterface;
 
+    String stopTaskInterface;
+
     EvalDetailServiceImpl(AlchemistPathConfig config) {
         modelCodePath = config.getModelCodePath();
         checkpointPath = config.getCheckpointPath();
@@ -54,6 +56,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         customizeInterface = config.getCustomizeInterface();
         promoteInterface = config.getPromoteInterface();
         hgfInterface = config.getHgfInterface();
+        stopTaskInterface = config.getStopTaskInterface();
     }
 
 
@@ -240,6 +243,15 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         param.setModelFilePath(modelInfo.getModelPath());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
+    }
+
+    @Override
+    public int stopTask(StopTaskParam param) {
+        String url = stopTaskInterface;
+        EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
+        String imageName = evalDetail.getImageName();
+        param.setImageName(imageName);
         return 1;
     }
 
