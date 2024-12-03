@@ -45,8 +45,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String customizeInterface;
     String promoteInterface;
     String hgfInterface;
-
     String stopTaskInterface;
+    String grepTimeElapse;
 
     EvalDetailServiceImpl(AlchemistPathConfig config) {
         modelCodePath = config.getModelCodePath();
@@ -57,6 +57,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         promoteInterface = config.getPromoteInterface();
         hgfInterface = config.getHgfInterface();
         stopTaskInterface = config.getStopTaskInterface();
+        grepTimeElapse = config.getGrepTimeElapse();
     }
 
 
@@ -247,13 +248,27 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int stopTask(StopTaskParam param) {
+    public String grepTimeElapse(int evalDetailId) throws IOException {
+        String url = grepTimeElapse;
+        EvalDetail evalDetail = evalDetailMapper.selectById(evalDetailId);
+        String imageName = evalDetail.getImageName();
+        StopTaskParam param = StopTaskParam.builder()
+                .imageName(imageName)
+                .build();
+        return HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+    }
+
+    @Override
+    public int stopTask(StopTaskParam param) throws IOException {
         String url = stopTaskInterface;
         EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
         String imageName = evalDetail.getImageName();
         param.setImageName(imageName);
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
     }
+
+
 
     @Override
     public int runTestHug(RunTestModelParam param) throws IOException {

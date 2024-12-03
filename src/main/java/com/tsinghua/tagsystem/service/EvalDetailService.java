@@ -43,7 +43,9 @@ public interface EvalDetailService {
 
     int runTestPromote(RunTestModelParam param) throws IOException;
 
-    int stopTask(StopTaskParam param);
+    String grepTimeElapse(int evalDetailId) throws IOException;
+
+    int stopTask(StopTaskParam param) throws IOException;
 
     int runTestHug(RunTestModelParam param) throws IOException;
 
