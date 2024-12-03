@@ -126,11 +126,22 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int delModel(int modelId) {
+        evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("model_id", modelId));
+        return modelInfoMapper.deleteById(modelId);
+    }
+
+    @Override
     public int addNewScore(EvalDetail evalDetail) {
         // 设置当前时间置evalDetail的evalTime字段
         evalDetail.setEvalTime(LocalDateTime.now());
         evalDetailMapper.insert(evalDetail);
         return evalDetail.getEvalDetailId();
+    }
+
+    @Override
+    public int updateScore(EvalDetail evalDetail) {
+        return evalDetailMapper.updateById(evalDetail);
     }
 
     @Override

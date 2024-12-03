@@ -47,5 +47,7 @@ public class EvalDetail implements Serializable {
 
     private String evalUserName;
 
+    private Integer pid;
+
 
 }

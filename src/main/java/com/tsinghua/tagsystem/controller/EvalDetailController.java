@@ -5,6 +5,7 @@ import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.model.WebResInfo;
+import com.tsinghua.tagsystem.queue.MessageQueue;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,9 @@ public class EvalDetailController {
 
     @Autowired
     EvalDetailService evalDetailService;
+
+    @Autowired
+    MessageQueue messageQueue;
 
     @GetMapping(value = "display")
     public WebResInfo display(int evalOverviewId) throws IOException {
@@ -42,8 +46,10 @@ public class EvalDetailController {
     public WebResInfo runTest(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTest");
         log.info(JSON.toJSONString(runTestModelParam));
+        runTestModelParam.setTaskType("customize");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
-        evalDetailService.runTest(runTestModelParam);
+//        evalDetailService.runTest(runTestModelParam);
+        messageQueue.enqueue(runTestModelParam);
         return WebUtil.successResult("success");
     }
 
@@ -51,8 +57,10 @@ public class EvalDetailController {
     public WebResInfo runTestModel(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTestPromote");
         log.info(JSON.toJSONString(runTestModelParam));
+        runTestModelParam.setTaskType("promote");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
-        evalDetailService.runTestPromote(runTestModelParam);
+//        evalDetailService.runTestPromote(runTestModelParam);
+        messageQueue.enqueue(runTestModelParam);
         return WebUtil.successResult("success");
     }
 
@@ -60,8 +68,10 @@ public class EvalDetailController {
     public WebResInfo runTestCompare(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTestHug");
         log.info(JSON.toJSONString(runTestModelParam));
+        runTestModelParam.setTaskType("compare");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
-        evalDetailService.runTestHug(runTestModelParam);
+//        evalDetailService.runTestHug(runTestModelParam);
+        messageQueue.enqueue(runTestModelParam);
         return WebUtil.successResult("success");
     }
 
@@ -77,6 +87,15 @@ public class EvalDetailController {
     @PostMapping(value = "updateScore")
     public WebResInfo updateScore(@RequestBody EvalDetail evalDetail) throws IOException {
         log.info("into updateScore");
+        log.info(JSON.toJSONString(evalDetail));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.updateScore(evalDetail);
+        return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "addScore")
+    public WebResInfo addScore(@RequestBody EvalDetail evalDetail) throws IOException {
+        log.info("into addScore");
         log.info(JSON.toJSONString(evalDetail));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         evalDetailService.addNewScore(evalDetail);

@@ -25,7 +25,11 @@ public interface EvalDetailService {
 
     int delTestResult(int evalDetailId);
 
+    int delModel(int modelId);
+
     int addNewScore(EvalDetail evalDetail);
+
+    int updateScore(EvalDetail evalDetail);
 
     int uploadTestData(UploadTestDataParam param) throws IOException;
 

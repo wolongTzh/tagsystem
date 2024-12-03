@@ -47,4 +47,6 @@ public class RunTestModelParam {
     String envPath;
 
     String cmd;
+
+    String taskType;
 }
