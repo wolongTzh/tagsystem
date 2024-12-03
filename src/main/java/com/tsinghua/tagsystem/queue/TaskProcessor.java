@@ -21,10 +21,10 @@ public class TaskProcessor {
     @Autowired
     public TaskProcessor(MessageQueue messageQueue) {
         this.messageQueue = messageQueue;
-        this.executorService = Executors.newFixedThreadPool(2);  // 固定线程池大小为 2
+        this.executorService = Executors.newFixedThreadPool(1);  // 固定线程池大小为 2
 
         // 启动后台线程来处理任务
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             executorService.submit(this::processQueue);  // 每个线程执行 processQueue 方法
         }
     }
