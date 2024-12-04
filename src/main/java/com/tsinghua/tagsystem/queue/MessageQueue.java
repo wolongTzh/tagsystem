@@ -1,11 +1,17 @@
 package com.tsinghua.tagsystem.queue;
+import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
+import com.tsinghua.tagsystem.service.EvalDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.Queue;
 
 @Component
 public class MessageQueue {
+
+    @Autowired
+    EvalDetailService evalDetailService;
 
     private final Queue<RunTestModelParam> queue;
 
@@ -15,9 +21,21 @@ public class MessageQueue {
     }
 
     // 向队列中添加消息
-    public synchronized void enqueue(RunTestModelParam message) {
+    public synchronized int enqueue(RunTestModelParam message) {
+        int evalDetailId = evalDetailService.addNewScore(EvalDetail.builder()
+                .evalDataName(message.getEvalDataName())
+                .evalDataId(message.getEvalDataId())
+                .evalOverviewId(message.getEvalOverviewId())
+                .modelId(message.getModelId())
+                .modelName(message.getModelName())
+                .evalUserId(message.getEvalUserId())
+                .evalUserName(message.getEvalUserName())
+                .evalScore("排队中")
+                .build());
+        message.setEvalDetailId(evalDetailId);
         queue.offer(message);  // 将任务添加到队列
         System.out.println("Message added: " + message);
+        return evalDetailId;
     }
 
     // 获取并移除队列中的消息

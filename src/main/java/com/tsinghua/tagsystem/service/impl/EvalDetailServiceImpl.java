@@ -66,7 +66,18 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
         // 使用该evalOverview构建一个EvalDetailDecorate对象
         EvalDetailDecorate evalDetailDecorate = new EvalDetailDecorate(evalOverview);
-        evalDetailDecorate.setEvalDetailList(evalDetailMapper.selectList(new QueryWrapper<EvalDetail>().eq("eval_overview_id", evalOverviewId)));
+        List<EvalDetail> evalDetailList = evalDetailMapper.selectList(new QueryWrapper<EvalDetail>().eq("eval_overview_id", evalOverviewId));
+        for (EvalDetail evalDetail : evalDetailList) {
+            String score = evalDetail.getEvalScore();
+            if (score.contains("开始时间")) {
+                double startTime = Double.parseDouble(score.replace("开始时间", ""));
+                // 计算当前时间到开始时间的时间间隔
+                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
+                String newContent = "经过了" + Math.floor(currentTime - startTime) + "秒";
+                evalDetail.setEvalScore(newContent);
+            }
+        }
+        evalDetailDecorate.setEvalDetailList(evalDetailList);
         List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>());
         List<ExistModel> existModelList = new ArrayList<>();
         // 使用modelInfoList来构建existModelList

@@ -49,8 +49,8 @@ public class EvalDetailController {
         runTestModelParam.setTaskType("customize");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
 //        evalDetailService.runTest(runTestModelParam);
-        messageQueue.enqueue(runTestModelParam);
-        return WebUtil.successResult("success");
+        int evalDetailId = messageQueue.enqueue(runTestModelParam);
+        return WebUtil.successResult(evalDetailId);
     }
 
     @PostMapping(value = "runTestPromote")
@@ -60,8 +60,8 @@ public class EvalDetailController {
         runTestModelParam.setTaskType("promote");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
 //        evalDetailService.runTestPromote(runTestModelParam);
-        messageQueue.enqueue(runTestModelParam);
-        return WebUtil.successResult("success");
+        int evalDetailId = messageQueue.enqueue(runTestModelParam);
+        return WebUtil.successResult(evalDetailId);
     }
 
     @PostMapping(value = "runTestHug")
@@ -71,8 +71,8 @@ public class EvalDetailController {
         runTestModelParam.setTaskType("compare");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
 //        evalDetailService.runTestHug(runTestModelParam);
-        messageQueue.enqueue(runTestModelParam);
-        return WebUtil.successResult("success");
+        int evalDetailId = messageQueue.enqueue(runTestModelParam);
+        return WebUtil.successResult(evalDetailId);
     }
 
     @PostMapping(value = "deleteTestResult")

@@ -22,6 +22,8 @@ import lombok.experimental.SuperBuilder;
 public class RunTestModelParam {
     private static final long serialVersionUID=1L;
 
+    Integer evalDetailId;
+
     Integer evalOverviewId;
 
     Integer modelId;
