@@ -146,4 +146,12 @@ public class EvalDetailController {
         int modelId = evalDetailService.stopTask(param);
         return WebUtil.successResult(modelId);
     }
+
+    @PostMapping(value = "deleteModel")
+    public WebResInfo deleteModel(int modelId, int evalOverviewId) throws IOException {
+        log.info("into deleteModel");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.deleteModel(modelId, evalOverviewId);
+        return WebUtil.successResult("success");
+    }
 }

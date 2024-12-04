@@ -49,4 +49,6 @@ public interface EvalDetailService {
 
     int runTestHug(RunTestModelParam param) throws IOException;
 
+    int deleteModel(int modelId, int evalOverviewId);
+
 }

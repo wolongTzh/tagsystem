@@ -291,4 +291,37 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
     }
+
+    @Override
+    public int deleteModel(int modelId, int evalOverviewId) {
+
+        // 获取 EvalOverview 对象
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+
+        // 获取 algoIds 和 algoNames，并转换为 ArrayList 方便操作
+        List<String> algoIdList = new ArrayList<>(Arrays.asList(evalOverview.getEvalAlgoIds().split(",")));
+        List<String> algoNameList = new ArrayList<>(Arrays.asList(evalOverview.getEvalAlgoNames().split(",")));
+
+        // 找到 modelId 的索引并移除对应的元素
+        int indexToRemove = algoIdList.indexOf(String.valueOf(modelId));
+        if (indexToRemove != -1) {  // 如果找到该 modelId
+            algoIdList.remove(indexToRemove);
+            algoNameList.remove(indexToRemove);
+        }
+
+        // 将列表转换回逗号分隔的字符串
+        String algoIds = String.join(",", algoIdList);
+        String algoNames = String.join(",", algoNameList);
+
+        // 更新 EvalOverview 对象
+        evalOverview.setEvalAlgoIds(algoIds);
+        evalOverview.setEvalAlgoNames(algoNames);
+
+        // 打印结果（用于调试）
+        System.out.println(algoIds);
+        System.out.println(algoNames);
+        evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("model_id", modelId).eq("eval_overview_id", evalOverviewId));
+        evalOverviewMapper.updateById(evalOverview);
+        return 1;
+    }
 }
