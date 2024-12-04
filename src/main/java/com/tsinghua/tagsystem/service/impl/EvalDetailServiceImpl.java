@@ -275,6 +275,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
         String imageName = evalDetail.getImageName();
         param.setImageName(imageName);
+        evalDetailMapper.deleteById(param.getEvalDetailId());
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
     }
