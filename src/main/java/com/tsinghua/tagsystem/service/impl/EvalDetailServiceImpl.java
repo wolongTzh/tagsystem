@@ -93,7 +93,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             evalDetailDecorate.setCurTrainModelInfo(modelInfo1);
         }
         evalDetailDecorate.setEvalDetailList(evalDetailList);
-        List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>().eq("eval_train_data_id", null));
+        List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>().eq("status", null));
         List<ExistModel> existModelList = new ArrayList<>();
         // 使用modelInfoList来构建existModelList
         existModelList = modelInfoList.stream().map(ExistModel::new).collect(Collectors.toList());
