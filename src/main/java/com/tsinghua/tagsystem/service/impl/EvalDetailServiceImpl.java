@@ -340,7 +340,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCheckPointPath(modelInfo.getModelPath());
         System.out.println(JSON.toJSONString(algoInfo));
-        param.setCmd(algoInfo.getCmd());
+        param.setCmd(algoInfo.getTrainCmd());
         param.setEnvPath(algoInfo.getEnvPath());
         param.setModelPath(algoInfo.getAlgoPath());
         param.setDataPath(modelInfo.getModelTrainDataName());

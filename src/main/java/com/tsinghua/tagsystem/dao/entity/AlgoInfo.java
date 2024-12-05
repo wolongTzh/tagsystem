@@ -43,6 +43,8 @@ public class AlgoInfo implements Serializable {
 
     private String cmd;
 
+    private String trainCmd;
+
     private Integer evalOverviewId;
 
 
