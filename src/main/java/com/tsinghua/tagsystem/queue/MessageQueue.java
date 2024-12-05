@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.queue;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.ModelInfo;
+import com.tsinghua.tagsystem.dao.mapper.ModelInfoMapper;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class MessageQueue {
     @Autowired
     EvalDetailService evalDetailService;
 
+    @Autowired
+    ModelInfoMapper modelInfoMapper;
+
     private final Queue<RunTestModelParam> queue;
 
     // 构造函数，初始化队列
@@ -25,6 +29,9 @@ public class MessageQueue {
     public synchronized int enqueue(RunTestModelParam message) {
         int retId = 0;
         if(message.getTaskType().equals("train")) {
+            ModelInfo modelInfo = modelInfoMapper.selectById(message.getModelId());
+            modelInfo.setStatus("排队中");
+            modelInfoMapper.updateById(modelInfo);
             retId = message.getModelId();
         }
         else {

@@ -53,4 +53,6 @@ public class RunTestModelParam {
     String taskType;
 
     String modelSuffix;
+
+    String checkPointPath;
 }

@@ -272,7 +272,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelName(param.getModelName());
         modelInfo.setModelTrainDataName(param.getModelTrainDataName());
         modelInfo.setModelPath(customizeModeModelPath + param.getEvalUserName() + "-" + param.getModelName() + param.getSuffix());
-        modelInfo.setStatus("排队中");
+        modelInfo.setStatus("待开始");
         modelInfoMapper.insert(modelInfo);
         EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
         evalOverview.setEvalTrainingModelId( modelInfo.getModelId());
@@ -334,10 +334,13 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     public int runTrain(RunTestModelParam param) throws IOException {
         String url = promoteInterface;
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
+        ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
+        param.setCheckPointPath(modelInfo.getModelPath());
         System.out.println(JSON.toJSONString(algoInfo));
         param.setCmd(algoInfo.getCmd());
         param.setEnvPath(algoInfo.getEnvPath());
         param.setModelPath(algoInfo.getAlgoPath());
+        param.setDataPath(modelInfo.getModelTrainDataName());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
