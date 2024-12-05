@@ -335,7 +335,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Override
     public int runTrain(RunTestModelParam param) throws IOException {
-        String url = promoteInterface;
+        String url = trainInterface;
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setCheckPointPath(modelInfo.getModelPath());
