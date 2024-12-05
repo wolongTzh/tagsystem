@@ -32,6 +32,7 @@ public class EvalOverviewDecorate extends EvalOverview {
         this.setEvalTestIds(evalOverview.getEvalTestIds());
         this.setEvalAlgoIds(evalOverview.getEvalAlgoIds());
         this.setEvalOverviewType(evalOverview.getEvalOverviewType());
+        this.setEvalTrainingModelId(evalOverview.getEvalTrainingModelId());
     }
 
     //重写它的toString方法，使得其可以输出所继承的EvalOverview类里面的全部属性

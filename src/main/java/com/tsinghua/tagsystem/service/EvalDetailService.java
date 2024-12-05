@@ -31,6 +31,10 @@ public interface EvalDetailService {
 
     int updateScore(EvalDetail evalDetail);
 
+    int updateTrainMsg(ModelInfo modelInfo);
+
+    int finishTrain(int evalOverviewId, int modelId);
+
     int uploadTestData(UploadTestDataParam param) throws IOException;
 
     int uploadModel(UploadModelParam param) throws IOException;
@@ -39,15 +43,17 @@ public interface EvalDetailService {
 
     int uploadHugModel(UploadHugModelParam param) throws IOException;
 
+    int uploadTrain(UploadTrainParam param);
+
     int runTest(RunTestModelParam param) throws IOException;
 
     int runTestPromote(RunTestModelParam param) throws IOException;
 
-    String grepTimeElapse(int evalDetailId) throws IOException;
-
     int stopTask(StopTaskParam param) throws IOException;
 
     int runTestHug(RunTestModelParam param) throws IOException;
+
+    int runTrain(RunTestModelParam param) throws IOException;
 
     int deleteModel(int modelId, int evalOverviewId);
 

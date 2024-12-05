@@ -51,4 +51,6 @@ public class RunTestModelParam {
     String cmd;
 
     String taskType;
+
+    String modelSuffix;
 }

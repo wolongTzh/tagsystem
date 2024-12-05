@@ -9,13 +9,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class StopTaskParam {
+public class UploadTrainParam {
 
-    int evalDetailId;
-
-    int modelId;
-
-    String imageName;
-
-    String taskType;
+    int evalOverviewId;
+    int evalUserId;
+    String evalUserName;
+    String modelName;
+    String modelTrainDataName;
+    String suffix;
 }

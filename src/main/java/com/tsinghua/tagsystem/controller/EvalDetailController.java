@@ -3,6 +3,7 @@ package com.tsinghua.tagsystem.controller;
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
+import com.tsinghua.tagsystem.dao.entity.ModelInfo;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.queue.MessageQueue;
@@ -75,6 +76,17 @@ public class EvalDetailController {
         return WebUtil.successResult(evalDetailId);
     }
 
+    @PostMapping(value = "runTrain")
+    public WebResInfo runTrain(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
+        log.info("into runTrain");
+        log.info(JSON.toJSONString(runTestModelParam));
+        runTestModelParam.setTaskType("train");
+//        EvalDetailControllerUtil.validTestModelParam(testModelParam);
+//        evalDetailService.runTestHug(runTestModelParam);
+        int evalDetailId = messageQueue.enqueue(runTestModelParam);
+        return WebUtil.successResult(evalDetailId);
+    }
+
     @PostMapping(value = "deleteTestResult")
     public WebResInfo deleteTestResult(@RequestBody EvalDetail evalDetail) throws IOException {
         log.info("into deleteTestResult");
@@ -90,6 +102,24 @@ public class EvalDetailController {
         log.info(JSON.toJSONString(evalDetail));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         evalDetailService.updateScore(evalDetail);
+        return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "updateTrainMsg")
+    public WebResInfo updateTrainMsg(@RequestBody ModelInfo modelInfo) throws IOException {
+        log.info("into updateTrainMsg");
+        log.info(JSON.toJSONString(modelInfo));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.updateTrainMsg(modelInfo);
+        return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "finishTrain")
+    public WebResInfo finishTrain(int evalOverviewId, int modelId) throws IOException {
+        log.info("into finishTrain");
+        log.info(evalOverviewId +  " " + modelId);
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.finishTrain(evalOverviewId, modelId);
         return WebUtil.successResult("success");
     }
 
@@ -135,6 +165,15 @@ public class EvalDetailController {
         log.info(JSON.toJSONString(uploadHugModelParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int modelId = evalDetailService.uploadHugModel(uploadHugModelParam);
+        return WebUtil.successResult(modelId);
+    }
+
+    @PostMapping(value = "uploadTrain")
+    public WebResInfo uploadTrain(@RequestBody UploadTrainParam uploadTrainParam) throws IOException {
+        log.info("into uploadTrain");
+        log.info(JSON.toJSONString(uploadTrainParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int modelId = evalDetailService.uploadTrain(uploadTrainParam);
         return WebUtil.successResult(modelId);
     }
 

@@ -2,8 +2,10 @@ package com.tsinghua.tagsystem.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
@@ -21,6 +23,9 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class ModelInfo implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -59,5 +64,9 @@ public class ModelInfo implements Serializable {
     private String cmd;
 
     private Integer algoId;
+
+    private String status;
+
+    private String imageName;
 
 }

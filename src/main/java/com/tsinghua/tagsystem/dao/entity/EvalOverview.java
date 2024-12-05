@@ -45,6 +45,8 @@ public class EvalOverview implements Serializable {
 
     public String evalAlgoNames;
 
+    public Integer evalTrainingModelId;
+
     public Integer evalAlreadyRunNum = 0;
 
     public LocalDateTime evalOverviewTime;

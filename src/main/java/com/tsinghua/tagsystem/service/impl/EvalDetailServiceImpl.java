@@ -77,8 +77,23 @@ public class EvalDetailServiceImpl implements EvalDetailService {
                 evalDetail.setEvalScore(newContent);
             }
         }
+        if (evalOverview.getEvalTrainingModelId() != null) {
+            ModelInfo modelInfo = modelInfoMapper.selectById(evalOverview.getEvalTrainingModelId());
+            String status = modelInfo.getStatus();
+            if (status.contains("开始时间")) {
+                double startTime = Double.parseDouble(status.replace("开始时间", ""));
+                // 计算当前时间到开始时间的时间间隔
+                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
+                status = Math.floor(currentTime - startTime) + "s";
+            }
+            ModelInfo modelInfo1 = ModelInfo.builder()
+                    .status(status)
+                    .modelName(modelInfo.getModelName())
+                    .build();
+            evalDetailDecorate.setCurTrainModelInfo(modelInfo1);
+        }
         evalDetailDecorate.setEvalDetailList(evalDetailList);
-        List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>());
+        List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>().eq("eval_train_data_id", null));
         List<ExistModel> existModelList = new ArrayList<>();
         // 使用modelInfoList来构建existModelList
         existModelList = modelInfoList.stream().map(ExistModel::new).collect(Collectors.toList());
@@ -160,6 +175,23 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int updateTrainMsg(ModelInfo modelInfo) {
+        return modelInfoMapper.updateById(modelInfo);
+    }
+
+    @Override
+    public int finishTrain(int evalOverviewId, int modelId) {
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        evalOverview.setEvalTrainingModelId(null);
+        evalOverviewMapper.updateById(evalOverview);
+        ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
+        modelInfo.setStatus(null);
+        modelInfo.setImageName(null);
+        modelInfoMapper.updateById(modelInfo);
+        return 1;
+    }
+
+    @Override
     public int uploadTestData(UploadTestDataParam param) throws IOException {
         String dataName = param.getDataName();
         File destFile = new File(testDataPath + param.getEvalUserName() + "-" + dataName + ".json");
@@ -232,6 +264,23 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int uploadTrain(UploadTrainParam param) {
+        ModelInfo modelInfo = new ModelInfo();
+        modelInfo.setModelCreator(param.getEvalUserName());
+        modelInfo.setModelCreatorId(param.getEvalUserId());
+        modelInfo.setModelGenTime(LocalDateTime.now());
+        modelInfo.setModelName(param.getModelName());
+        modelInfo.setModelTrainDataName(param.getModelTrainDataName());
+        modelInfo.setModelPath(customizeModeModelPath + param.getEvalUserName() + "-" + param.getModelName() + param.getSuffix());
+        modelInfo.setStatus("排队中");
+        modelInfoMapper.insert(modelInfo);
+        EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
+        evalOverview.setEvalTrainingModelId( modelInfo.getModelId());
+        evalOverviewMapper.updateById(evalOverview);
+        return modelInfo.getModelId();
+    }
+
+    @Override
     public int runTest(RunTestModelParam param) throws IOException {
         String url = customizeInterface;
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
@@ -259,17 +308,6 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public String grepTimeElapse(int evalDetailId) throws IOException {
-        String url = grepTimeElapse;
-        EvalDetail evalDetail = evalDetailMapper.selectById(evalDetailId);
-        String imageName = evalDetail.getImageName();
-        StopTaskParam param = StopTaskParam.builder()
-                .imageName(imageName)
-                .build();
-        return HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
-    }
-
-    @Override
     public int stopTask(StopTaskParam param) throws IOException {
         String url = stopTaskInterface;
         EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
@@ -287,6 +325,19 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         String url = hgfInterface;
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         param.setModelPath(modelInfo.getModelPath());
+        System.out.println(JSON.toJSONString(param));
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
+    }
+
+    @Override
+    public int runTrain(RunTestModelParam param) throws IOException {
+        String url = promoteInterface;
+        AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
+        System.out.println(JSON.toJSONString(algoInfo));
+        param.setCmd(algoInfo.getCmd());
+        param.setEnvPath(algoInfo.getEnvPath());
+        param.setModelPath(algoInfo.getAlgoPath());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;

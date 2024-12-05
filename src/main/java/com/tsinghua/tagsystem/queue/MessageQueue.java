@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.queue;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
+import com.tsinghua.tagsystem.dao.entity.ModelInfo;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +23,27 @@ public class MessageQueue {
 
     // 向队列中添加消息
     public synchronized int enqueue(RunTestModelParam message) {
-        int evalDetailId = evalDetailService.addNewScore(EvalDetail.builder()
-                .evalDataName(message.getEvalDataName())
-                .evalDataId(message.getEvalDataId())
-                .evalOverviewId(message.getEvalOverviewId())
-                .modelId(message.getModelId())
-                .modelName(message.getModelName())
-                .evalUserId(message.getEvalUserId())
-                .evalUserName(message.getEvalUserName())
-                .evalScore("排队中")
-                .build());
-        message.setEvalDetailId(evalDetailId);
+        int retId = 0;
+        if(message.getTaskType().equals("train")) {
+            retId = message.getModelId();
+        }
+        else {
+            int evalDetailId = evalDetailService.addNewScore(EvalDetail.builder()
+                    .evalDataName(message.getEvalDataName())
+                    .evalDataId(message.getEvalDataId())
+                    .evalOverviewId(message.getEvalOverviewId())
+                    .modelId(message.getModelId())
+                    .modelName(message.getModelName())
+                    .evalUserId(message.getEvalUserId())
+                    .evalUserName(message.getEvalUserName())
+                    .evalScore("排队中")
+                    .build());
+            message.setEvalDetailId(evalDetailId);
+            retId = evalDetailId;
+        }
         queue.offer(message);  // 将任务添加到队列
         System.out.println("Message added: " + message);
-        return evalDetailId;
+        return retId;
     }
 
     // 获取并移除队列中的消息

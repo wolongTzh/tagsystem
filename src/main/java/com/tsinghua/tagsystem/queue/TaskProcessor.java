@@ -52,6 +52,9 @@ public class TaskProcessor {
                     else if (message.getTaskType().equals("compare")) {
                         evalDetailService.runTestHug(message);
                     }
+                    else if (message.getTaskType().equals("train")) {
+                        evalDetailService.runTrain(message);
+                    }
                     else {
                         System.out.println("no match task type!!");
                     }
