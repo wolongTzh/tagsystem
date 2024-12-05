@@ -89,6 +89,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             ModelInfo modelInfo1 = ModelInfo.builder()
                     .status(status)
                     .modelName(modelInfo.getModelName())
+                    .modelId(modelInfo.getModelId())
                     .build();
             evalDetailDecorate.setCurTrainModelInfo(modelInfo1);
         }
