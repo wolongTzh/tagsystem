@@ -44,6 +44,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String customizeModeModelPath;
     String customizeInterface;
     String promoteInterface;
+    String trainInterface;
     String hgfInterface;
     String stopTaskInterface;
     String grepTimeElapse;
@@ -55,6 +56,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         customizeModeModelPath = config.getCustomizeModeModelPath();
         customizeInterface = config.getCustomizeInterface();
         promoteInterface = config.getPromoteInterface();
+        trainInterface = config.getTrainInterface();
         hgfInterface = config.getHgfInterface();
         stopTaskInterface = config.getStopTaskInterface();
         grepTimeElapse = config.getGrepTimeElapse();

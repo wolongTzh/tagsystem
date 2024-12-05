@@ -26,6 +26,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.promoteInterface}")
     private String promoteInterface;
 
+    @Value("${AlchemistPath.trainInterface}")
+    private String trainInterface;
+
     @Value("${AlchemistPath.hgfInterface}")
     private String hgfInterface;
 

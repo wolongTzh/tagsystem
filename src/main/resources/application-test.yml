@@ -32,6 +32,7 @@ AlchemistPath:
   customizeModeModelPath: /home/tz/copy-code/docker-pytorch/
   customizeInterface: http://192.168.3.39:8081/eval_upload_model
   promoteInterface: http://192.168.3.39:8081/eval_promote_task
+  trainInterface: http://192.168.3.39:8081/eval_train_task
   hgfInterface: http://192.168.3.39:8081/eval_hug_task
   stopTaskInterface: http://192.168.3.39:8081/task_killer
   grepTimeElapse: http://192.168.3.39:8081/grep_time_elapse
