@@ -2,6 +2,7 @@ package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.*;
@@ -184,16 +185,23 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Override
     public int finishTrain(int evalOverviewId, int modelId) {
+        UpdateWrapper<ModelInfo> modelWrapper = new UpdateWrapper<>();
+        modelWrapper.eq("model_id", modelId)
+                .set("status", null)
+                .set("image_name", null);
+
         ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
-        modelInfo.setStatus(null);
-        modelInfo.setImageName(null);
         String modelName = modelInfo.getModelName();
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
-        evalOverview.setEvalTrainingModelId(null);
-        evalOverview.setEvalAlgoIds(evalOverview.getEvalAlgoIds() + "," + modelId);
-        evalOverview.setEvalAlgoNames(evalOverview.getEvalAlgoNames() + "," + modelName);
-        evalOverviewMapper.updateById(evalOverview);
-        modelInfoMapper.updateById(modelInfo);
+
+        UpdateWrapper<EvalOverview> overviewWrapper = new UpdateWrapper<>();
+        overviewWrapper.eq("eval_overview_id", evalOverviewId)
+                .set("algo_ids", evalOverview.getEvalAlgoIds() + "," + modelId)
+                .set("algo_names", evalOverview.getEvalAlgoNames() + "," + modelName)
+                .set("eval_training_model_id", null);
+
+        evalOverviewMapper.update(null, overviewWrapper);
+        modelInfoMapper.update(null, modelWrapper);
         return 1;
     }
 
@@ -398,8 +406,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     public int deleteTrainingModel(int modelId, int evalOverviewId) {
         modelInfoMapper.deleteById(modelId);
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
-        evalOverview.setEvalTrainingModelId(null);
-        evalOverviewMapper.updateById(evalOverview);
+        UpdateWrapper<EvalOverview> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", evalOverviewId).set("eval_training_model_id", null);
+        evalOverviewMapper.update(null, updateWrapper);
         return 1;
     }
 
