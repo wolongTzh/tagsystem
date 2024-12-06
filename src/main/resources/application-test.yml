@@ -19,6 +19,11 @@ spring:
       minimum-idle: 3
       maximum-pool-size: 10
       max-lifetime: 30000   #不能小于30秒，否则默认回到1800秒
+mybatis-plus:
+  global-config:
+    db-config:
+      insert-strategy: ignored  # "忽略判断", 所有字段都插入
+      update-strategy: ignored  # "忽略判断", 所有字段都更新
 path:
   taskBase: /data/tagsystem/%s
   finalTag: /data/tagsystem/%s/finalTag.json
