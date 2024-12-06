@@ -407,7 +407,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfoMapper.deleteById(modelId);
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
         UpdateWrapper<EvalOverview> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", evalOverviewId).set("eval_training_model_id", null);
+        updateWrapper.eq("eval_overview_id", evalOverviewId).set("eval_training_model_id", null);
         evalOverviewMapper.update(null, updateWrapper);
         return 1;
     }
