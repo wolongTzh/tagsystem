@@ -184,12 +184,15 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Override
     public int finishTrain(int evalOverviewId, int modelId) {
-        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
-        evalOverview.setEvalTrainingModelId(null);
-        evalOverviewMapper.updateById(evalOverview);
         ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
         modelInfo.setStatus(null);
         modelInfo.setImageName(null);
+        String modelName = modelInfo.getModelName();
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        evalOverview.setEvalTrainingModelId(null);
+        evalOverview.setEvalAlgoIds(evalOverview.getEvalAlgoIds() + "," + modelId);
+        evalOverview.setEvalAlgoNames(evalOverview.getEvalAlgoNames() + "," + modelName);
+        evalOverviewMapper.updateById(evalOverview);
         modelInfoMapper.updateById(modelInfo);
         return 1;
     }
@@ -313,10 +316,19 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int stopTask(StopTaskParam param) throws IOException {
         String url = stopTaskInterface;
-        EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
-        String imageName = evalDetail.getImageName();
-        param.setImageName(imageName);
-        evalDetailMapper.deleteById(param.getEvalDetailId());
+        if(param.getTaskType().equals("train")) {
+            ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
+            modelInfo.setStatus("待开始");
+            modelInfoMapper.updateById(modelInfo);
+            String imageName = modelInfo.getImageName();
+            param.setImageName(imageName);
+        }
+        else {
+            EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
+            String imageName = evalDetail.getImageName();
+            param.setImageName(imageName);
+            evalDetailMapper.deleteById(param.getEvalDetailId());
+        }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
     }
@@ -378,6 +390,15 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         System.out.println(algoIds);
         System.out.println(algoNames);
         evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("model_id", modelId).eq("eval_overview_id", evalOverviewId));
+        evalOverviewMapper.updateById(evalOverview);
+        return 1;
+    }
+
+    @Override
+    public int deleteTrainingModel(int modelId, int evalOverviewId) {
+        modelInfoMapper.deleteById(modelId);
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        evalOverview.setEvalTrainingModelId(null);
         evalOverviewMapper.updateById(evalOverview);
         return 1;
     }

@@ -57,6 +57,8 @@ public interface EvalDetailService {
 
     int deleteModel(int modelId, int evalOverviewId);
 
+    int deleteTrainingModel(int modelId, int evalOverviewId);
+
     int deleteTestData(int testDataId, int evalOverviewId);
 
 }
