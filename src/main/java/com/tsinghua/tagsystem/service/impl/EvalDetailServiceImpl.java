@@ -196,8 +196,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
         UpdateWrapper<EvalOverview> overviewWrapper = new UpdateWrapper<>();
         overviewWrapper.eq("eval_overview_id", evalOverviewId)
-                .set("algo_ids", evalOverview.getEvalAlgoIds() + "," + modelId)
-                .set("algo_names", evalOverview.getEvalAlgoNames() + "," + modelName)
+                .set("eval_algo_ids", evalOverview.getEvalAlgoIds() + "," + modelId)
+                .set("eval_algo_names", evalOverview.getEvalAlgoNames() + "," + modelName)
                 .set("eval_training_model_id", null);
 
         evalOverviewMapper.update(null, overviewWrapper);
