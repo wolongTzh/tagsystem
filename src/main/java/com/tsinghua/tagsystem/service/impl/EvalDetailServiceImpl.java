@@ -197,11 +197,25 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
         String modelName = modelInfo.getModelName();
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        String evalAlgoIds = evalOverview.getEvalAlgoIds();
+        String evalAlgoNames = evalOverview.getEvalAlgoNames();
+        if(StringUtils.isEmpty(evalAlgoIds)) {
+            evalAlgoIds = String.valueOf(modelId);
+        }
+        else {
+            evalAlgoIds = evalAlgoIds + "," + modelId;
+        }
+        if(StringUtils.isEmpty(evalAlgoNames)) {
+            evalAlgoNames = modelName;
+        }
+        else {
+            evalAlgoNames = evalAlgoNames + "," + modelName;
+        }
 
         UpdateWrapper<EvalOverview> overviewWrapper = new UpdateWrapper<>();
         overviewWrapper.eq("eval_overview_id", evalOverviewId)
-                .set("eval_algo_ids", evalOverview.getEvalAlgoIds() + "," + modelId)
-                .set("eval_algo_names", evalOverview.getEvalAlgoNames() + "," + modelName)
+                .set("eval_algo_ids", evalAlgoIds)
+                .set("eval_algo_names", evalAlgoNames)
                 .set("eval_training_model_id", null);
 
         evalOverviewMapper.update(null, overviewWrapper);
