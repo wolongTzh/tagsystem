@@ -55,5 +55,7 @@ public class EvalDetail implements Serializable {
 
     private String imageName;
 
+    private String modelResultPath;
+
 
 }

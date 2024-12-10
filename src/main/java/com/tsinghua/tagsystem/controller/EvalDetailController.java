@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.dao.entity.ModelInfo;
+import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.queue.MessageQueue;
@@ -85,6 +86,14 @@ public class EvalDetailController {
 //        evalDetailService.runTestHug(runTestModelParam);
         int evalDetailId = messageQueue.enqueue(runTestModelParam);
         return WebUtil.successResult(evalDetailId);
+    }
+
+    @PostMapping(value = "comparePredictAnswer")
+    public WebResInfo comparePredictAnswer(int modelId, int testDataId) throws IOException {
+        log.info("into comparePredictAnswer");
+        log.info(modelId + " " + testDataId);
+        int ret = evalDetailService.comparePredictAnswer(modelId, testDataId);
+        return WebUtil.successResult(ret);
     }
 
     @PostMapping(value = "deleteTestResult")

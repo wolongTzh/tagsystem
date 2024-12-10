@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.*;
+import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
@@ -47,6 +48,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String promoteInterface;
     String trainInterface;
     String hgfInterface;
+    String compareInterface;
     String stopTaskInterface;
     String grepTimeElapse;
 
@@ -61,6 +63,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         hgfInterface = config.getHgfInterface();
         stopTaskInterface = config.getStopTaskInterface();
         grepTimeElapse = config.getGrepTimeElapse();
+        compareInterface = config.getCompareInterface();
     }
 
 
@@ -366,6 +369,16 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         param.setDataPath(modelInfo.getModelTrainDataName());
         System.out.println(JSON.toJSONString(param));
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
+    }
+
+    @Override
+    public int comparePredictAnswer(int modelId, int testDataId) throws IOException {
+        String url = compareInterface;
+        EvalDetail evalDetail = evalDetailMapper.selectOne(new QueryWrapper<EvalDetail>().eq("model_id",modelId).eq("eval_data_id", testDataId));
+        String modelResultPath = evalDetail.getModelResultPath();
+        String testDataPath = dataInfoMapper.selectById(testDataId).getDataPath();
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(PathCollection.builder().modelResultPath(modelResultPath).testDataPath(testDataPath).build()));
         return 1;
     }
 

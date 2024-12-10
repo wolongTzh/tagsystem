@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.service;
 
 import com.tsinghua.tagsystem.dao.entity.*;
+import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,8 @@ public interface EvalDetailService {
     int runTestHug(RunTestModelParam param) throws IOException;
 
     int runTrain(RunTestModelParam param) throws IOException;
+
+    int comparePredictAnswer(int modelId, int testDataId) throws IOException;
 
     int deleteModel(int modelId, int evalOverviewId);
 
