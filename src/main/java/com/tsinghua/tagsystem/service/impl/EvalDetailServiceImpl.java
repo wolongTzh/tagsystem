@@ -427,6 +427,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         System.out.println(algoNames);
         evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("model_id", modelId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
+        modelInfoMapper.deleteById(modelId);
         return 1;
     }
 

@@ -9,6 +9,7 @@ import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -184,6 +185,9 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
         LocalDateTime initTime = evalOverview.getEvalOverviewTime();
         String log = "任务" + evalOverview.getEvalOverviewName() + "开始于" + initTime;
+        if(StringUtils.isEmpty(evalOverview.getEvalAlgoIds())) {
+            return log;
+        }
         String[] modelIdList = evalOverview.getEvalAlgoIds().split(",");
         for (String modelId : modelIdList) {
             ModelInfo modelInfo = modelInfoMapper.selectById(Integer.parseInt(modelId));
