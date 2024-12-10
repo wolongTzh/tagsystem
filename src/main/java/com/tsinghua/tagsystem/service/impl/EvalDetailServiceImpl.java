@@ -191,7 +191,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         UpdateWrapper<ModelInfo> modelWrapper = new UpdateWrapper<>();
         modelWrapper.eq("model_id", modelId)
                 .set("status", null)
-                .set("image_name", null);
+                .set("image_name", null)
+                .set("model_gen_time", LocalDateTime.now());
 
         ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
         String modelName = modelInfo.getModelName();

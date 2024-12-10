@@ -77,4 +77,13 @@ public class EvalOverviewController {
         int evalOverviewId = evalOverviewService.buildCompareTask(buildCompareTaskParam);
         return WebUtil.successResult(evalOverviewId);
     }
+
+    @PostMapping(value = "genLog")
+    public WebResInfo genLog(int evalOverviewId) throws IOException {
+        log.info("into genLog");
+//        log.info(JSON.toJSONString(buildCompareTaskParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        String log = evalOverviewService.genLog(evalOverviewId);
+        return WebUtil.successResult(log);
+    }
 }

@@ -40,4 +40,6 @@ public interface EvalOverviewService {
     int buildPromoteTask(BuildPromoteTaskParam param) throws IOException;
 
     int buildCompareTask(BuildCompareTaskParam param) throws IOException;
+
+    String genLog(int evalOverviewId);
 }

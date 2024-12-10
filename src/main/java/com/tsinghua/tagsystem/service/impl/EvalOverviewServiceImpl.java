@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -176,5 +177,24 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
         return evalOverviewId;
+    }
+
+    @Override
+    public String genLog(int evalOverviewId) {
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        LocalDateTime initTime = evalOverview.getEvalOverviewTime();
+        String log = "任务" + evalOverview.getEvalOverviewName() + "开始于" + initTime;
+        String[] modelIdList = evalOverview.getEvalAlgoIds().split(",");
+        for (String modelId : modelIdList) {
+            ModelInfo modelInfo = modelInfoMapper.selectById(Integer.parseInt(modelId));
+            LocalDateTime curModelTime = modelInfo.getModelGenTime();
+            // 计算curModelTime与initTime的时间间隔，并以经过了多少天多少小时多少分这样的格式输出
+            long days = Duration.between(initTime, curModelTime).toDays();
+            long hours = Duration.between(initTime, curModelTime).toHours() % 24;
+            long minutes = Duration.between(initTime, curModelTime).toMinutes() % 60;
+            log += "<br>模型" + modelInfo.getModelName() + "生成于" + curModelTime + "，花费了" + days + "天" + hours + "小时" + minutes + "分构建而成";
+        }
+        System.out.println(log);
+        return log;
     }
 }
