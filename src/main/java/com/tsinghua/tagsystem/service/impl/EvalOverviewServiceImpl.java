@@ -192,6 +192,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewUserName(param.getEvalUserName())
                 .llmUpType(param.getLlmUpType())
                 .token(param.getToken())
+                .evalOverviewType("大模型任务")
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
         return evalOverviewId;
