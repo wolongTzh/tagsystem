@@ -24,8 +24,7 @@ public class LLMController {
     @Autowired
     LLMTaskService llmTaskService;
 
-    @GetMapping(value = "createTask")
-    @CrossOrigin
+    @PostMapping(value = "createTask")
     public WebResInfo createTask(CreateLLMTaskParam param) throws IOException {
         log.info("into llm createTask");
         log.info(JSON.toJSONString(param));
