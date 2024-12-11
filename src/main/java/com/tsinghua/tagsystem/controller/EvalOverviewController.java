@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildLLMTaskParam;
 import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.impl.EvalOverviewServiceImpl;
 import com.tsinghua.tagsystem.utils.WebUtil;
@@ -75,6 +76,15 @@ public class EvalOverviewController {
 //        log.info(JSON.toJSONString(buildCompareTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         int evalOverviewId = evalOverviewService.buildCompareTask(buildCompareTaskParam);
+        return WebUtil.successResult(evalOverviewId);
+    }
+
+    @PostMapping(value = "createLLMTask")
+    public WebResInfo createLLMTask(@RequestBody BuildLLMTaskParam buildLLMTaskParam) throws IOException {
+        log.info("into createLLMTask");
+        log.info(JSON.toJSONString(buildLLMTaskParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int evalOverviewId = evalOverviewService.buildLLMTask(buildLLMTaskParam);
         return WebUtil.successResult(evalOverviewId);
     }
 

@@ -3,6 +3,7 @@ package com.tsinghua.tagsystem.service;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.EvalOverviewDecorate;
 import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildLLMTaskParam;
 import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,8 @@ public interface EvalOverviewService {
     int buildPromoteTask(BuildPromoteTaskParam param) throws IOException;
 
     int buildCompareTask(BuildCompareTaskParam param) throws IOException;
+
+    int buildLLMTask(BuildLLMTaskParam param) throws IOException;
 
     String genLog(int evalOverviewId);
 }

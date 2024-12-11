@@ -5,6 +5,7 @@ import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.*;
 import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
+import com.tsinghua.tagsystem.model.params.BuildLLMTaskParam;
 import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
 import com.tsinghua.tagsystem.service.EvalOverviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,8 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewType(evalOverviewParam.getEvalOverviewType())
                 // 使用当前时间赋值OverviewTime
                 .evalOverviewTime(LocalDateTime.now())
+                .token(evalOverviewParam.getToken())
+                .llmUpType(evalOverviewParam.getLlmUpType())
                 .build();
         evalOverviewMapper.insert(evalOverview);
         OverviewUserRela overviewUserRela = OverviewUserRela.builder()
@@ -175,6 +178,20 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewUserId(param.getEvalUserId())
                 .evalOverviewUserName(param.getEvalUserName())
                 .evalOverviewType("对比任务-" + param.getSource())
+                .build();
+        int evalOverviewId = addEvalOverview(evalOverview);
+        return evalOverviewId;
+    }
+
+    @Override
+    public int buildLLMTask(BuildLLMTaskParam param) throws IOException {
+        EvalOverview evalOverview = EvalOverview.builder()
+                .evalOverviewName(param.getEvalOverviewName())
+                .evalOverviewIntro(param.getEvalOverviewIntro())
+                .evalOverviewUserId(param.getEvalUserId())
+                .evalOverviewUserName(param.getEvalUserName())
+                .llmUpType(param.getLlmUpType())
+                .token(param.getToken())
                 .build();
         int evalOverviewId = addEvalOverview(evalOverview);
         return evalOverviewId;

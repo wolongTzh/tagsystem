@@ -57,5 +57,9 @@ public class EvalOverview implements Serializable {
 
     public String evalOverviewType;
 
+    public String llmUpType;
+
+    public String token;
+
 
 }
