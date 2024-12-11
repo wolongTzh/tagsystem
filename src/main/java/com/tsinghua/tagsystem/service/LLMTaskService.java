@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LLMTaskService {
-   @Async
+
    public int createLLMTask(CreateLLMTaskParam createLLMTaskParam);
 }
