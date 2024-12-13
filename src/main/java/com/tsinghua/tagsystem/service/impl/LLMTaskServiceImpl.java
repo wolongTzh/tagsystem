@@ -44,6 +44,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                 .formatDescribe(createLLMTaskParam.getFormatDescribe())
                 .llmScriptPath(createLLMTaskParam.getLlmScriptPath())
                 .evalOverviewId(createLLMTaskParam.getEvalOverviewId())
+                .llmInputPath(createLLMTaskParam.getLlmInputPath())
                 .build();
         llmTaskMapper.insert(llmTask);
         return llmTask.getLlmTaskId();

@@ -23,5 +23,7 @@ public class CreateLLMTaskParam {
 
     String llmScriptPath;
 
+    String llmInputPath;
+
     String formatDescribe;
 }
