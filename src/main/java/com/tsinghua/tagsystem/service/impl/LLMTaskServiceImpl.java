@@ -77,6 +77,15 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                     .map(Integer::parseInt)
                     .collect(Collectors.toList());
             List<LlmTask> llmTaskList = llmTaskMapper.selectList(new QueryWrapper<LlmTask>().in("llm_task_id", modelIdList));
+            for(LlmTask llmTask : llmTaskList) {
+                if (llmTask.getLlmOutputPath().contains("开始时间")) {
+                    double startTime = Double.parseDouble(llmTask.getLlmOutputPath().replace("开始时间", ""));
+                    // 计算当前时间到开始时间的时间间隔
+                    double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
+                    String newContent = Math.floor(currentTime - startTime) + "s";
+                    llmTask.setLlmOutputPath(newContent);
+                }
+            }
             llmTaskDecorate.setLlmTaskList(llmTaskList);
         }
         if (!StringUtils.isEmpty(testDataListStr)) {
