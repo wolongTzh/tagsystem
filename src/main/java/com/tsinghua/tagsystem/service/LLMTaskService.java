@@ -11,4 +11,6 @@ public interface LLMTaskService {
    public int createLLMTask(CreateLLMTaskParam createLLMTaskParam);
 
    public LlmTaskDecorate display(int evalOverviewId);
+
+   public int deleteModel(int modelId, int evalOverviewId);
 }

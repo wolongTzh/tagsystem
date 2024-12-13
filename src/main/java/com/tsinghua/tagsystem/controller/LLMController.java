@@ -39,4 +39,12 @@ public class LLMController {
 //        EvalOverviewControllerUtil.validDisplayParam(userId);
         return WebUtil.successResult(llmTaskService.display(evalOverviewId));
     }
+
+    @PostMapping(value = "deleteModel")
+    public WebResInfo deleteModel(int modelId, int evalOverviewId) throws IOException {
+        log.info("into deleteModel");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        llmTaskService.deleteModel(modelId, evalOverviewId);
+        return WebUtil.successResult("success");
+    }
 }
