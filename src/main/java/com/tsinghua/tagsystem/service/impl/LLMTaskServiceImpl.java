@@ -173,6 +173,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
 
     @Override
     public int runTask(StartLLMTaskParam param) throws IOException {
+        System.out.println(JSON.toJSONString(param));
         EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
         LlmTask llmTask = llmTaskMapper.selectById(param.getLlmTaskId());
         param.setToken(evalOverview.getToken());
