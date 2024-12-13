@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.queue;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
+import com.tsinghua.tagsystem.model.params.StartLLMTaskParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.service.LLMTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,10 @@ public class TaskProcessor {
                         evalDetailService.runTrain(message);
                     }
                     else if (message.getTaskType().equals("LLM")) {
-                        llmTaskService.runTask(message.getModelId(), message.getEvalOverviewId());
+                        llmTaskService.runTask(StartLLMTaskParam.builder()
+                                .evalOverviewId(message.getEvalOverviewId())
+                                .llmTaskId(message.getModelId())
+                                .build());
                     }
                     else {
                         System.out.println("no match task type!!");

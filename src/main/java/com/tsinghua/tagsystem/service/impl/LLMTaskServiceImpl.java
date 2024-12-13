@@ -8,8 +8,11 @@ import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalLlmDetailMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
+import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
 import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.CreateLLMTaskParam;
+import com.tsinghua.tagsystem.model.params.FinishLLMTaskParam;
+import com.tsinghua.tagsystem.model.params.StartLLMTaskParam;
 import com.tsinghua.tagsystem.service.LLMTaskService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,10 +170,11 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     }
 
     @Override
-    public int runTask(int modelId, int evalOverviewId) throws IOException {
-        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
-        LlmTask llmTask = llmTaskMapper.selectById(modelId);
-        llmTask.setToken(evalOverview.getToken());
+    public int runTask(StartLLMTaskParam param) throws IOException {
+        EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
+        LlmTask llmTask = llmTaskMapper.selectById(param.getLlmTaskId());
+        param.setToken(evalOverview.getToken());
+        param.setLlmTask(llmTask);
         String url = llmTaskInterface;
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTask));
         return 1;
@@ -180,5 +184,27 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     public int updateStatus(LlmTask llmTask) {
         llmTaskMapper.updateById(llmTask);
         return 1;
+    }
+
+    @Override
+    public List<LLMTaskScoreCalHelper> finishLLMTask(FinishLLMTaskParam param) {
+        LlmTask llmTask = llmTaskMapper.selectById(param.getLlmTaskId());
+        llmTask.setLlmOutputPath(param.getLlmOutputPath());
+        EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
+        List<LLMTaskScoreCalHelper> llmTaskScoreCalHelperList = new ArrayList<>();
+        List<Integer> testIdList = Arrays.stream(evalOverview.getEvalTestIds().split(","))
+                .map(Integer::parseInt)   // 将每个字符串转换为整数
+                .collect(Collectors.toList());  // 收集成一个列表
+        for(Integer testId : testIdList){
+            String dataPath = dataInfoMapper.selectById(testId).getDataPath();
+            llmTaskScoreCalHelperList.add(LLMTaskScoreCalHelper.builder()
+                            .llmTaskId(llmTask.getLlmTaskId())
+                            .llmTaskName(llmTask.getLlmTaskName())
+                            .testDataPath(dataPath)
+                            .testDataId(testId)
+                            .llmOutPutPath(llmTask.getLlmOutputPath())
+                    .build());
+        }
+        return llmTaskScoreCalHelperList;
     }
 }

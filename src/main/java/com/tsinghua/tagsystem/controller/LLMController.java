@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.dao.entity.LlmTask;
+import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.queue.MessageQueue;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/eval/llm")
@@ -77,5 +79,14 @@ public class LLMController {
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         llmTaskService.updateStatus(llmTask);
         return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "finishLLMTask")
+    public WebResInfo finishLLMTask(@RequestBody FinishLLMTaskParam param) throws IOException {
+        log.info("into llm finishLLMTask");
+        log.info(JSON.toJSONString(param));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        List<LLMTaskScoreCalHelper> results = llmTaskService.finishLLMTask(param);
+        return WebUtil.successResult(results);
     }
 }
