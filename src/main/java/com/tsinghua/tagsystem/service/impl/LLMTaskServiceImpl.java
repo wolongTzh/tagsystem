@@ -42,9 +42,11 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     DataInfoMapper dataInfoMapper;
 
     String llmTaskInterface;
+    String llmCalculateInterface;
 
     LLMTaskServiceImpl(AlchemistPathConfig config) {
         llmTaskInterface = config.getLlmTaskInterface();
+        llmCalculateInterface = config.getLlmCalculateInterface();
     }
 
     @Override
@@ -187,10 +189,14 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     }
 
     @Override
-    public List<LLMTaskScoreCalHelper> finishLLMTask(FinishLLMTaskParam param) {
+    public int finishLLMTask(FinishLLMTaskParam param) throws IOException {
         LlmTask llmTask = llmTaskMapper.selectById(param.getLlmTaskId());
         llmTask.setLlmOutputPath(param.getLlmOutputPath());
+        llmTaskMapper.updateById(llmTask);
         EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
+        if(StringUtils.isEmpty(evalOverview.getEvalTestIds().split(","))) {
+            return 1;
+        }
         List<LLMTaskScoreCalHelper> llmTaskScoreCalHelperList = new ArrayList<>();
         List<Integer> testIdList = Arrays.stream(evalOverview.getEvalTestIds().split(","))
                 .map(Integer::parseInt)   // 将每个字符串转换为整数
@@ -205,6 +211,8 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                             .llmOutPutPath(llmTask.getLlmOutputPath())
                     .build());
         }
-        return llmTaskScoreCalHelperList;
+        String url = llmCalculateInterface;
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTaskScoreCalHelperList));
+        return 1;
     }
 }

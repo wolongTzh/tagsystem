@@ -86,7 +86,7 @@ public class LLMController {
         log.info("into llm finishLLMTask");
         log.info(JSON.toJSONString(param));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
-        List<LLMTaskScoreCalHelper> results = llmTaskService.finishLLMTask(param);
-        return WebUtil.successResult(results);
+        llmTaskService.finishLLMTask(param);
+        return WebUtil.successResult("success");
     }
 }

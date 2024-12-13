@@ -41,6 +41,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.llmTaskInterface}")
     private String llmTaskInterface;
 
+    @Value("${AlchemistPath.llmCalculateInterface}")
+    private String llmCalculateInterface;
+
     @Value("${AlchemistPath.grepTimeElapse}")
     private String grepTimeElapse;
 }

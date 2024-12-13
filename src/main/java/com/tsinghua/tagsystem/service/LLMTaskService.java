@@ -27,5 +27,5 @@ public interface LLMTaskService {
 
    public int updateStatus(LlmTask llmTask);
 
-   public List<LLMTaskScoreCalHelper> finishLLMTask(FinishLLMTaskParam param);
+   public int finishLLMTask(FinishLLMTaskParam param) throws IOException;
 }
