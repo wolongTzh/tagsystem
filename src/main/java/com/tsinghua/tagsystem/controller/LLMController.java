@@ -89,4 +89,13 @@ public class LLMController {
         llmTaskService.finishLLMTask(param);
         return WebUtil.successResult("success");
     }
+
+    @PostMapping(value = "addLLMDetailRelation")
+    public WebResInfo addLLMDetailRelation(@RequestBody List<AddLLMDetailRelationParam> param) throws IOException {
+        log.info("into llm addLLMDetailRelation");
+        log.info(JSON.toJSONString(param));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        llmTaskService.addLLMDetailRelation(param);
+        return WebUtil.successResult("success");
+    }
 }

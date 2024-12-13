@@ -10,6 +10,7 @@ import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
 import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
 import com.tsinghua.tagsystem.model.PathCollection;
+import com.tsinghua.tagsystem.model.params.AddLLMDetailRelationParam;
 import com.tsinghua.tagsystem.model.params.CreateLLMTaskParam;
 import com.tsinghua.tagsystem.model.params.FinishLLMTaskParam;
 import com.tsinghua.tagsystem.model.params.StartLLMTaskParam;
@@ -215,6 +216,21 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         }
         String url = llmCalculateInterface;
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTaskScoreCalHelperList));
+        return 1;
+    }
+
+    @Override
+    public int addLLMDetailRelation(List<AddLLMDetailRelationParam> params) {
+        int evalOverviewId = llmTaskMapper.selectById(params.get(0).getLlmTaskId()).getEvalOverviewId();
+        for(AddLLMDetailRelationParam param : params) {
+            evalLlmDetailMapper.insert(EvalLlmDetail.builder()
+                    .dataId(param.getTestDataId())
+                    .llmTaskId(param.getLlmTaskId())
+                    .evalLlmDetailTime(LocalDateTime.now())
+                    .evalLlmDetailScore(param.getScore())
+                    .evalOverviewId(evalOverviewId)
+                    .build());
+        }
         return 1;
     }
 }
