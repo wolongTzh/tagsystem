@@ -178,7 +178,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         param.setToken(evalOverview.getToken());
         param.setLlmTask(llmTask);
         String url = llmTaskInterface;
-        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTask));
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(evalOverview));
         return 1;
     }
 
