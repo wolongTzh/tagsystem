@@ -166,4 +166,10 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTask));
         return 1;
     }
+
+    @Override
+    public int updateStatus(LlmTask llmTask) {
+        llmTaskMapper.updateById(llmTask);
+        return 1;
+    }
 }

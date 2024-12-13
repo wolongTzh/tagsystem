@@ -1,7 +1,9 @@
 package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
+import com.tsinghua.tagsystem.dao.entity.LlmTask;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.queue.MessageQueue;
@@ -66,5 +68,14 @@ public class LLMController {
 //        evalDetailService.runTestPromote(runTestModelParam);
         int evalDetailId = messageQueue.enqueue(runTestModelParam);
         return WebUtil.successResult(evalDetailId);
+    }
+
+    @PostMapping(value = "updateStatus")
+    public WebResInfo updateStatus(@RequestBody LlmTask llmTask) throws IOException {
+        log.info("into llm updateStatus");
+        log.info(JSON.toJSONString(llmTask));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        llmTaskService.updateStatus(llmTask);
+        return WebUtil.successResult("success");
     }
 }
