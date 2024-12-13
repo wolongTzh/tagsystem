@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -26,32 +27,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class LlmTask implements Serializable {
+public class LlmTaskDecorate implements Serializable {
 
-    private static final long serialVersionUID=1L;
-
-    @TableId(value = "llm_task_id", type = IdType.AUTO)
-    private Integer llmTaskId;
-
-    private String llmTaskName;
-
-    private LocalDateTime llmCreateTime;
-
-    private Integer llmCreateUserId;
-
-    private String llmCreateUserName;
-
-    private String llmType;
-
-    private String llmScriptPath;
-
-    private String llmInputPath;
-
-    private String llmOutputPath;
-
-    private String formatDescribe;
-
-    private Integer evalOverviewId;
-
+    List<LlmTask> llmTaskList;
+    List<EvalLlmDetail> evalDetailList;
+    List<DataInfo> testDataList;
+    String evalTestNames;
+    String evalTestIds;
+    String evalAlgoNames;
+    String evalAlgoIds;
 
 }

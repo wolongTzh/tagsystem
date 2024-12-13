@@ -31,4 +31,12 @@ public class LLMController {
 //        EvalOverviewControllerUtil.validDisplayParam(userId);
         return WebUtil.successResult(llmTaskService.createLLMTask(param));
     }
+
+    @GetMapping(value = "display")
+    public WebResInfo display(Integer evalOverviewId) throws IOException {
+        log.info("into llm display");
+        log.info("evalOverviewId: " + evalOverviewId);
+//        EvalOverviewControllerUtil.validDisplayParam(userId);
+        return WebUtil.successResult(llmTaskService.display(evalOverviewId));
+    }
 }
