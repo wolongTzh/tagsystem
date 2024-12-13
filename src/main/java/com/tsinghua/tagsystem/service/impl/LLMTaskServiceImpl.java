@@ -63,7 +63,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                 .llmScriptPath(createLLMTaskParam.getLlmScriptPath())
                 .evalOverviewId(createLLMTaskParam.getEvalOverviewId())
                 .llmInputPath(createLLMTaskParam.getLlmInputPath())
-                .llmInputPath("待开始")
+                .llmOutputPath("待开始")
                 .build();
         llmTaskMapper.insert(llmTask);
         return llmTask.getLlmTaskId();
