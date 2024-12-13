@@ -36,6 +36,7 @@ AlchemistPath:
   hgfInterface: http://192.168.3.39:8081/eval_hug_task
   compareInterface: http://192.168.3.39:8081/compare_predict_answer
   stopTaskInterface: http://192.168.3.39:8081/task_killer
+  llmTaskInterface: http://192.168.3.39:8081/eval_llm_task
   grepTimeElapse: http://192.168.3.39:8081/grep_time_elapse
 
 

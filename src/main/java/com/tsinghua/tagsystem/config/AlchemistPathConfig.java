@@ -38,6 +38,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.stopTaskInterface}")
     private String stopTaskInterface;
 
+    @Value("${AlchemistPath.llmTaskInterface}")
+    private String llmTaskInterface;
+
     @Value("${AlchemistPath.grepTimeElapse}")
     private String grepTimeElapse;
 }

@@ -53,5 +53,7 @@ public class LlmTask implements Serializable {
 
     private Integer evalOverviewId;
 
+    private String token;
+
 
 }

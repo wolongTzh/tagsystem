@@ -1,17 +1,22 @@
 package com.tsinghua.tagsystem.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalLlmDetailMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
+import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.CreateLLMTaskParam;
 import com.tsinghua.tagsystem.service.LLMTaskService;
+import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +38,12 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     @Autowired
     DataInfoMapper dataInfoMapper;
 
+    String llmTaskInterface;
+
+    LLMTaskServiceImpl(AlchemistPathConfig config) {
+        llmTaskInterface = config.getLlmTaskInterface();
+    }
+
     @Override
     public int createLLMTask(CreateLLMTaskParam createLLMTaskParam) {
         LlmTask llmTask = LlmTask.builder()
@@ -45,6 +56,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                 .llmScriptPath(createLLMTaskParam.getLlmScriptPath())
                 .evalOverviewId(createLLMTaskParam.getEvalOverviewId())
                 .llmInputPath(createLLMTaskParam.getLlmInputPath())
+                .llmInputPath("待开始")
                 .build();
         llmTaskMapper.insert(llmTask);
         return llmTask.getLlmTaskId();
@@ -142,6 +154,16 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         System.out.println(testNames);
         evalLlmDetailMapper.delete(new QueryWrapper<EvalLlmDetail>().eq("eval_data_id", testDataId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
+        return 1;
+    }
+
+    @Override
+    public int runTask(int modelId, int evalOverviewId) throws IOException {
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        LlmTask llmTask = llmTaskMapper.selectById(modelId);
+        llmTask.setToken(evalOverview.getToken());
+        String url = llmTaskInterface;
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTask));
         return 1;
     }
 }

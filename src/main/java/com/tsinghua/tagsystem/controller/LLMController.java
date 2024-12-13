@@ -3,10 +3,8 @@ package com.tsinghua.tagsystem.controller;
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.EvalOverview;
 import com.tsinghua.tagsystem.model.WebResInfo;
-import com.tsinghua.tagsystem.model.params.BuildCompareTaskParam;
-import com.tsinghua.tagsystem.model.params.BuildLLMTaskParam;
-import com.tsinghua.tagsystem.model.params.BuildPromoteTaskParam;
-import com.tsinghua.tagsystem.model.params.CreateLLMTaskParam;
+import com.tsinghua.tagsystem.model.params.*;
+import com.tsinghua.tagsystem.queue.MessageQueue;
 import com.tsinghua.tagsystem.service.LLMTaskService;
 import com.tsinghua.tagsystem.service.impl.EvalOverviewServiceImpl;
 import com.tsinghua.tagsystem.utils.WebUtil;
@@ -23,6 +21,9 @@ public class LLMController {
 
     @Autowired
     LLMTaskService llmTaskService;
+
+    @Autowired
+    MessageQueue messageQueue;
 
     @PostMapping(value = "createTask")
     public WebResInfo createTask(CreateLLMTaskParam param) throws IOException {
@@ -54,5 +55,16 @@ public class LLMController {
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         llmTaskService.deleteTestData(testId, evalOverviewId);
         return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "runTestLLM")
+    public WebResInfo runTestModel(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
+        log.info("into runTestLLM");
+        log.info(JSON.toJSONString(runTestModelParam));
+        runTestModelParam.setTaskType("LLM");
+//        EvalDetailControllerUtil.validTestModelParam(testModelParam);
+//        evalDetailService.runTestPromote(runTestModelParam);
+        int evalDetailId = messageQueue.enqueue(runTestModelParam);
+        return WebUtil.successResult(evalDetailId);
     }
 }
