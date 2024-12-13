@@ -47,4 +47,12 @@ public class LLMController {
         llmTaskService.deleteModel(modelId, evalOverviewId);
         return WebUtil.successResult("success");
     }
+
+    @PostMapping(value = "deleteTestData")
+    public WebResInfo deleteTestData(int testId, int evalOverviewId) throws IOException {
+        log.info("into deleteTestData");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        llmTaskService.deleteTestData(testId, evalOverviewId);
+        return WebUtil.successResult("success");
+    }
 }

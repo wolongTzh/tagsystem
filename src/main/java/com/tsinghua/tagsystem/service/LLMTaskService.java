@@ -13,4 +13,6 @@ public interface LLMTaskService {
    public LlmTaskDecorate display(int evalOverviewId);
 
    public int deleteModel(int modelId, int evalOverviewId);
+
+   public int deleteTestData(int testDataId, int evalOverviewId);
 }
