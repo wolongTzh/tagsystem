@@ -98,4 +98,13 @@ public class LLMController {
         llmTaskService.addLLMDetailRelation(param);
         return WebUtil.successResult("success");
     }
+
+    @PostMapping(value = "uploadTestData")
+    public WebResInfo uploadTestData(UploadTestDataParam uploadTestDataParam) throws IOException {
+        log.info("into llm uploadTestData");
+//        log.info(JSON.toJSONString(uploadTestDataParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        int testDataId = llmTaskService.uploadTestData(uploadTestDataParam);
+        return WebUtil.successResult(testDataId);
+    }
 }

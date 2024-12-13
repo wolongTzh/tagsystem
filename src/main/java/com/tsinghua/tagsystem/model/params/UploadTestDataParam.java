@@ -14,6 +14,8 @@ public class UploadTestDataParam {
 
     int evalUserId;
 
+    int evalOverviewId;
+
     String evalUserName;
 
     String dataName;

@@ -10,16 +10,15 @@ import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
 import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
 import com.tsinghua.tagsystem.model.PathCollection;
-import com.tsinghua.tagsystem.model.params.AddLLMDetailRelationParam;
-import com.tsinghua.tagsystem.model.params.CreateLLMTaskParam;
-import com.tsinghua.tagsystem.model.params.FinishLLMTaskParam;
-import com.tsinghua.tagsystem.model.params.StartLLMTaskParam;
+import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.service.LLMTaskService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,10 +43,12 @@ public class LLMTaskServiceImpl implements LLMTaskService {
 
     String llmTaskInterface;
     String llmCalculateInterface;
+    String testDataPath;
 
     LLMTaskServiceImpl(AlchemistPathConfig config) {
         llmTaskInterface = config.getLlmTaskInterface();
         llmCalculateInterface = config.getLlmCalculateInterface();
+        testDataPath = config.getTestDataPath();
     }
 
     @Override
@@ -232,5 +233,41 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                     .build());
         }
         return 1;
+    }
+
+    @Override
+    public int uploadTestData(UploadTestDataParam param) throws IOException {
+        String dataName = param.getDataName();
+        File destFile = new File(testDataPath + param.getEvalUserName() + "-" + dataName + ".json");
+        MultipartFile multipartFile = param.getFile();
+        multipartFile.transferTo(destFile);
+        DataInfo dataInfo = new DataInfo();
+        dataInfo.setDataName(dataName);
+        dataInfo.setDataCreatorId(param.getEvalUserId());
+        dataInfo.setDataCreatorName(param.getEvalUserName());
+        dataInfo.setDataPath(testDataPath + param.getEvalUserName() + "-" + dataName + ".json");
+        dataInfo.setDataGenTime(LocalDateTime.now());
+        dataInfo.setDataType("EVAL");
+        dataInfo.setDataRelaInfo("");
+        dataInfoMapper.insert(dataInfo);
+
+        List<LLMTaskScoreCalHelper> llmTaskScoreCalHelperList = new ArrayList<>();
+        List<LlmTask> llmTaskList = llmTaskMapper.selectList(new QueryWrapper<LlmTask>().eq("eval_overview_id", param.getEvalOverviewId()));
+        for(LlmTask llmTask : llmTaskList) {
+            if(llmTask.getLlmOutputPath().contains("docker-pytorch-llm")) {
+                llmTaskScoreCalHelperList.add(LLMTaskScoreCalHelper.builder()
+                        .llmTaskId(llmTask.getLlmTaskId())
+                        .llmTaskName(llmTask.getLlmTaskName())
+                        .testDataPath(dataInfo.getDataPath())
+                        .testDataId(dataInfo.getDataId())
+                        .llmOutPutPath(llmTask.getLlmOutputPath())
+                        .build());
+            }
+        }
+        if(llmTaskScoreCalHelperList.size() > 0) {
+            String url = llmCalculateInterface;
+            HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTaskScoreCalHelperList));
+        }
+        return dataInfo.getDataId();
     }
 }

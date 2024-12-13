@@ -3,10 +3,7 @@ package com.tsinghua.tagsystem.service;
 import com.tsinghua.tagsystem.dao.entity.LlmTask;
 import com.tsinghua.tagsystem.dao.entity.LlmTaskDecorate;
 import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
-import com.tsinghua.tagsystem.model.params.AddLLMDetailRelationParam;
-import com.tsinghua.tagsystem.model.params.CreateLLMTaskParam;
-import com.tsinghua.tagsystem.model.params.FinishLLMTaskParam;
-import com.tsinghua.tagsystem.model.params.StartLLMTaskParam;
+import com.tsinghua.tagsystem.model.params.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +28,6 @@ public interface LLMTaskService {
    public int finishLLMTask(FinishLLMTaskParam param) throws IOException;
 
    public int addLLMDetailRelation(List<AddLLMDetailRelationParam> params);
+
+   public int uploadTestData(UploadTestDataParam param) throws IOException;
 }
