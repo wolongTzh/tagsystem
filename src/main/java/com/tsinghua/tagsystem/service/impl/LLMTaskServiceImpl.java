@@ -170,6 +170,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         System.out.println(testNames);
         evalLlmDetailMapper.delete(new QueryWrapper<EvalLlmDetail>().eq("eval_data_id", testDataId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
+        dataInfoMapper.deleteById(testDataId);
         return 1;
     }
 

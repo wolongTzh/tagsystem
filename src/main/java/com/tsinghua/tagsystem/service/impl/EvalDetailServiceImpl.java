@@ -470,6 +470,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         System.out.println(testNames);
         evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("eval_data_id", testDataId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
+        dataInfoMapper.deleteById(testDataId);
         return 1;
     }
 }
