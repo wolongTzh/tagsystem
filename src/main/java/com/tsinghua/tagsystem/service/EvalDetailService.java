@@ -64,6 +64,6 @@ public interface EvalDetailService {
 
     int deleteTestData(int testDataId, int evalOverviewId);
 
-    String getStatus(int evalOverviewId, int modelId, int testDataId);
+    String getStatus(int evalDetailId);
 
 }

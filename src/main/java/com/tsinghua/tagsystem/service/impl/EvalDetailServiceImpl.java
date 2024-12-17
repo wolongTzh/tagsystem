@@ -476,8 +476,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public String getStatus(int evalOverviewId, int modelId, int testDataId) {
-        EvalDetail evalDetail = evalDetailMapper.selectOne(new QueryWrapper<EvalDetail>().eq("eval_overview_id", evalOverviewId).eq("model_id", modelId).eq("eval_data_id", testDataId));
+    public String getStatus(int evalDetailId) {
+        EvalDetail evalDetail = evalDetailMapper.selectById(evalDetailId);
         String score = evalDetail.getEvalScore();
         if (score.contains("开始时间")) {
 //                double startTime = Double.parseDouble(score.replace("开始时间", ""));

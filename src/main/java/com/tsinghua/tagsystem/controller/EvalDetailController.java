@@ -204,10 +204,10 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "getStatus")
-    public WebResInfo getStatus(int evalOverviewId, int modelId, int testDataId) throws IOException {
+    public WebResInfo getStatus(int evalDetailId) throws IOException {
         log.info("into getStatus");
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
-        String status = evalDetailService.getStatus(evalOverviewId, modelId, testDataId);
+        String status = evalDetailService.getStatus(evalDetailId);
         return WebUtil.successResult(status);
     }
 
