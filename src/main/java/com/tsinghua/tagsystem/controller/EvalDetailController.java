@@ -203,6 +203,14 @@ public class EvalDetailController {
         return WebUtil.successResult("success");
     }
 
+    @PostMapping(value = "getStatus")
+    public WebResInfo getStatus(int evalOverviewId, int modelId) throws IOException {
+        log.info("into getStatus");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        String status = evalDetailService.getStatus(evalOverviewId, modelId);
+        return WebUtil.successResult(status);
+    }
+
     @PostMapping(value = "deleteTrainingModel")
     public WebResInfo deleteTrainingModel(int modelId, int evalOverviewId) throws IOException {
         log.info("into deleteTrainingModel");

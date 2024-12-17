@@ -474,4 +474,18 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         dataInfoMapper.deleteById(testDataId);
         return 1;
     }
+
+    @Override
+    public String getStatus(int evalOverviewId, int modelId) {
+        EvalDetail evalDetail = evalDetailMapper.selectOne(new QueryWrapper<EvalDetail>().eq("eval_overview_id", evalOverviewId).eq("model_id", modelId));
+        String score = evalDetail.getEvalScore();
+        if (score.contains("开始时间")) {
+//                double startTime = Double.parseDouble(score.replace("开始时间", ""));
+//                // 计算当前时间到开始时间的时间间隔
+//                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
+//                String newContent = Math.floor(currentTime - startTime) + "s";
+            score = score.replace("开始时间", "");
+        }
+        return score;
+    }
 }
