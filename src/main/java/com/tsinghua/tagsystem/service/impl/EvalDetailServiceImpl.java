@@ -76,21 +76,22 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         for (EvalDetail evalDetail : evalDetailList) {
             String score = evalDetail.getEvalScore();
             if (score.contains("开始时间")) {
-                double startTime = Double.parseDouble(score.replace("开始时间", ""));
-                // 计算当前时间到开始时间的时间间隔
-                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
-                String newContent = Math.floor(currentTime - startTime) + "s";
-                evalDetail.setEvalScore(newContent);
+//                double startTime = Double.parseDouble(score.replace("开始时间", ""));
+//                // 计算当前时间到开始时间的时间间隔
+//                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
+//                String newContent = Math.floor(currentTime - startTime) + "s";
+                evalDetail.setEvalScore(score.replace("开始时间", ""));
             }
         }
         if (evalOverview.getEvalTrainingModelId() != null) {
             ModelInfo modelInfo = modelInfoMapper.selectById(evalOverview.getEvalTrainingModelId());
             String status = modelInfo.getStatus();
             if (status.contains("开始时间")) {
-                double startTime = Double.parseDouble(status.replace("开始时间", ""));
-                // 计算当前时间到开始时间的时间间隔
-                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
-                status = Math.floor(currentTime - startTime) + "s";
+//                double startTime = Double.parseDouble(status.replace("开始时间", ""));
+//                // 计算当前时间到开始时间的时间间隔
+//                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
+//                status = Math.floor(currentTime - startTime) + "s";
+                status = status.replace("开始时间", "");
             }
             ModelInfo modelInfo1 = ModelInfo.builder()
                     .status(status)
