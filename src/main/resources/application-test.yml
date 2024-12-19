@@ -35,6 +35,7 @@ AlchemistPath:
   trainInterface: http://192.168.3.39:8081/eval_train_task
   hgfInterface: http://192.168.3.39:8081/eval_hug_task
   compareInterface: http://192.168.3.39:8081/compare_predict_answer
+  compareTripleInterface: http://192.168.3.39:8081/compare_predict_answer_triple
   stopTaskInterface: http://192.168.3.39:8081/task_killer
   llmTaskInterface: http://192.168.3.39:8081/eval_llm_task
   llmCalculateInterface: http://192.168.3.39:8081/llm_calculate
