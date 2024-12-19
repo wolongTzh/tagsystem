@@ -19,6 +19,7 @@ public class BuildPromoteTaskParam {
     String originCodeName;
     String originEnvName;
     String cmd;
+    String trainCmd;
     int workerId;
     String workerName;
     String modelType;
