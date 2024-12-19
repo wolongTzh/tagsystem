@@ -105,6 +105,14 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         }
         evalDetailDecorate.setEvalDetailList(evalDetailList);
         List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>().isNull("status"));
+        if(!StringUtils.isEmpty(evalOverview.getEvalAlgoIds())) {
+            Integer modelId = Integer.valueOf(evalOverview.getEvalAlgoIds().split(",")[0]);
+            Integer algoId = modelInfoMapper.selectById(modelId).getAlgoId();
+            if(!StringUtils.isEmpty(algoId)) {
+                String modelType = algoInfoMapper.selectById(algoId).getModelType();
+                evalDetailDecorate.setModelType(modelType);
+            }
+        }
         List<ExistModel> existModelList = new ArrayList<>();
         // 使用modelInfoList来构建existModelList
         existModelList = modelInfoList.stream().map(ExistModel::new).collect(Collectors.toList());
