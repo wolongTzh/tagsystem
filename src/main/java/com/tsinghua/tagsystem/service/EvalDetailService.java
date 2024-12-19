@@ -56,7 +56,7 @@ public interface EvalDetailService {
 
     int runTrain(RunTestModelParam param) throws IOException;
 
-    int comparePredictAnswer(int modelId, int testDataId) throws IOException;
+    String comparePredictAnswer(int modelId, int testDataId) throws IOException;
 
     int deleteModel(int modelId, int evalOverviewId);
 

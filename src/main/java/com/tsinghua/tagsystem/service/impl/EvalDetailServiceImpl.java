@@ -105,14 +105,6 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         }
         evalDetailDecorate.setEvalDetailList(evalDetailList);
         List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>().isNull("status"));
-        if(!StringUtils.isEmpty(evalOverview.getEvalAlgoIds())) {
-            Integer modelId = Integer.valueOf(evalOverview.getEvalAlgoIds().split(",")[0]);
-            Integer algoId = modelInfoMapper.selectById(modelId).getAlgoId();
-            if(!StringUtils.isEmpty(algoId)) {
-                String modelType = algoInfoMapper.selectById(algoId).getModelType();
-                evalDetailDecorate.setModelType(modelType);
-            }
-        }
         List<ExistModel> existModelList = new ArrayList<>();
         // 使用modelInfoList来构建existModelList
         existModelList = modelInfoList.stream().map(ExistModel::new).collect(Collectors.toList());
@@ -400,7 +392,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int comparePredictAnswer(int modelId, int testDataId) throws IOException {
+    public String comparePredictAnswer(int modelId, int testDataId) throws IOException {
         String url = compareInterface;
         Integer algoId = modelInfoMapper.selectById(modelId).getAlgoId();
         String modelType = algoInfoMapper.selectById(algoId).getModelType();
@@ -414,7 +406,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         String modelResultPath = evalDetail.getModelResultPath();
         String testDataPath = dataInfoMapper.selectById(testDataId).getDataPath();
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(PathCollection.builder().modelResultPath(modelResultPath).testDataPath(testDataPath).build()));
-        return 1;
+        return modelType;
     }
 
     @Override

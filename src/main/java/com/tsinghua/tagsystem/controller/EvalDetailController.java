@@ -92,8 +92,8 @@ public class EvalDetailController {
     public WebResInfo comparePredictAnswer(int modelId, int testDataId) throws IOException {
         log.info("into comparePredictAnswer");
         log.info(modelId + " " + testDataId);
-        int ret = evalDetailService.comparePredictAnswer(modelId, testDataId);
-        return WebUtil.successResult(ret);
+        String modelType = evalDetailService.comparePredictAnswer(modelId, testDataId);
+        return WebUtil.successResult(modelType);
     }
 
     @PostMapping(value = "deleteTestResult")
