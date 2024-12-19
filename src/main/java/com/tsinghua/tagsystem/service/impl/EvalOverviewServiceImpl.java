@@ -166,6 +166,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         algoInfo.setCmd(param.getCmd());
         algoInfo.setAlgoVersion("V1");
         algoInfo.setEvalOverviewId(evalOverviewId);
+        algoInfo.setModelType(param.getModelType());
         algoInfoMapper.insert(algoInfo);
         return evalOverviewId;
     }

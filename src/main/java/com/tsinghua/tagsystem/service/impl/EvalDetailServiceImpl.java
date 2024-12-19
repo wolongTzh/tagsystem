@@ -12,6 +12,7 @@ import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,6 +50,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String trainInterface;
     String hgfInterface;
     String compareInterface;
+    String compareTripleInterface;
     String stopTaskInterface;
     String grepTimeElapse;
 
@@ -64,6 +66,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         stopTaskInterface = config.getStopTaskInterface();
         grepTimeElapse = config.getGrepTimeElapse();
         compareInterface = config.getCompareInterface();
+        compareTripleInterface = config.getCompareTripleInterface();
     }
 
 
@@ -391,6 +394,14 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int comparePredictAnswer(int modelId, int testDataId) throws IOException {
         String url = compareInterface;
+        Integer algoId = modelInfoMapper.selectById(modelId).getAlgoId();
+        String modelType = algoInfoMapper.selectById(algoId).getModelType();
+        if(modelType.equals("ner")) {
+            url = compareInterface;
+        }
+        else if(modelType.equals("re")) {
+            url = compareTripleInterface;
+        }
         EvalDetail evalDetail = evalDetailMapper.selectOne(new QueryWrapper<EvalDetail>().eq("model_id",modelId).eq("eval_data_id", testDataId));
         String modelResultPath = evalDetail.getModelResultPath();
         String testDataPath = dataInfoMapper.selectById(testDataId).getDataPath();

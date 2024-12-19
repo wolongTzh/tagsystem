@@ -21,4 +21,5 @@ public class BuildPromoteTaskParam {
     String cmd;
     int workerId;
     String workerName;
+    String modelType;
 }

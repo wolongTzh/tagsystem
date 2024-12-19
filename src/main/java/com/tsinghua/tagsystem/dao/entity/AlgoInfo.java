@@ -47,5 +47,6 @@ public class AlgoInfo implements Serializable {
 
     private Integer evalOverviewId;
 
+    private String modelType;
 
 }
