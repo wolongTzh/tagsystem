@@ -354,7 +354,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             modelInfoMapper.updateById(modelInfo);
             String imageName = modelInfo.getImageName();
             param.setImageName(imageName);
-            param.setModelPath(param.getModelPath());
+            param.setModelPath(modelInfoMapper.selectById(param.getModelId()).getModelPath());
         }
         else {
             EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
