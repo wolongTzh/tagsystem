@@ -301,6 +301,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Override
     public int uploadTrain(UploadTrainParam param) {
+        Integer algoId = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId())).getAlgoId();
         ModelInfo modelInfo = new ModelInfo();
         modelInfo.setModelCreator(param.getEvalUserName());
         modelInfo.setModelCreatorId(param.getEvalUserId());
@@ -309,6 +310,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelTrainDataName(param.getModelTrainDataName());
         modelInfo.setModelPath(customizeModeModelPath + param.getEvalUserName() + "-" + param.getModelName() + param.getSuffix());
         modelInfo.setStatus("待开始");
+        modelInfo.setAlgoId(algoId);
         modelInfoMapper.insert(modelInfo);
         EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
         evalOverview.setEvalTrainingModelId( modelInfo.getModelId());
