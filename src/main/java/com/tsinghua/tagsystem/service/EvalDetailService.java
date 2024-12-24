@@ -66,4 +66,6 @@ public interface EvalDetailService {
 
     String getStatus(int evalDetailId);
 
+    String getTrainStatus(int modelId);
+
 }
