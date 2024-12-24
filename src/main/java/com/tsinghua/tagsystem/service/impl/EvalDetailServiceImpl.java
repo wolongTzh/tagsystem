@@ -505,7 +505,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public String getTrainStatus(int modelId) {
         ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
-        String score = modelInfo.getImageName();
+        String score = modelInfo.getStatus();
         if (score.contains("开始时间")) {
 //                double startTime = Double.parseDouble(score.replace("开始时间", ""));
 //                // 计算当前时间到开始时间的时间间隔
