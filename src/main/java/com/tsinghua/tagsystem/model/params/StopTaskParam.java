@@ -18,4 +18,6 @@ public class StopTaskParam {
     String imageName;
 
     String taskType;
+
+    String modelPath;
 }
