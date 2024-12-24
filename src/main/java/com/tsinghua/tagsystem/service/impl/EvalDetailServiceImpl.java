@@ -45,6 +45,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String checkpointPath;
     String testDataPath;
     String customizeModeModelPath;
+    String trainModelPath;
     String customizeInterface;
     String promoteInterface;
     String trainInterface;
@@ -67,6 +68,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         grepTimeElapse = config.getGrepTimeElapse();
         compareInterface = config.getCompareInterface();
         compareTripleInterface = config.getCompareTripleInterface();
+        trainModelPath = config.getTrainModelPath();
     }
 
 
@@ -308,7 +310,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelGenTime(LocalDateTime.now());
         modelInfo.setModelName(param.getModelName());
         modelInfo.setModelTrainDataName(param.getModelTrainDataName());
-        modelInfo.setModelPath(customizeModeModelPath + param.getEvalUserName() + "-" + param.getModelName() + param.getSuffix());
+        modelInfo.setModelPath(trainModelPath + param.getEvalUserName() + "-" + param.getModelName() + param.getSuffix());
         modelInfo.setStatus("待开始");
         modelInfo.setAlgoId(algoId);
         modelInfoMapper.insert(modelInfo);

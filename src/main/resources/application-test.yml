@@ -30,6 +30,7 @@ AlchemistPath:
   checkpointPath: /home/tz/copy-code/docker-pytorch-promote/model/
   testDataPath: /home/tz/copy-code/docker-pytorch/input/
   customizeModeModelPath: /home/tz/copy-code/docker-pytorch/
+  trainModelPath: /home/tz/copy-code/docker-pytorch-promote/
   customizeInterface: http://192.168.3.39:8081/eval_upload_model
   promoteInterface: http://192.168.3.39:8081/eval_promote_task
   trainInterface: http://192.168.3.39:8081/eval_train_task

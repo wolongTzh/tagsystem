@@ -20,6 +20,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.customizeModeModelPath}")
     private String customizeModeModelPath;
 
+    @Value("${AlchemistPath.trainModelPath}")
+    private String trainModelPath;
+
     @Value("${AlchemistPath.customizeInterface}")
     private String customizeInterface;
 
