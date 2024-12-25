@@ -463,8 +463,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     public int deleteTrainingModel(int modelId, int evalOverviewId) {
         modelInfoMapper.deleteById(modelId);
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        String trainingIds = evalOverview.getEvalTrainingModelId();
         UpdateWrapper<EvalOverview> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("eval_overview_id", evalOverviewId).set("eval_training_model_id", null);
+        updateWrapper.eq("eval_overview_id", evalOverviewId).set("eval_training_model_id", trainingIds.replace(String.valueOf(modelId) + ",", ""));
         evalOverviewMapper.update(null, updateWrapper);
         return 1;
     }
