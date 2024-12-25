@@ -29,7 +29,7 @@ public class EvalDetailDecorate extends EvalOverview {
 
     List<ExistModel> modelList;
 
-    ModelInfo curTrainModelInfo;
+    List<ModelInfo> curTrainModelInfo;
 
 
 

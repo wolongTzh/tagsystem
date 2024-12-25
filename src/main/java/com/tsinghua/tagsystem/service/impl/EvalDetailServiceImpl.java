@@ -89,21 +89,27 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             }
         }
         if (evalOverview.getEvalTrainingModelId() != null) {
-            ModelInfo modelInfo = modelInfoMapper.selectById(evalOverview.getEvalTrainingModelId());
-            String status = modelInfo.getStatus();
-            if (status.contains("开始时间")) {
+            String trainingModelIds = evalOverview.getEvalTrainingModelId();
+            List<ModelInfo> modelInfoList = new ArrayList<>();
+            for(String trainingModelId : trainingModelIds.split(",")) {
+                ModelInfo modelInfo = modelInfoMapper.selectById(trainingModelId);
+                String status = modelInfo.getStatus();
+                if (status.contains("开始时间")) {
 //                double startTime = Double.parseDouble(status.replace("开始时间", ""));
 //                // 计算当前时间到开始时间的时间间隔
 //                double currentTime = System.currentTimeMillis() / 1000.0;  // 当前时间戳（秒）
 //                status = Math.floor(currentTime - startTime) + "s";
-                status = status.replace("开始时间", "");
+                    status = status.replace("开始时间", "");
+                }
+                ModelInfo modelInfo1 = ModelInfo.builder()
+                        .status(status)
+                        .modelName(modelInfo.getModelName())
+                        .modelId(modelInfo.getModelId())
+                        .build();
+                modelInfoList.add(modelInfo1);
+
             }
-            ModelInfo modelInfo1 = ModelInfo.builder()
-                    .status(status)
-                    .modelName(modelInfo.getModelName())
-                    .modelId(modelInfo.getModelId())
-                    .build();
-            evalDetailDecorate.setCurTrainModelInfo(modelInfo1);
+            evalDetailDecorate.setCurTrainModelInfo(modelInfoList);
         }
         evalDetailDecorate.setEvalDetailList(evalDetailList);
         List<ModelInfo> modelInfoList = modelInfoMapper.selectList(new QueryWrapper<ModelInfo>().isNull("status"));
@@ -219,10 +225,11 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         }
 
         UpdateWrapper<EvalOverview> overviewWrapper = new UpdateWrapper<>();
+        String trainingIds = evalOverview.getEvalTrainingModelId();
         overviewWrapper.eq("eval_overview_id", evalOverviewId)
                 .set("eval_algo_ids", evalAlgoIds)
                 .set("eval_algo_names", evalAlgoNames)
-                .set("eval_training_model_id", null);
+                .set("eval_training_model_id", trainingIds.replace(String.valueOf(modelId) + ",", ""));
 
         evalOverviewMapper.update(null, overviewWrapper);
         modelInfoMapper.update(null, modelWrapper);
@@ -315,7 +322,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setAlgoId(algoId);
         modelInfoMapper.insert(modelInfo);
         EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
-        evalOverview.setEvalTrainingModelId( modelInfo.getModelId());
+        evalOverview.setEvalTrainingModelId(modelInfo.getModelId() + ",");
         evalOverviewMapper.updateById(evalOverview);
         return modelInfo.getModelId();
     }
