@@ -88,7 +88,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
                 evalDetail.setEvalScore(score.replace("开始时间", ""));
             }
         }
-        if (evalOverview.getEvalTrainingModelId() != null) {
+        if (!StringUtils.isEmpty(evalOverview.getEvalTrainingModelId())) {
             String trainingModelIds = evalOverview.getEvalTrainingModelId();
             List<ModelInfo> modelInfoList = new ArrayList<>();
             for(String trainingModelId : trainingModelIds.split(",")) {
