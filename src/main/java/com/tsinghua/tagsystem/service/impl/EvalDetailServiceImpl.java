@@ -322,7 +322,11 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setAlgoId(algoId);
         modelInfoMapper.insert(modelInfo);
         EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
-        evalOverview.setEvalTrainingModelId(modelInfo.getModelId() + ",");
+        String oldTrainingModelId = evalOverview.getEvalTrainingModelId();
+        if(oldTrainingModelId == null) {
+            oldTrainingModelId = "";
+        }
+        evalOverview.setEvalTrainingModelId(oldTrainingModelId + modelInfo.getModelId() + ",");
         evalOverviewMapper.updateById(evalOverview);
         return modelInfo.getModelId();
     }
