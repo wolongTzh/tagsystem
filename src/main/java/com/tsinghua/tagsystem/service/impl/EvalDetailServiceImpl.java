@@ -52,6 +52,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String hgfInterface;
     String compareInterface;
     String compareTripleInterface;
+    String compareEventInterface;
     String stopTaskInterface;
     String grepTimeElapse;
 
@@ -69,6 +70,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         compareInterface = config.getCompareInterface();
         compareTripleInterface = config.getCompareTripleInterface();
         trainModelPath = config.getTrainModelPath();
+        compareEventInterface = config.getCompareEventInterface();
     }
 
 
@@ -417,6 +419,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         }
         else if(modelType.equals("re")) {
             url = compareTripleInterface;
+        }
+        else if(modelType.equals("event")) {
+            url = compareEventInterface;
         }
         EvalDetail evalDetail = evalDetailMapper.selectOne(new QueryWrapper<EvalDetail>().eq("model_id",modelId).eq("eval_data_id", testDataId));
         String modelResultPath = evalDetail.getModelResultPath();

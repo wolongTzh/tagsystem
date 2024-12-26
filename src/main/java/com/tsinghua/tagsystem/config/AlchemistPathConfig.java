@@ -41,6 +41,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.compareTripleInterface}")
     private String compareTripleInterface;
 
+    @Value("${AlchemistPath.compareEventInterface}")
+    private String compareEventInterface;
+
     @Value("${AlchemistPath.stopTaskInterface}")
     private String stopTaskInterface;
 
