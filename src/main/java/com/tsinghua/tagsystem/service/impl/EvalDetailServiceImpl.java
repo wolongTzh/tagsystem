@@ -39,6 +39,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     ModelHelpTagMapper modelHelpTagMapper;
 
     @Autowired
+    LlmTaskMapper llmTaskMapper;
+
+    @Autowired
     DataInfoMapper dataInfoMapper;
     @Autowired
     AlgoInfoMapper algoInfoMapper;
@@ -383,6 +386,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             param.setModelPath(algoInfo.getAlgoPath());
             param.setModelFilePath(modelInfo.getModelPath());
             System.out.println(JSON.toJSONString(param));
+        }
+        else {
+            param.setLlmTask(llmTaskMapper.selectById(62));
         }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;

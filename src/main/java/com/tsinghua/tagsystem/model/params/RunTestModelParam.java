@@ -1,5 +1,6 @@
 package com.tsinghua.tagsystem.model.params;
 
+import com.tsinghua.tagsystem.dao.entity.LlmTask;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -57,4 +58,6 @@ public class RunTestModelParam {
     String modelSuffix;
 
     String checkPointPath;
+
+    LlmTask llmTask;
 }
