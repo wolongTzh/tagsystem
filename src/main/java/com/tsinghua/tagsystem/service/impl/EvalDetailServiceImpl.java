@@ -595,9 +595,11 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Override
     public int createModelHelpTagTask(ModelHelpTag modelHelpTag) {
-        ModelInfo modelInfo = modelInfoMapper.selectById(modelHelpTag.getModelId());
-        modelHelpTag.setModelName(modelInfo.getModelName());
-        modelHelpTag.setModelPath(modelInfo.getModelPath());
+        if(modelHelpTag.getModelId() != -1) {
+            ModelInfo modelInfo = modelInfoMapper.selectById(modelHelpTag.getModelId());
+            modelHelpTag.setModelName(modelInfo.getModelName());
+            modelHelpTag.setModelPath(modelInfo.getModelPath());
+        }
         modelHelpTag.setOutputPath("待开始");
         modelHelpTagMapper.insert(modelHelpTag);
         return modelHelpTag.getModelHelpTagId();
