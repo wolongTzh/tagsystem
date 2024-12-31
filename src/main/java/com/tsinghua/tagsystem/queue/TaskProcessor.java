@@ -66,6 +66,9 @@ public class TaskProcessor {
                                 .llmTaskId(message.getModelId())
                                 .build());
                     }
+                    else if (message.getTaskType().equals("modelHelp")) {
+                        evalDetailService.runTestModelHelp(message);
+                    }
                     else {
                         System.out.println("no match task type!!");
                     }

@@ -1,8 +1,10 @@
 package com.tsinghua.tagsystem.queue;
 import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.LlmTask;
+import com.tsinghua.tagsystem.dao.entity.ModelHelpTag;
 import com.tsinghua.tagsystem.dao.entity.ModelInfo;
 import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
+import com.tsinghua.tagsystem.dao.mapper.ModelHelpTagMapper;
 import com.tsinghua.tagsystem.dao.mapper.ModelInfoMapper;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
@@ -19,6 +21,9 @@ public class MessageQueue {
 
     @Autowired
     ModelInfoMapper modelInfoMapper;
+
+    @Autowired
+    ModelHelpTagMapper modelHelpTagMapper;
 
     @Autowired
     LlmTaskMapper llmTaskMapper;
@@ -44,6 +49,12 @@ public class MessageQueue {
             modelInfo.setStatus("排队中");
             modelInfoMapper.updateById(modelInfo);
             retId = message.getModelId();
+        }
+        else if (message.getTaskType().equals("modelHelp")) {
+            ModelHelpTag modelHelpTag = modelHelpTagMapper.selectById(message.getModelHelpTagId());
+            modelHelpTag.setOutputPath("排队中");
+            modelHelpTagMapper.updateById(modelHelpTag);
+            retId = message.getModelHelpTagId();
         }
         else {
             int evalDetailId = evalDetailService.addNewScore(EvalDetail.builder()

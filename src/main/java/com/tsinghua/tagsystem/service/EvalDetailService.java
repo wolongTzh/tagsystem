@@ -33,7 +33,7 @@ public interface EvalDetailService {
     int updateScore(EvalDetail evalDetail);
 
     int updateTrainMsg(ModelInfo modelInfo);
-
+    int updateModelHelp(ModelHelpTag modelHelpTag);
     int finishTrain(int evalOverviewId, int modelId);
 
     int uploadTestData(UploadTestDataParam param) throws IOException;
@@ -49,6 +49,8 @@ public interface EvalDetailService {
     int runTest(RunTestModelParam param) throws IOException;
 
     int runTestPromote(RunTestModelParam param) throws IOException;
+
+    int runTestModelHelp(RunTestModelParam param) throws IOException;
 
     int stopTask(StopTaskParam param) throws IOException;
 
@@ -67,5 +69,9 @@ public interface EvalDetailService {
     String getStatus(int evalDetailId);
 
     String getTrainStatus(int modelId);
+
+ String getModelHelpStatus(int modelHelpId);
+
+    int createModelHelpTagTask(ModelHelpTag modelHelpTag);
 
 }

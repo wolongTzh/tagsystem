@@ -38,6 +38,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.compareInterface}")
     private String compareInterface;
 
+    @Value("${AlchemistPath.modelHelpInterface}")
+    private String modelHelpInterface;
+
     @Value("${AlchemistPath.compareTripleInterface}")
     private String compareTripleInterface;
 

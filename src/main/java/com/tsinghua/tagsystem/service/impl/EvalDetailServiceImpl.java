@@ -12,7 +12,6 @@ import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +36,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     ModelInfoMapper modelInfoMapper;
 
     @Autowired
+    ModelHelpTagMapper modelHelpTagMapper;
+
+    @Autowired
     DataInfoMapper dataInfoMapper;
     @Autowired
     AlgoInfoMapper algoInfoMapper;
@@ -53,6 +55,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String compareInterface;
     String compareTripleInterface;
     String compareEventInterface;
+    String modelHelpInterface;
     String stopTaskInterface;
     String grepTimeElapse;
 
@@ -71,6 +74,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         compareTripleInterface = config.getCompareTripleInterface();
         trainModelPath = config.getTrainModelPath();
         compareEventInterface = config.getCompareEventInterface();
+        modelHelpInterface = config.getModelHelpInterface();
     }
 
 
@@ -124,6 +128,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         testDataList = dataInfoList.stream().map(ExistTestData::new).collect(Collectors.toList());
         evalDetailDecorate.setTestDataList(testDataList);
         evalDetailDecorate.setModelList(existModelList);
+        ModelHelpTag modelHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId));
+        evalDetailDecorate.setModelHelpTag(modelHelpTag);
         return evalDetailDecorate;
     }
 
@@ -198,6 +204,11 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int updateTrainMsg(ModelInfo modelInfo) {
         return modelInfoMapper.updateById(modelInfo);
+    }
+
+    @Override
+    public int updateModelHelp(ModelHelpTag modelHelpTag) {
+        return modelHelpTagMapper.updateById(modelHelpTag);
     }
 
     @Override
@@ -361,6 +372,23 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int runTestModelHelp(RunTestModelParam param) throws IOException {
+        String url = modelHelpInterface;
+        if(!(StringUtils.isEmpty(param.getModelName()) || param.getModelName().equals("冷启动大模型"))) {
+            AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
+            ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
+            System.out.println(JSON.toJSONString(algoInfo));
+            param.setCmd(algoInfo.getCmd());
+            param.setEnvPath(algoInfo.getEnvPath());
+            param.setModelPath(algoInfo.getAlgoPath());
+            param.setModelFilePath(modelInfo.getModelPath());
+            System.out.println(JSON.toJSONString(param));
+        }
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        return 1;
+    }
+
+    @Override
     public int stopTask(StopTaskParam param) throws IOException {
         String url = stopTaskInterface;
         if(param.getTaskType().equals("train")) {
@@ -370,6 +398,13 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             String imageName = modelInfo.getImageName();
             param.setImageName(imageName);
             param.setModelPath(modelInfoMapper.selectById(param.getModelId()).getModelPath());
+        }
+        else if(param.getTaskType().contains("modelHelp")) {
+            ModelHelpTag modelHelpTag = modelHelpTagMapper.selectById(param.getModelId());
+            modelHelpTag.setOutputPath("待开始");
+            modelHelpTagMapper.updateById(modelHelpTag);
+            String imageName = modelHelpTag.getImageName();
+            param.setImageName(imageName);
         }
         else {
             EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
@@ -534,5 +569,25 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             score = score.replace("开始时间", "");
         }
         return score;
+    }
+
+    @Override
+    public String getModelHelpStatus(int modelHelpId) {
+        ModelHelpTag modelHelpTag = modelHelpTagMapper.selectById(modelHelpId);
+        String score = modelHelpTag.getOutputPath();
+        if (score.contains("开始时间")) {
+            score = score.replace("开始时间", "");
+        }
+        return score;
+    }
+
+    @Override
+    public int createModelHelpTagTask(ModelHelpTag modelHelpTag) {
+        ModelInfo modelInfo = modelInfoMapper.selectById(modelHelpTag.getModelId());
+        modelHelpTag.setModelName(modelInfo.getModelName());
+        modelHelpTag.setModelPath(modelInfo.getModelPath());
+        modelHelpTag.setOutputPath("待开始");
+        modelHelpTagMapper.insert(modelHelpTag);
+        return modelHelpTag.getModelHelpTagId();
     }
 }

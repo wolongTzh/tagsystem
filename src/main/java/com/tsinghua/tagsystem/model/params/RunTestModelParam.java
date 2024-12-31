@@ -26,6 +26,8 @@ public class RunTestModelParam {
 
     Integer evalOverviewId;
 
+    Integer modelHelpTagId;
+
     Integer modelId;
 
     String modelName;

@@ -31,6 +31,8 @@ public class EvalDetailDecorate extends EvalOverview {
 
     List<ModelInfo> curTrainModelInfo;
 
+    ModelHelpTag modelHelpTag;
+
 
 
     //生成一个构造方法，使用一个EvalOverview对象来构造EvalDetailDecorate
