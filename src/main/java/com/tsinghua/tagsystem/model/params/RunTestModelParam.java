@@ -59,5 +59,7 @@ public class RunTestModelParam {
 
     String checkPointPath;
 
+    String token;
+
     LlmTask llmTask;
 }

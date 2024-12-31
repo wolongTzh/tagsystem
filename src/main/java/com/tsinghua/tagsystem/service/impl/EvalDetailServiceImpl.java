@@ -388,7 +388,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             System.out.println(JSON.toJSONString(param));
         }
         else {
+            //TODO:这块的逻辑不够合理
             param.setLlmTask(llmTaskMapper.selectById(62));
+            param.setToken("6306367a14a96d92d3910a33b6d079a8.kGYlp3ommvTt6fFu");
         }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         return 1;
