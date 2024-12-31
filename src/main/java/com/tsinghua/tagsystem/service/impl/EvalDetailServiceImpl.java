@@ -511,6 +511,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int deleteModelHelpTag(int modelHelpTagId) {
+        modelHelpTagMapper.deleteById(modelHelpTagId);
+        return 1;
+    }
+
+    @Override
     public int deleteTestData(int testDataId, int evalOverviewId) {
         // 获取 EvalOverview 对象
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);

@@ -64,6 +64,8 @@ public interface EvalDetailService {
 
     int deleteTrainingModel(int modelId, int evalOverviewId);
 
+    int deleteModelHelpTag(int modelHelpTagId);
+
     int deleteTestData(int testDataId, int evalOverviewId);
 
     String getStatus(int evalDetailId);
