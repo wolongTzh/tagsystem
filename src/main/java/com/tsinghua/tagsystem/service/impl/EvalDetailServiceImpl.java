@@ -377,7 +377,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int runTestModelHelp(RunTestModelParam param) throws IOException {
         String url = modelHelpInterface;
-        if(!(StringUtils.isEmpty(param.getModelName()) || param.getModelName().equals("冷启动大模型"))) {
+        if(param.getModelId() != -1) {
             AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
             ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
             System.out.println(JSON.toJSONString(algoInfo));
