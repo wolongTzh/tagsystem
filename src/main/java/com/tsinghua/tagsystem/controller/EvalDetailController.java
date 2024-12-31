@@ -232,6 +232,14 @@ public class EvalDetailController {
         return WebUtil.successResult("success");
     }
 
+    @PostMapping(value = "deleteModelHelpTag")
+    public WebResInfo deleteModelHelpTag(int modelHelpTagId) throws IOException {
+        log.info("into deleteModelHelpTag");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.deleteModelHelpTag(modelHelpTagId);
+        return WebUtil.successResult("success");
+    }
+
     @PostMapping(value = "getStatus")
     public WebResInfo getStatus(int evalDetailId) throws IOException {
         log.info("into getStatus");
