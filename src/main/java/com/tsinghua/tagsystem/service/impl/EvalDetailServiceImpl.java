@@ -389,7 +389,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         }
         else {
             //TODO:这块的逻辑不够合理
-            param.setLlmTask(llmTaskMapper.selectById(62));
+            param.setLlmTask(llmTaskMapper.selectById(82));
             param.setToken("6306367a14a96d92d3910a33b6d079a8.kGYlp3ommvTt6fFu");
         }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
