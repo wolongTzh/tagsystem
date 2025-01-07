@@ -5,6 +5,7 @@ import com.tsinghua.tagsystem.dao.entity.EvalDetail;
 import com.tsinghua.tagsystem.dao.entity.EvalDetailDecorate;
 import com.tsinghua.tagsystem.dao.entity.ModelHelpTag;
 import com.tsinghua.tagsystem.dao.entity.ModelInfo;
+import com.tsinghua.tagsystem.model.ModelHelpTagDTO;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.queue.MessageQueue;
@@ -126,7 +127,7 @@ public class EvalDetailController {
     }
 
     @PostMapping(value = "updateModelHelp")
-    public WebResInfo updateModelHelp(@RequestBody ModelHelpTag modelHelpTag) throws IOException {
+    public WebResInfo updateModelHelp(@RequestBody ModelHelpTagDTO modelHelpTag) throws IOException {
         log.info("into updateModelHelp");
         log.info(JSON.toJSONString(modelHelpTag));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.*;
+import com.tsinghua.tagsystem.model.ModelHelpTagDTO;
 import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
 import com.tsinghua.tagsystem.service.EvalDetailService;
@@ -210,7 +211,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
-    public int updateModelHelp(ModelHelpTag modelHelpTag) {
+    public int updateModelHelp(ModelHelpTagDTO modelHelpTag) {
         if(!StringUtils.isEmpty(modelHelpTag.getFee())) {
             Integer evalOverviewId = modelHelpTagMapper.selectById(modelHelpTag.getModelId()).getEvalOverviewId();
             EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);

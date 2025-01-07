@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.service;
 
 import com.tsinghua.tagsystem.dao.entity.*;
+import com.tsinghua.tagsystem.model.ModelHelpTagDTO;
 import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public interface EvalDetailService {
     int updateScore(EvalDetail evalDetail);
 
     int updateTrainMsg(ModelInfo modelInfo);
-    int updateModelHelp(ModelHelpTag modelHelpTag);
+    int updateModelHelp(ModelHelpTagDTO modelHelpTag);
     int finishModelHelpTagCheckTaskBuild(int modelHelpTagId);
     int finishTrain(int evalOverviewId, int modelId);
 
