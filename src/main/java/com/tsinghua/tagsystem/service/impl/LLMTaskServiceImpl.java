@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -279,5 +280,21 @@ public class LLMTaskServiceImpl implements LLMTaskService {
             HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTaskScoreCalHelperList));
         }
         return dataInfo.getDataId();
+    }
+
+    @Override
+    public String genLog(int evalOverviewId) {
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        LocalDateTime initTime = evalOverview.getEvalOverviewTime();
+        LocalDateTime now = LocalDateTime.now();
+        long days = Duration.between(initTime, now).toDays();
+        long hours = Duration.between(initTime, now).toHours() % 24;
+        long minutes = Duration.between(initTime, now).toMinutes() % 60;
+        String log = "任务" + evalOverview.getEvalOverviewName() + "开始于" + initTime + "<br>已进行" + days + "天" + hours + "小时" + minutes + "分钟";
+        if(!StringUtils.isEmpty(evalOverview.getFee())) {
+            log += "<br>所花费总额为：" + evalOverview.getFee();
+        }
+        System.out.println(log);
+        return log;
     }
 }

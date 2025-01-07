@@ -30,4 +30,6 @@ public interface LLMTaskService {
    public int addLLMDetailRelation(List<AddLLMDetailRelationParam> params);
 
    public int uploadTestData(UploadTestDataParam param) throws IOException;
+
+   public String genLog(int evalOverviewId);
 }

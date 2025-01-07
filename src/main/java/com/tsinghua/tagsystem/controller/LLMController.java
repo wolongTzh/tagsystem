@@ -107,4 +107,13 @@ public class LLMController {
         int testDataId = llmTaskService.uploadTestData(uploadTestDataParam);
         return WebUtil.successResult(testDataId);
     }
+
+    @PostMapping(value = "genLog")
+    public WebResInfo genLog(int evalOverviewId) throws IOException {
+        log.info("into genLog");
+//        log.info(JSON.toJSONString(buildCompareTaskParam));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        String log = llmTaskService.genLog(evalOverviewId);
+        return WebUtil.successResult(log);
+    }
 }
