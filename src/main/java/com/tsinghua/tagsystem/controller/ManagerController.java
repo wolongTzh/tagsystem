@@ -27,6 +27,7 @@ public class ManagerController {
 
     @PostMapping(value = "createTask")
     public WebResInfo createTask(@RequestParam("file") MultipartFile rawFile, @RequestParam("param") String rawParam) throws IOException {
+        System.out.println(rawParam);
         CreateTaskParam param = JSON.parseObject(rawParam, CreateTaskParam.class);
         File file = File.createTempFile("temp", "json");
         rawFile.transferTo(file);
