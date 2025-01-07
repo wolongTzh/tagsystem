@@ -220,7 +220,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
         }
         log += "<br>该任务至现在为止总花费金额为";
         if(!StringUtils.isEmpty(evalOverview.getFee())) {
-            log += evalOverview.getFee() + "元";
+            log += String.format("%.4f", Double.parseDouble(evalOverview.getFee())) + "元";
         }
         else {
             log += "0元";

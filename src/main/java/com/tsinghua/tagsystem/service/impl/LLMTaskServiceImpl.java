@@ -292,7 +292,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         long minutes = Duration.between(initTime, now).toMinutes() % 60;
         String log = "任务" + evalOverview.getEvalOverviewName() + "开始于" + initTime + "<br>已进行" + days + "天" + hours + "小时" + minutes + "分钟";
         if(!StringUtils.isEmpty(evalOverview.getFee())) {
-            log += "<br>所花费总额为：" + evalOverview.getFee();
+            log += "<br>所花费总额为：" + String.format("%.4f", Double.parseDouble(evalOverview.getFee()));
         }
         System.out.println(log);
         return log;
