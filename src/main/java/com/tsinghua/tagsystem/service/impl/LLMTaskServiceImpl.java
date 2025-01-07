@@ -220,7 +220,11 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         String url = llmCalculateInterface;
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTaskScoreCalHelperList));
         if(!StringUtils.isEmpty(param.getFee())) {
-            evalOverview.setFee(String.valueOf(Double.parseDouble(evalOverview.getFee()) + Double.parseDouble(param.getFee())));
+            String fee = "0.0";
+            if(!StringUtils.isEmpty(evalOverview.getFee())) {
+                fee = evalOverview.getFee();
+            }
+            evalOverview.setFee(String.valueOf(Double.parseDouble(fee) + Double.parseDouble(param.getFee())));
         }
         return 1;
     }
