@@ -38,7 +38,9 @@ public class ModelHelpTag implements Serializable {
 
     private String imageName;
 
-    private String evalOverviewId;
+    private Integer evalOverviewId;
+
+    private String fee;
 
 
 }
