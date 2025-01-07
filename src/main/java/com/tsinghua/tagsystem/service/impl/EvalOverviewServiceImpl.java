@@ -218,6 +218,13 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
             long minutes = Duration.between(initTime, curModelTime).toMinutes() % 60;
             log += "<br>模型" + modelInfo.getModelName() + "生成于" + curModelTime + "，花费了" + days + "天" + hours + "小时" + minutes + "分构建而成";
         }
+        log += "<br>该任务至现在为止总花费金额为";
+        if(!StringUtils.isEmpty(evalOverview.getFee())) {
+            log += evalOverview.getFee() + "元";
+        }
+        else {
+            log += "0元";
+        }
         System.out.println(log);
         return log;
     }
