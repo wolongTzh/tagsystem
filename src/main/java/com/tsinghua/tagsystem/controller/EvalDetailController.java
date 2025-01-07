@@ -134,6 +134,15 @@ public class EvalDetailController {
         return WebUtil.successResult("success");
     }
 
+    @PostMapping(value = "finishModelHelpTagCheckTaskBuild")
+    public WebResInfo updateModelHelp(int modelHelpTagId) throws IOException {
+        log.info("into FinishModelHelpCheckTaskBuild");
+        log.info(JSON.toJSONString(modelHelpTagId));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.finishModelHelpTagCheckTaskBuild(modelHelpTagId);
+        return WebUtil.successResult("success");
+    }
+
     @PostMapping(value = "updateTrainMsg")
     public WebResInfo updateTrainMsg(@RequestBody ModelInfo modelInfo) throws IOException {
         log.info("into updateTrainMsg");

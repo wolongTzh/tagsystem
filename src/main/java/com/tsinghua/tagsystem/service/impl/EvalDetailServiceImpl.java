@@ -215,6 +215,13 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int finishModelHelpTagCheckTaskBuild(int modelHelpTagId) {
+        ModelHelpTag modelHelpTag = modelHelpTagMapper.selectById(modelHelpTagId);
+        modelHelpTag.setOutputPath("已创建标注确认任务");
+        return modelHelpTagMapper.updateById(modelHelpTag);
+    }
+
+    @Override
     public int finishTrain(int evalOverviewId, int modelId) {
         UpdateWrapper<ModelInfo> modelWrapper = new UpdateWrapper<>();
         modelWrapper.eq("model_id", modelId)
