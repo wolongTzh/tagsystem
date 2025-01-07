@@ -16,4 +16,6 @@ public class FinishLLMTaskParam {
     int evalOverviewId;
 
     String llmOutputPath;
+
+    String fee;
 }
