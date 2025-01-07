@@ -396,8 +396,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int runTestModelHelp(RunTestModelParam param) throws IOException {
         String url = modelHelpInterface;
+        AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         if(param.getModelId() != -1) {
-            AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
             ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
             System.out.println(JSON.toJSONString(algoInfo));
             param.setCmd(algoInfo.getCmd());
@@ -407,6 +407,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             System.out.println(JSON.toJSONString(param));
         }
         else {
+            param.setModelType(algoInfo.getModelType());
             //TODO:这块的逻辑不够合理
             param.setLlmTask(llmTaskMapper.selectById(82));
             param.setToken("6306367a14a96d92d3910a33b6d079a8.kGYlp3ommvTt6fFu");
