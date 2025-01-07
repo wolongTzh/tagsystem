@@ -213,9 +213,13 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int updateModelHelp(ModelHelpTagDTO modelHelpTag) {
         if(!StringUtils.isEmpty(modelHelpTag.getFee())) {
-            Integer evalOverviewId = modelHelpTagMapper.selectById(modelHelpTag.getModelId()).getEvalOverviewId();
+            Integer evalOverviewId = modelHelpTagMapper.selectById(modelHelpTag.getModelHelpTagId()).getEvalOverviewId();
             EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
-            evalOverview.setFee(modelHelpTag.getFee());
+            String fee = evalOverview.getFee();
+            if(fee == null) {
+                fee = "0.0";
+            }
+            evalOverview.setFee(String.valueOf(Double.parseDouble(modelHelpTag.getFee()) + Double.parseDouble(fee)));
             evalOverviewMapper.updateById(evalOverview);
             modelHelpTag.setFee(null);
         }
