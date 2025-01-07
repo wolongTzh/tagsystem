@@ -225,6 +225,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                 fee = evalOverview.getFee();
             }
             evalOverview.setFee(String.valueOf(Double.parseDouble(fee) + Double.parseDouble(param.getFee())));
+            evalOverviewMapper.updateById(evalOverview);
         }
         return 1;
     }
