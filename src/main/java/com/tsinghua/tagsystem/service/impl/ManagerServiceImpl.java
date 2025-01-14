@@ -238,6 +238,9 @@ public class ManagerServiceImpl implements ManagerService {
         Set<Integer> alreadyCheck = new HashSet<>();
         JSONArray result = new JSONArray();
         for(Relation relation : relationList) {
+            if(relation.getStatus().equals("FAILED")) {
+                continue;
+            }
             if(relation.getId() != curId) {
                 if(curId != -1) {
                     jsonArray.add(jsonObject);
