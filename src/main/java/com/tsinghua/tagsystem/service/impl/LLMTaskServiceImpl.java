@@ -45,11 +45,13 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     String llmTaskInterface;
     String llmCalculateInterface;
     String testDataPath;
+    String compareLLMInterface;
 
     LLMTaskServiceImpl(AlchemistPathConfig config) {
         llmTaskInterface = config.getLlmTaskInterface();
         llmCalculateInterface = config.getLlmCalculateInterface();
         testDataPath = config.getTestDataPath();
+        compareLLMInterface = config.getCompareLLMInterface();
     }
 
     @Override
@@ -283,6 +285,15 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     }
 
     @Override
+    public String comparePredictAnswer(int modelId, int testDataId) throws IOException {
+        String testDataPath = dataInfoMapper.selectById(testDataId).getDataPath();
+        String modelResultPath = llmTaskMapper.selectById(modelId).getLlmOutputPath();
+        String url = compareLLMInterface;
+        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(PathCollection.builder().modelResultPath(modelResultPath).testDataPath(testDataPath).build()));
+        return "ner";
+    }
+
+    @Override
     public String genLog(int evalOverviewId) {
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
         LocalDateTime initTime = evalOverview.getEvalOverviewTime();
@@ -292,7 +303,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         long minutes = Duration.between(initTime, now).toMinutes() % 60;
         String log = "任务" + evalOverview.getEvalOverviewName() + "开始于" + initTime + "<br>已进行" + days + "天" + hours + "小时" + minutes + "分钟";
         if(!StringUtils.isEmpty(evalOverview.getFee())) {
-            log += "<br>所花费总额为：" + String.format("%.4f", Double.parseDouble(evalOverview.getFee()));
+            log += "<br>所花费总额为：" + String.format("%.4f", Double.parseDouble(evalOverview.getFee())) + "元";
         }
         System.out.println(log);
         return log;

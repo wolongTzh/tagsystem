@@ -31,5 +31,7 @@ public interface LLMTaskService {
 
    public int uploadTestData(UploadTestDataParam param) throws IOException;
 
+   public String comparePredictAnswer(int modelId, int testDataId) throws IOException;
+
    public String genLog(int evalOverviewId);
 }

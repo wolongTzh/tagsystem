@@ -37,6 +37,7 @@ AlchemistPath:
   modelHelpInterface: http://192.168.3.39:8081/eval_model_help_task
   hgfInterface: http://192.168.3.39:8081/eval_hug_task
   compareInterface: http://192.168.3.39:8081/compare_predict_answer
+  compareLLMInterface: http://192.168.3.39:8081/compare_predict_llm_answer
   compareTripleInterface: http://192.168.3.39:8081/compare_predict_answer_triple
   compareEventInterface: http://192.168.3.39:8081/compare_predict_answer_event
   stopTaskInterface: http://192.168.3.39:8081/task_killer

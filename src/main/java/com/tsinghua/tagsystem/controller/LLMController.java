@@ -89,6 +89,14 @@ public class LLMController {
         llmTaskService.finishLLMTask(param);
         return WebUtil.successResult("success");
     }
+    @PostMapping(value = "comparePredictAnswer")
+    public WebResInfo comparePredictAnswer(int modelId, int testDataId) throws IOException {
+        log.info("into llm comparePredictAnswer");
+        log.info(modelId + " " + testDataId);
+        String modelType = llmTaskService.comparePredictAnswer(modelId, testDataId);
+        return WebUtil.successResult(modelType);
+    }
+
 
     @PostMapping(value = "addLLMDetailRelation")
     public WebResInfo addLLMDetailRelation(@RequestBody List<AddLLMDetailRelationParam> param) throws IOException {
