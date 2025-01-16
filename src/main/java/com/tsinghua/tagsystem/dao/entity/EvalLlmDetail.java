@@ -43,5 +43,7 @@ public class EvalLlmDetail implements Serializable {
 
     private String evalLlmDetailScore;
 
+    private String evalDetailContent;
+
 
 }
