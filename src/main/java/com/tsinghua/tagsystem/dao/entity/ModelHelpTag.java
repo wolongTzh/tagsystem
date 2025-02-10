@@ -40,6 +40,8 @@ public class ModelHelpTag implements Serializable {
 
     private Integer evalOverviewId;
 
+    private String type;
+
 
 
 }

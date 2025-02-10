@@ -41,6 +41,8 @@ public class EvalOverview implements Serializable {
 
     public String evalTestNames;
 
+    public Integer evalAutoBuildTestId;
+
     public String evalAlgoIds;
 
     public String evalAlgoNames;

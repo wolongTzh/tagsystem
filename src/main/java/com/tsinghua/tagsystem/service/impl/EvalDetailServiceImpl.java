@@ -132,8 +132,10 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         testDataList = dataInfoList.stream().map(ExistTestData::new).collect(Collectors.toList());
         evalDetailDecorate.setTestDataList(testDataList);
         evalDetailDecorate.setModelList(existModelList);
-        ModelHelpTag modelHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId));
+        ModelHelpTag modelHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "train"));
         evalDetailDecorate.setModelHelpTag(modelHelpTag);
+        ModelHelpTag testHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
+        evalDetailDecorate.setTestHelpTag(testHelpTag);
         return evalDetailDecorate;
     }
 
@@ -625,5 +627,25 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelHelpTag.setOutputPath("待开始");
         modelHelpTagMapper.insert(modelHelpTag);
         return modelHelpTag.getModelHelpTagId();
+    }
+
+    @Override
+    public int buildAutoTestTask(BuildAutoTestTaskParam buildAutoTestTaskParam) {
+        UploadTestDataParam param = buildAutoTestTaskParam.getUploadTestDataParam();
+        String dataName = param.getDataName();
+        DataInfo dataInfo = new DataInfo();
+        dataInfo.setDataName(dataName);
+        dataInfo.setDataCreatorId(param.getEvalUserId());
+        dataInfo.setDataCreatorName(param.getEvalUserName());
+        dataInfo.setDataPath(testDataPath + param.getEvalUserName() + "-AUTO-" + dataName + ".json");
+        dataInfo.setDataGenTime(LocalDateTime.now());
+        dataInfo.setDataType("EVAL-AUTO");
+        dataInfo.setDataRelaInfo("");
+        dataInfo.setDataDefinitionInfo(buildAutoTestTaskParam.getDataDefinitionInfo());
+        dataInfoMapper.insert(dataInfo);
+        createModelHelpTagTask(buildAutoTestTaskParam.getModelHelpTag());
+        EvalOverview evalOverview = evalOverviewMapper.selectById(buildAutoTestTaskParam.getEvalOverviewId());
+        evalOverview.setEvalAutoBuildTestId(dataInfo.getDataId());
+        return 1;
     }
 }

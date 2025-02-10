@@ -44,5 +44,7 @@ public class DataInfo implements Serializable {
 
     private String dataPath;
 
+    private String dataDefinitionInfo;
+
 
 }

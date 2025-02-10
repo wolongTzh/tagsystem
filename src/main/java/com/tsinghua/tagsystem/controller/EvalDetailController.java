@@ -289,4 +289,12 @@ public class EvalDetailController {
         evalDetailService.deleteTestData(testId, evalOverviewId);
         return WebUtil.successResult("success");
     }
+
+    @PostMapping(value = "buildAutoTestTask")
+    public WebResInfo buildAutoTestTask(BuildAutoTestTaskParam buildAutoTestTaskParam) throws IOException {
+        log.info("into buildAutoTestTask");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.buildAutoTestTask(buildAutoTestTaskParam);
+        return WebUtil.successResult("success");
+    }
 }

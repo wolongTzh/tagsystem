@@ -78,4 +78,6 @@ public interface EvalDetailService {
 
     int createModelHelpTagTask(ModelHelpTag modelHelpTag);
 
+    int buildAutoTestTask(BuildAutoTestTaskParam buildAutoTestTaskParam);
+
 }
