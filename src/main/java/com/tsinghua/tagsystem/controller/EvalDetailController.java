@@ -293,6 +293,7 @@ public class EvalDetailController {
     @PostMapping(value = "buildAutoTestTask")
     public WebResInfo buildAutoTestTask(BuildAutoTestTaskParam buildAutoTestTaskParam) throws IOException {
         log.info("into buildAutoTestTask");
+        log.info(JSON.toJSONString(buildAutoTestTaskParam));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
         evalDetailService.buildAutoTestTask(buildAutoTestTaskParam);
         return WebUtil.successResult("success");
