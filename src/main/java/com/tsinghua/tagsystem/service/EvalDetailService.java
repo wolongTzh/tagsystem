@@ -80,4 +80,6 @@ public interface EvalDetailService {
 
     int buildAutoTestTask(BuildAutoTestTaskParam buildAutoTestTaskParam);
 
+    int uploadAutoTestSource(ModelHelpTag modelHelpTag);
+
 }

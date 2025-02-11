@@ -298,4 +298,13 @@ public class EvalDetailController {
         evalDetailService.buildAutoTestTask(buildAutoTestTaskParam);
         return WebUtil.successResult("success");
     }
+
+    @PostMapping(value = "uploadAutoTestSource")
+    public WebResInfo uploadAutoTestSource(@RequestBody ModelHelpTag modelHelpTag) throws IOException {
+        log.info("into uploadAutoTestSource");
+        log.info(JSON.toJSONString(modelHelpTag));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.uploadAutoTestSource(modelHelpTag);
+        return WebUtil.successResult("success");
+    }
 }

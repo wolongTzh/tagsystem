@@ -646,6 +646,13 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         createModelHelpTagTask(buildAutoTestTaskParam.getModelHelpTag());
         EvalOverview evalOverview = evalOverviewMapper.selectById(buildAutoTestTaskParam.getEvalOverviewId());
         evalOverview.setEvalAutoBuildTestId(dataInfo.getDataId());
+        evalOverviewMapper.updateById(evalOverview);
+        return 1;
+    }
+
+    @Override
+    public int uploadAutoTestSource(ModelHelpTag modelHelpTag) {
+        modelHelpTagMapper.updateById(modelHelpTag);
         return 1;
     }
 }
