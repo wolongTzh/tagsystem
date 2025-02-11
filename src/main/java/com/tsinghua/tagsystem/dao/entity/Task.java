@@ -26,4 +26,6 @@ public class Task {
     private Integer uncheckedNum;
 
     private String checkWorker;
+
+    private Integer evalOverviewId;
 }

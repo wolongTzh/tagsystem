@@ -22,4 +22,6 @@ public class CreateTaskParam {
     Member members;
 
     File file;
+
+    Integer evalOverviewId;
 }

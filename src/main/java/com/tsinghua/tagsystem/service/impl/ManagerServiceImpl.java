@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tsinghua.tagsystem.config.AddressConfig;
-import com.tsinghua.tagsystem.dao.entity.SubTask;
-import com.tsinghua.tagsystem.dao.entity.Task;
-import com.tsinghua.tagsystem.dao.entity.TsUser;
-import com.tsinghua.tagsystem.dao.entity.WorkerTaskRela;
+import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
+import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
+import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.enums.TaskStateEnum;
+import com.tsinghua.tagsystem.manager.DataInfoManager;
 import com.tsinghua.tagsystem.manager.SubTaskManager;
 import com.tsinghua.tagsystem.manager.TaskManager;
 import com.tsinghua.tagsystem.manager.WorkerTaskRelaManager;
@@ -25,10 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +43,12 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Autowired
     WorkerTaskRelaManager workerTaskRelaManager;
+
+    @Autowired
+    DataInfoMapper dataInfoMapper;
+
+    @Autowired
+    EvalOverviewMapper evalOverviewMapper;
 
     String subTaskFile = "";
     String checkedFile = "";
@@ -88,6 +93,9 @@ public class ManagerServiceImpl implements ManagerService {
                 .uncheckedNum(uncheckedNum)
                 .checkWorker(param.getMembers().getCheckingWorker().getName())
                 .build();
+        if(!StringUtils.isEmpty(param.getEvalOverviewId())) {
+            task.setEvalOverviewId(param.getEvalOverviewId());
+        }
         List<WorkerTaskRela> workerTaskRelaList = new ArrayList<>();
         List<SubTask> subTaskList = new ArrayList<>();
         for(List<TsUser> group : param.getMembers().getTaggingWorker()) {
@@ -295,6 +303,25 @@ public class ManagerServiceImpl implements ManagerService {
             result.add(exportRelation);
         }
         jsonArray.add(jsonObject);
+        if(!StringUtils.isEmpty(task.getEvalOverviewId())) {
+            EvalOverview evalOverview = evalOverviewMapper.selectById(task.getEvalOverviewId());
+            DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
+            String allPath = dataInfo.getDataPath();
+            // 使用 BufferedReader 读取文件内容
+            BufferedReader reader = new BufferedReader(new FileReader(allPath));
+            StringBuilder jsonContent = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonContent.append(line);  // 拼接每一行
+            }
+            reader.close();
+            // 将文件内容转换为 JSONArray
+            JSONArray oldJsonArray = JSONArray.parseArray(jsonContent.toString());
+            oldJsonArray.addAll(jsonArray);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(allPath));
+            writer.write(oldJsonArray.toJSONString());
+            return oldJsonArray;
+        }
         return jsonArray;
     }
 }
