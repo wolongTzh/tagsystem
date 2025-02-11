@@ -413,17 +413,22 @@ public class EvalDetailServiceImpl implements EvalDetailService {
                 String defTagName = def.get("tagName");
                 String defTagNum = def.get("tagNum");
                 String defTagKeyword = def.get("tagKeyword");
-
+                boolean findTag = false;
                 // 在 current 中查找与 definition 中相同的 tagName
                 for (Map<String, String> cur : current) {
                     String curTagName = cur.get("tagName");
                     String curTagNum = cur.get("tagNum");
-
+                    if(defTagName.equals(curTagName)) {
+                        findTag = true;
+                    }
                     // 如果 tagName 相同，且 definition 的 tagNum 大于 current 的 tagNum
                     if (defTagName.equals(curTagName) && Integer.parseInt(defTagNum) > Integer.parseInt(curTagNum)) {
                         // 拼接 tagKeyword
                         mergedKeywords += defTagKeyword + "、";
                     }
+                }
+                if(!findTag) {
+                    mergedKeywords += defTagKeyword + "、";
                 }
             }
             String[] keywords = mergedKeywords.substring(0, mergedKeywords.length()-1).split("、");
