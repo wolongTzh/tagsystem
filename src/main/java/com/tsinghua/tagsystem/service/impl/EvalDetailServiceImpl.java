@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -407,6 +408,11 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             // 将字符串转换为 List<Map>，每个 Map 对应一个 JSON 对象
             List<Map<String, String>> definition = objectMapper.readValue(dataInfo.getDataDefinitionInfo(), List.class);
             List<Map<String, String>> current = objectMapper.readValue(new File(dataInfo.getDataPath()), List.class);
+            System.out.println("definition list");
+            System.out.println(JSONObject.toJSONString(definition));
+            System.out.println("current list");
+            System.out.println(JSONObject.toJSONString(current));
+
             // 遍历 definition
             String mergedKeywords = "";
             for (Map<String, String> def : definition) {
@@ -431,6 +437,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
                     mergedKeywords += defTagKeyword + "、";
                 }
             }
+            System.out.println("mergedKeywords");
+            System.out.println(mergedKeywords);
             String[] keywords = mergedKeywords.substring(0, mergedKeywords.length()-1).split("、");
             ModelHelpTag modelHelpTag = modelHelpTagMapper.selectById(param.getModelHelpTagId());
             // 读取文件的每一行
