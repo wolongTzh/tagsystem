@@ -29,6 +29,8 @@ public class RunTestModelParam {
 
     Integer modelHelpTagId;
 
+    String modelHelpType;
+
     Integer modelId;
 
     String modelName;

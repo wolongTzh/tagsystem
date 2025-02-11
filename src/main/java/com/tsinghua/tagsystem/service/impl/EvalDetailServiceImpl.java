@@ -3,6 +3,7 @@ package com.tsinghua.tagsystem.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.*;
@@ -16,12 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -398,6 +399,62 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int runTestModelHelp(RunTestModelParam param) throws IOException {
         String url = modelHelpInterface;
+        if(param.getModelHelpType().equals("test")) {
+            EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
+            DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+            // 将字符串转换为 List<Map>，每个 Map 对应一个 JSON 对象
+            List<Map<String, String>> definition = objectMapper.readValue(dataInfo.getDataDefinitionInfo(), List.class);
+            List<Map<String, String>> current = objectMapper.readValue(new File(dataInfo.getDataPath()), List.class);
+            // 遍历 definition
+            String mergedKeywords = "";
+            for (Map<String, String> def : definition) {
+                String defTagName = def.get("tagName");
+                String defTagNum = def.get("tagNum");
+                String defTagKeyword = def.get("tagKeyword");
+
+                // 在 current 中查找与 definition 中相同的 tagName
+                for (Map<String, String> cur : current) {
+                    String curTagName = cur.get("tagName");
+                    String curTagNum = cur.get("tagNum");
+
+                    // 如果 tagName 相同，且 definition 的 tagNum 大于 current 的 tagNum
+                    if (defTagName.equals(curTagName) && Integer.parseInt(defTagNum) > Integer.parseInt(curTagNum)) {
+                        // 拼接 tagKeyword
+                        mergedKeywords += defTagKeyword + "、";
+                    }
+                }
+            }
+            String[] keywords = mergedKeywords.substring(0, mergedKeywords.length()-1).split("、");
+            ModelHelpTag modelHelpTag = modelHelpTagMapper.selectById(param.getModelHelpTagId());
+            // 读取文件的每一行
+            BufferedReader reader = new BufferedReader(new FileReader(modelHelpTag.getDataPath()));
+            List<String> filteredLines = new ArrayList<>();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                // 检查每行是否包含任意一个关键词
+                for (String keyword : keywords) {
+                    if (line.contains(keyword)) {
+                        // 如果包含某个关键词，则保留这一行
+                        filteredLines.add(line);
+                        break; // 一旦找到关键词，跳出循环
+                    }
+                }
+            }
+            reader.close();
+
+            // 将过滤后的内容写回原文件
+            BufferedWriter writer = new BufferedWriter(new FileWriter(modelHelpTag.getDataPath()));
+            for (String filteredLine : filteredLines) {
+                writer.write(filteredLine);
+                writer.newLine();
+            }
+            writer.close();
+
+            System.out.println("文件过滤并更新成功。");
+        }
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         if(param.getModelId() != -1) {
             ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
@@ -656,8 +713,10 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         if (evalOverview.getEvalAutoBuildTestId() != null) {
             dataInfoMapper.delete(new QueryWrapper<DataInfo>().eq("data_id", evalOverview.getEvalAutoBuildTestId()));
         }
-        evalOverview.setEvalAutoBuildTestId(null);
-        evalOverviewMapper.updateById(evalOverview);
+        UpdateWrapper<EvalOverview> overviewWrapper = new UpdateWrapper<>();
+        overviewWrapper.eq("eval_overview_id", evalOverviewId)
+                .set("eval_auto_build_test_id", null);
+        evalOverviewMapper.update(null, overviewWrapper);
         modelHelpTagMapper.delete(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
         return 1;
     }
