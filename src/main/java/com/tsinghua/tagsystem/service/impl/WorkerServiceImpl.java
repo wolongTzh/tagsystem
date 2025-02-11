@@ -1,13 +1,14 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tsinghua.tagsystem.config.AddressConfig;
-import com.tsinghua.tagsystem.dao.entity.SubTask;
-import com.tsinghua.tagsystem.dao.entity.Task;
-import com.tsinghua.tagsystem.dao.entity.WorkerTaskRela;
+import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
 import com.tsinghua.tagsystem.dao.entity.multi.WorkerTask;
+import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
+import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
 import com.tsinghua.tagsystem.enums.TaskStateEnum;
 import com.tsinghua.tagsystem.manager.SubTaskManager;
 import com.tsinghua.tagsystem.manager.TaskManager;
@@ -15,17 +16,21 @@ import com.tsinghua.tagsystem.manager.WorkerTaskRelaManager;
 import com.tsinghua.tagsystem.model.*;
 import com.tsinghua.tagsystem.model.VO.CheckTaskVO;
 import com.tsinghua.tagsystem.model.VO.WorkerTasksVO;
+import com.tsinghua.tagsystem.model.export.Entity;
+import com.tsinghua.tagsystem.model.export.EntityValue;
+import com.tsinghua.tagsystem.model.export.ExportRelation;
 import com.tsinghua.tagsystem.model.params.SaveCheckParam;
 import com.tsinghua.tagsystem.service.WorkerService;
 import com.tsinghua.tagsystem.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +44,12 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Autowired
     TaskManager taskManager;
+
+    @Autowired
+    DataInfoMapper dataInfoMapper;
+
+    @Autowired
+    EvalOverviewMapper evalOverviewMapper;
 
     String subTaskFile = "";
     String checkedFile = "";
@@ -295,6 +306,9 @@ public class WorkerServiceImpl implements WorkerService {
             Task task = taskManager.getByTaskId(workerTaskRela.getTaskId());
             task.setStatus(TaskStateEnum.FINISHED.getContent());
             taskManager.updateByTaskId(task);
+            if(!StringUtils.isEmpty(task.getEvalOverviewId())) {
+                updateTestData(task.getEvalOverviewId(), finalList);
+            }
         }
         else {
             WorkerTaskRela workerTaskCheck = workerTaskRelaManager.getByRelaId(param.getTaskId());
@@ -306,6 +320,95 @@ public class WorkerServiceImpl implements WorkerService {
         fileWriter.write(JSON.toJSONString(param.getCheckList()));
         fileWriter.close();
         return true;
+    }
+
+    void updateTestData(int evalOverviewId, List<Relation> finalList) throws IOException {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        int curId = -1;
+        Set<Integer> alreadyCheck = new HashSet<>();
+        JSONArray result = new JSONArray();
+        for(Relation relation : finalList) {
+            if(relation.getStatus().equals("FAILED")) {
+                continue;
+            }
+            if(relation.getId() != curId) {
+                if(curId != -1) {
+                    jsonArray.add(jsonObject);
+                }
+                alreadyCheck = new HashSet<>();
+                jsonObject = new JSONObject();
+                result = new JSONArray();
+                List<String> outText = new ArrayList<>();
+                outText.add(relation.getText());
+                jsonObject.put("data", outText);
+                jsonObject.put("result", result);
+                curId = relation.getId();
+            }
+            if(!alreadyCheck.contains(relation.getSource_id())) {
+                alreadyCheck.add(relation.getSource_id());
+                EntityValue entityValue = EntityValue.builder()
+                        .start(relation.getSourceStart())
+                        .end(relation.getSourceEnd())
+                        .text(relation.getHead())
+                        .lables(relation.getSource_type())
+                        .build();
+                Entity entity = Entity.builder()
+                        .id(relation.getSource_id())
+                        .value(entityValue)
+                        .type("lables")
+                        .build();
+                result.add(entity);
+            }
+            if(!alreadyCheck.contains(relation.getTarget_id())) {
+                alreadyCheck.add(relation.getTarget_id());
+                EntityValue entityValue = EntityValue.builder()
+                        .start(relation.getTargetStart())
+                        .end(relation.getTargetEnd())
+                        .text(relation.getTail())
+                        .lables(relation.getTarget_type())
+                        .build();
+                Entity entity = Entity.builder()
+                        .id(relation.getTarget_id())
+                        .value(entityValue)
+                        .type("lables")
+                        .build();
+                result.add(entity);
+            }
+            List<String> lables = new ArrayList<>();
+            lables.add(relation.getPredicate());
+            ExportRelation exportRelation = ExportRelation.builder()
+                    .from_id(relation.getSource_id())
+                    .to_id(relation.getTarget_id())
+                    .lables(lables)
+                    .type("relation")
+                    .build();
+            result.add(exportRelation);
+        }
+        jsonArray.add(jsonObject);
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
+        String allPath = dataInfo.getDataPath();
+        System.out.println("allPath");
+        System.out.println(allPath);
+        // 使用 BufferedReader 读取文件内容
+        BufferedReader reader = new BufferedReader(new FileReader(allPath));
+        StringBuilder jsonContent = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonContent.append(line);  // 拼接每一行
+        }
+        reader.close();
+        // 将文件内容转换为 JSONArray
+        JSONArray oldJsonArray = JSONArray.parseArray(jsonContent.toString());
+        System.out.println("oldJsonArray");
+        System.out.println(oldJsonArray.toJSONString());
+        oldJsonArray.addAll(jsonArray);
+        System.out.println("newJsonArray");
+        System.out.println(oldJsonArray.toJSONString());
+        BufferedWriter writer = new BufferedWriter(new FileWriter(allPath));
+        writer.write(oldJsonArray.toJSONString());
+        writer.close();
     }
 
     boolean judgeNeedCheck(List<Relation> relationList) {

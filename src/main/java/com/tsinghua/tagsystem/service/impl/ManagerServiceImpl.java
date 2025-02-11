@@ -44,12 +44,6 @@ public class ManagerServiceImpl implements ManagerService {
     @Autowired
     WorkerTaskRelaManager workerTaskRelaManager;
 
-    @Autowired
-    DataInfoMapper dataInfoMapper;
-
-    @Autowired
-    EvalOverviewMapper evalOverviewMapper;
-
     String subTaskFile = "";
     String checkedFile = "";
     String escapedCheckFile = "";
@@ -303,32 +297,6 @@ public class ManagerServiceImpl implements ManagerService {
             result.add(exportRelation);
         }
         jsonArray.add(jsonObject);
-        if(!StringUtils.isEmpty(task.getEvalOverviewId())) {
-            EvalOverview evalOverview = evalOverviewMapper.selectById(task.getEvalOverviewId());
-            DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
-            String allPath = dataInfo.getDataPath();
-            System.out.println("allPath");
-            System.out.println(allPath);
-            // 使用 BufferedReader 读取文件内容
-            BufferedReader reader = new BufferedReader(new FileReader(allPath));
-            StringBuilder jsonContent = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonContent.append(line);  // 拼接每一行
-            }
-            reader.close();
-            // 将文件内容转换为 JSONArray
-            JSONArray oldJsonArray = JSONArray.parseArray(jsonContent.toString());
-            System.out.println("oldJsonArray");
-            System.out.println(oldJsonArray.toJSONString());
-            oldJsonArray.addAll(jsonArray);
-            System.out.println("newJsonArray");
-            System.out.println(oldJsonArray.toJSONString());
-            BufferedWriter writer = new BufferedWriter(new FileWriter(allPath));
-            writer.write(oldJsonArray.toJSONString());
-            writer.close();
-            return oldJsonArray;
-        }
         return jsonArray;
     }
 }
