@@ -326,6 +326,7 @@ public class ManagerServiceImpl implements ManagerService {
             System.out.println(oldJsonArray.toJSONString());
             BufferedWriter writer = new BufferedWriter(new FileWriter(allPath));
             writer.write(oldJsonArray.toJSONString());
+            writer.close();
             return oldJsonArray;
         }
         return jsonArray;
