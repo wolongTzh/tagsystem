@@ -299,6 +299,14 @@ public class EvalDetailController {
         return WebUtil.successResult("success");
     }
 
+    @PostMapping(value = "deleteAutoTestTask")
+    public WebResInfo deleteAutoTestTask(int evalOverviewId) throws IOException {
+        log.info("into deleteAutoTestTask");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        evalDetailService.deleteAutoTestTask(evalOverviewId);
+        return WebUtil.successResult("success");
+    }
+
     @PostMapping(value = "uploadAutoTestSource")
     public WebResInfo uploadAutoTestSource(@RequestBody ModelHelpTag modelHelpTag) throws IOException {
         log.info("into uploadAutoTestSource");

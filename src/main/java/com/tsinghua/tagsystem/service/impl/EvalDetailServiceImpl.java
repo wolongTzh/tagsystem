@@ -651,6 +651,18 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public int deleteAutoTestTask(int evalOverviewId) {
+        EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        if (evalOverview.getEvalAutoBuildTestId() != null) {
+            dataInfoMapper.delete(new QueryWrapper<DataInfo>().eq("data_id", evalOverview.getEvalAutoBuildTestId()));
+        }
+        evalOverview.setEvalAutoBuildTestId(null);
+        evalOverviewMapper.updateById(evalOverview);
+        modelHelpTagMapper.delete(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
+        return 1;
+    }
+
+    @Override
     public int uploadAutoTestSource(ModelHelpTag modelHelpTag) {
         modelHelpTagMapper.updateById(modelHelpTag);
         return 1;
