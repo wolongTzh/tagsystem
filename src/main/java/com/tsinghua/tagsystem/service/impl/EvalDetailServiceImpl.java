@@ -140,12 +140,38 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             if(!StringUtils.isEmpty(dataInfo.getDataCurrentInfo())) {
                 JSONArray jsonArray = JSONArray.parseArray(dataInfo.getDataCurrentInfo());
                 JSONArray jsonArrayDefinition = JSONArray.parseArray(dataInfo.getDataDefinitionInfo());
-                String html = generateHtmlTable(mergeAndMapTags(jsonArray, jsonArrayDefinition));
+                JSONArray mergeResult = mergeAndMapTags(jsonArray, jsonArrayDefinition);
+                String html = "已经完成";
+                if(!checkTags(mergeResult)) {
+                    html = generateHtmlTable(mergeAndMapTags(jsonArray, jsonArrayDefinition));
+                }
                 evalDetailDecorate.setTestHtmlCalculate(html);
             }
         }
         evalDetailDecorate.setTestHelpTag(testHelpTag);
         return evalDetailDecorate;
+    }
+
+    Boolean checkTags(JSONArray jsonArray) {
+        boolean allTagsSatisfyRequirement = true;
+
+        // 遍历 JSONArray 中的每一个元素
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+            // 获取已有标签数量和要求数量并转换为整数
+            int existingCount = Integer.parseInt(jsonObject.getString("已有标签数量"));
+            int requiredCount = Integer.parseInt(jsonObject.getString("要求数量"));
+
+            // 如果已有标签数量小于要求数量，则设置标志为 false 并退出循环
+            if (existingCount < requiredCount) {
+                allTagsSatisfyRequirement = false;
+                break;
+            }
+        }
+
+        // 输出判断结果
+        return allTagsSatisfyRequirement;
     }
 
     JSONArray mergeAndMapTags(JSONArray jsonArr1, JSONArray jsonArr2) {
