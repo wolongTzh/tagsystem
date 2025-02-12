@@ -710,6 +710,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         dataInfo.setDataGenTime(LocalDateTime.now());
         dataInfo.setDataType("EVAL-AUTO");
         dataInfo.setDataRelaInfo("");
+        dataInfo.setDataCurrentInfo("[]");
         dataInfo.setDataDefinitionInfo(buildAutoTestTaskParam.getDataDefinitionInfo());
         dataInfoMapper.insert(dataInfo);
         createModelHelpTagTask(buildAutoTestTaskParam.getModelHelpTag());
