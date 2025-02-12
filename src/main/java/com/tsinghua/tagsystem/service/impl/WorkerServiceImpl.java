@@ -229,7 +229,7 @@ public class WorkerServiceImpl implements WorkerService {
                 if(!findTag) {
                     relations.add(Relation.builder().predicate("未标注").status("CHECKED").build());
                 }
-                relations.add(relationList.get(index));
+//                relations.add(relationList.get(index));
                 index++;
             }
             for(int i = 0; i < needAddId.length; i++) {
