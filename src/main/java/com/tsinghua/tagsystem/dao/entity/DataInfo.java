@@ -46,5 +46,7 @@ public class DataInfo implements Serializable {
 
     private String dataDefinitionInfo;
 
+    private String dataCurrentInfo;
+
 
 }

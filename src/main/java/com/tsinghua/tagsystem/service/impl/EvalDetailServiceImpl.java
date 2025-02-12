@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -20,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -407,7 +405,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             ObjectMapper objectMapper = new ObjectMapper();
             // 将字符串转换为 List<Map>，每个 Map 对应一个 JSON 对象
             List<Map<String, String>> definition = objectMapper.readValue(dataInfo.getDataDefinitionInfo(), List.class);
-            List<Map<String, String>> current = objectMapper.readValue(new File(dataInfo.getDataPath()), List.class);
+            // TODO:current现在是数据本身不是统计数据，需要转换
+            List<Map<String, String>> current = objectMapper.readValue(dataInfo.getDataCurrentInfo(), List.class);
             System.out.println("definition list");
             System.out.println(JSONObject.toJSONString(definition));
             System.out.println("current list");

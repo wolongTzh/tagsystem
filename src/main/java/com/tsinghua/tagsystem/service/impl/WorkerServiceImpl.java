@@ -3,12 +3,14 @@ package com.tsinghua.tagsystem.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tsinghua.tagsystem.config.AddressConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.entity.multi.ManagerTask;
 import com.tsinghua.tagsystem.dao.entity.multi.WorkerTask;
 import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
+import com.tsinghua.tagsystem.dao.mapper.ModelHelpTagMapper;
 import com.tsinghua.tagsystem.enums.TaskStateEnum;
 import com.tsinghua.tagsystem.manager.SubTaskManager;
 import com.tsinghua.tagsystem.manager.TaskManager;
@@ -27,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +49,9 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Autowired
     EvalOverviewMapper evalOverviewMapper;
+
+    @Autowired
+    ModelHelpTagMapper modelHelpTagMapper;
 
     String subTaskFile = "";
     String checkedFile = "";
@@ -409,6 +411,39 @@ public class WorkerServiceImpl implements WorkerService {
         BufferedWriter writer = new BufferedWriter(new FileWriter(allPath));
         writer.write(oldJsonArray.toJSONString());
         writer.close();
+        List<Map<String, String>> current = new java.util.ArrayList<>();
+        Map<String, Integer> labelCountMap = new HashMap<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            jsonObject = jsonArray.getJSONObject(i);
+            JSONArray resultArray = jsonObject.getJSONArray("result");
+
+            // 遍历 result 数组，找到 lables 字段
+            for (int j = 0; j < resultArray.size(); j++) {
+                JSONObject resultItem = resultArray.getJSONObject(j);
+                if (resultItem.containsKey("lables")) {
+                    // 获取 lables 字段
+                    JSONArray labels = resultItem.getJSONArray("lables");
+                    for (int k = 0; k < labels.size(); k++) {
+                        String label = labels.getString(k);
+                        // 统计标签出现次数
+                        labelCountMap.put(label, labelCountMap.getOrDefault(label, 0) + 1);
+                    }
+                }
+            }
+        }
+
+        // 将标签统计结果放到 List<Map<String, String>> 中
+        for (Map.Entry<String, Integer> entry : labelCountMap.entrySet()) {
+            Map<String, String> labelStat = new HashMap<>();
+            labelStat.put("tagName", entry.getKey());
+            labelStat.put("tagNum", String.valueOf(entry.getValue()));
+            current.add(labelStat);
+        }
+        dataInfo.setDataCurrentInfo(JSONObject.toJSONString(current));
+        dataInfoMapper.updateById(dataInfo);
+        ModelHelpTag testHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
+        testHelpTag.setOutputPath("阶段标注任务完成");
+        modelHelpTagMapper.updateById(testHelpTag);
     }
 
     boolean judgeNeedCheck(List<Relation> relationList) {
