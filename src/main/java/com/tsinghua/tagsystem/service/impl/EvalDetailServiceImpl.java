@@ -135,8 +135,90 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         ModelHelpTag modelHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "train"));
         evalDetailDecorate.setModelHelpTag(modelHelpTag);
         ModelHelpTag testHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
+        if(!StringUtils.isEmpty(evalOverview.getEvalAutoBuildTestId())) {
+            DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
+            if(!StringUtils.isEmpty(dataInfo.getDataCurrentInfo())) {
+                JSONArray jsonArray = JSONArray.parseArray(dataInfo.getDataCurrentInfo());
+                JSONArray jsonArrayDefinition = JSONArray.parseArray(dataInfo.getDataDefinitionInfo());
+                String html = generateHtmlTable(mergeAndMapTags(jsonArray, jsonArrayDefinition));
+                evalDetailDecorate.setTestHtmlCalculate(html);
+            }
+        }
         evalDetailDecorate.setTestHelpTag(testHelpTag);
         return evalDetailDecorate;
+    }
+
+    JSONArray mergeAndMapTags(JSONArray jsonArr1, JSONArray jsonArr2) {
+        // 创建一个新的 JSONArray 用于存储结果
+        JSONArray result = new JSONArray();
+
+        // 遍历第二个 JSONArray
+        for (int i = 0; i < jsonArr2.size(); i++) {
+            JSONObject jsonObject2 = jsonArr2.getJSONObject(i);
+            String tagName2 = jsonObject2.getString("tagName");
+
+            // 创建新的 JSONObject 用于存储映射后的数据
+            JSONObject newJsonObject = new JSONObject();
+
+            // 映射原来的字段
+            newJsonObject.put("标签名称", tagName2);
+            newJsonObject.put("要求数量", jsonObject2.getString("tagNum"));
+
+            // 查找第一个 JSONArray 中是否存在相同的 tagName
+            boolean findTag = false;
+            for (int j = 0; j < jsonArr1.size(); j++) {
+                JSONObject jsonObject1 = jsonArr1.getJSONObject(j);
+                String tagName1 = jsonObject1.getString("tagName");
+
+                // 如果 tagName 相同，将 tagNum 添加为 "要求数量"
+                if (tagName2.equals(tagName1)) {
+                    String tagNum1 = jsonObject1.getString("tagNum");
+                    newJsonObject.put("已有标签数量", tagNum1);
+                    findTag = true;
+                    break;
+                }
+            }
+            // 如果在第一个 JSONArray 中没有找到相同的 tagName，将 "已有标签数量" 设置为 "0"
+            if (!findTag) {
+                newJsonObject.put("已有标签数量", "0");
+            }
+
+            // 将新生成的 JSONObject 加入结果数组
+            result.add(newJsonObject);
+        }
+
+        // 返回合并和映射后的结果
+        return result;
+    }
+
+    String generateHtmlTable(JSONArray jsonArray) {
+        StringBuilder html = new StringBuilder();
+
+        // 开始表格
+        html.append("<table border='1' cellpadding='5' cellspacing='0'>\n");
+
+        // 表头: 假设 JSON 对象的键是列名
+        html.append("<tr>");
+        JSONObject firstObject = jsonArray.getJSONObject(0);
+        for (String key : firstObject.keySet()) {
+            html.append("<th>").append(key).append("</th>");
+        }
+        html.append("</tr>\n");
+
+        // 表格内容
+        for (int i = 0; i < jsonArray.size(); i++) {
+            html.append("<tr>");
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            for (String key : jsonObject.keySet()) {
+                html.append("<td>").append(jsonObject.getString(key)).append("</td>");
+            }
+            html.append("</tr>\n");
+        }
+
+        // 结束表格
+        html.append("</table>");
+
+        return html.toString();
     }
 
     @Override
