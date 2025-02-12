@@ -442,7 +442,7 @@ public class WorkerServiceImpl implements WorkerService {
         dataInfo.setDataCurrentInfo(JSONObject.toJSONString(current));
         dataInfoMapper.updateById(dataInfo);
         ModelHelpTag testHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
-        testHelpTag.setOutputPath("阶段标注任务完成");
+        testHelpTag.setOutputPath(dataInfo.getDataPath());
         modelHelpTagMapper.updateById(testHelpTag);
     }
 
