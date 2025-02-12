@@ -212,9 +212,33 @@ public class WorkerServiceImpl implements WorkerService {
                 continue;
             }
             int index = 0;
+            int[] needAddId = new int[relationList.size()];
             for(List<Relation> relations : allRelations) {
+                Relation curRelation = relations.get(0);
+                boolean findTag = false;
+                int count = 0;
+                for(Relation relation : relationList) {
+                    if(relation.getText().equals(curRelation.getText()) && relation.getSourceStart() == curRelation.getSourceStart() && relation.getSourceEnd() == curRelation.getSourceEnd()) {
+                        relations.add(relation);
+                        findTag = true;
+                        needAddId[count] = 1;
+                        break;
+                    }
+                    count++;
+                }
+                if(!findTag) {
+                    relations.add(Relation.builder().predicate("未标注").status("CHECKED").build());
+                }
                 relations.add(relationList.get(index));
                 index++;
+            }
+            for(int i = 0; i < needAddId.length; i++) {
+                if(needAddId[i] == 0) {
+                    List<Relation> newRelations = new ArrayList<>();
+                    newRelations.add(relationList.get(i));
+                    newRelations.add(Relation.builder().predicate("未标注").status("CHECKED").build());
+                    allRelations.add(newRelations);
+                }
             }
         }
         for(List<Relation> relations : allRelations) {
