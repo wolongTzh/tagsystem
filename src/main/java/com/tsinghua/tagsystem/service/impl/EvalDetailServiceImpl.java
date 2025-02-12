@@ -736,6 +736,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Override
     public int uploadAutoTestSource(ModelHelpTag modelHelpTag) {
+        modelHelpTag.setOutputPath("待开始");
         modelHelpTagMapper.updateById(modelHelpTag);
         return 1;
     }
