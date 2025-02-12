@@ -235,8 +235,8 @@ public class WorkerServiceImpl implements WorkerService {
             for(int i = 0; i < needAddId.length; i++) {
                 if(needAddId[i] == 0) {
                     List<Relation> newRelations = new ArrayList<>();
-                    newRelations.add(relationList.get(i));
                     newRelations.add(Relation.builder().predicate("未标注").status("CHECKED").build());
+                    newRelations.add(relationList.get(i));
                     allRelations.add(newRelations);
                 }
             }
