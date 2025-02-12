@@ -439,11 +439,42 @@ public class WorkerServiceImpl implements WorkerService {
             labelStat.put("tagNum", String.valueOf(entry.getValue()));
             current.add(labelStat);
         }
+        if(!StringUtils.isEmpty(dataInfo.getDataCurrentInfo())) {
+            oldJsonArray = JSONArray.parseArray(dataInfo.getDataCurrentInfo());
+            List<Map<String, String>> dataList = new ArrayList<>();
+            for (int i = 0; i < oldJsonArray.size(); i++) {
+                JSONObject j = oldJsonArray.getJSONObject(i);
+                // 将 JSONObject 转换为 Map<String, String>
+                Map<String, String> dataMap = new HashMap<>();
+                dataMap.put("tagName", j.getString("tagName"));
+                dataMap.put("tagNum", j.getString("tagNum"));
+                dataList.add(dataMap);
+            }
+            mergeListToMap(dataList, current);
+        }
         dataInfo.setDataCurrentInfo(JSONObject.toJSONString(current));
         dataInfoMapper.updateById(dataInfo);
         ModelHelpTag testHelpTag = modelHelpTagMapper.selectOne(new QueryWrapper<ModelHelpTag>().eq("eval_overview_id", evalOverviewId).eq("type", "test"));
         testHelpTag.setOutputPath(dataInfo.getDataPath());
         modelHelpTagMapper.updateById(testHelpTag);
+    }
+
+    void mergeListToMap(List<Map<String, String>> list, List<Map<String, String>> resultMap) {
+        for (Map<String, String> item : list) {
+            String tagName = item.get("tagName");
+            String tagNum = item.get("tagNum");
+            boolean findTag = false;
+            for(Map<String, String> resultItem : resultMap) {
+                if(resultItem.get("tagName").equals(tagName)) {
+                    int newTagNum = Integer.parseInt(resultItem.get("tagNum")) + Integer.parseInt(tagNum);
+                    resultItem.put("tagNum", String.valueOf(newTagNum));
+                    findTag = true;
+                }
+            }
+            if(!findTag) {
+                resultMap.add(item);
+            }
+        }
     }
 
     boolean judgeNeedCheck(List<Relation> relationList) {
