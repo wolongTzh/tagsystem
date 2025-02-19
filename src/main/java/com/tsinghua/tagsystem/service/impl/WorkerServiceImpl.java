@@ -163,6 +163,8 @@ public class WorkerServiceImpl implements WorkerService {
         WorkerTask workerTask = workerTaskRelaManager.getTask(param.getTaskId());
         String curSubTaskFile = String.format(subTaskFile, workerTask.getTaskId(), workerTask.getSubTaskId());
         List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(curSubTaskFile)), Relation.class);
+        Integer offset = relationList.size() - (workerTask.getEnd() - workerTask.getStart());
+        workerTask.setEnd(workerTask.getEnd() + offset);
         List<Relation> headList = relationList.subList(0, workerTask.getStart());
         List<Relation> tailList = relationList.subList(workerTask.getEnd(), relationList.size());
         List<Relation> finalList = new ArrayList<>();
@@ -174,6 +176,12 @@ public class WorkerServiceImpl implements WorkerService {
         fileWriter.write(JSON.toJSONString(finalList));
         fileWriter.close();
         WorkerTaskRela workerTaskRela = workerTaskRelaManager.getByRelaId(param.getTaskId());
+        workerTaskRela.setEnd(workerTask.getEnd() + offset);
+        if(offset > 0) {
+            Task task = taskManager.getByTaskId(workerTask.getTaskId());
+            task.setRelationNum(task.getRelationNum() + offset);
+            taskManager.updateByTaskId(task);
+        }
         workerTaskRela.setUntaggedNum(param.getUnTaggedNum());
         workerTaskRelaManager.updateByRelaId(workerTaskRela);
         return true;
