@@ -362,6 +362,7 @@ public class WorkerServiceImpl implements WorkerService {
         WorkerTaskRela workerTaskRela = workerTaskRelaManager.getByRelaId(taskId);
         SubTask subTask = subTaskManager.getByTaskId(workerTaskRela.getTaskId());
         Task task = taskManager.getByTaskId(subTask.getParentId());
+        System.out.println(task.getRelationDefinition());
         return task.getRelationDefinition();
     }
 
