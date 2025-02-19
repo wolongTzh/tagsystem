@@ -181,7 +181,7 @@ public class WorkerServiceImpl implements WorkerService {
         fileWriter.write(JSON.toJSONString(finalList));
         fileWriter.close();
         WorkerTaskRela workerTaskRela = workerTaskRelaManager.getByRelaId(param.getTaskId());
-        workerTaskRela.setEnd(workerTask.getEnd() + offset);
+        workerTaskRela.setEnd(workerTask.getEnd());
         if(offset > 0) {
             Task task = taskManager.getByTaskId(workerTask.getTaskId());
             task.setRelationNum(task.getRelationNum() + offset);
