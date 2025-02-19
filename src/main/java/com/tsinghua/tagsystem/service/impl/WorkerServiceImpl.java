@@ -163,12 +163,7 @@ public class WorkerServiceImpl implements WorkerService {
         WorkerTask workerTask = workerTaskRelaManager.getTask(param.getTaskId());
         String curSubTaskFile = String.format(subTaskFile, workerTask.getTaskId(), workerTask.getSubTaskId());
         List<Relation> relationList = JSONObject.parseArray(JSONObject.toJSONString(CommonUtil.readJsonArray(curSubTaskFile)), Relation.class);
-        System.out.println("relationList:");
-        System.out.println(JSON.toJSONString(relationList));
-        System.out.println("workerTask:");
-        System.out.println(JSON.toJSONString(workerTask));
         Integer offset = param.getRelationList().size() - (workerTask.getEnd() - workerTask.getStart());
-        System.out.println("offset:" + offset);
         List<Relation> headList = relationList.subList(0, workerTask.getStart());
         List<Relation> tailList = relationList.subList(workerTask.getEnd(), relationList.size());
         List<Relation> finalList = new ArrayList<>();
@@ -184,8 +179,10 @@ public class WorkerServiceImpl implements WorkerService {
         if(offset > 0) {
             Task task = taskManager.getByTaskId(workerTask.getTaskId());
             task.setRelationNum(task.getRelationNum() + offset);
+            task.setUncheckedNum(task.getUncheckedNum() + offset);
             taskManager.updateByTaskId(task);
         }
+        // TODO: 如果同组有多个人标注，需要考虑其他祖研的start和end值
         workerTaskRela.setUntaggedNum(param.getUnTaggedNum());
         workerTaskRelaManager.updateByRelaId(workerTaskRela);
         return true;
@@ -247,8 +244,8 @@ public class WorkerServiceImpl implements WorkerService {
             for(int i = 0; i < needAddId.length; i++) {
                 if(needAddId[i] == 0) {
                     List<Relation> newRelations = new ArrayList<>();
-                    newRelations.add(Relation.builder().predicate("未标注").status("CHECKED").build());
                     newRelations.add(relationList.get(i));
+                    newRelations.add(Relation.builder().predicate("未标注").status("CHECKED").build());
                     allRelations.add(newRelations);
                 }
             }
