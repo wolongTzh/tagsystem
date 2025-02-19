@@ -167,7 +167,7 @@ public class WorkerServiceImpl implements WorkerService {
         System.out.println(JSON.toJSONString(relationList));
         System.out.println("workerTask:");
         System.out.println(JSON.toJSONString(workerTask));
-        Integer offset = relationList.size() - (workerTask.getEnd() - workerTask.getStart());
+        Integer offset = param.getRelationList().size() - (workerTask.getEnd() - workerTask.getStart());
         System.out.println("offset:" + offset);
         workerTask.setEnd(workerTask.getEnd() + offset);
         List<Relation> headList = relationList.subList(0, workerTask.getStart());
