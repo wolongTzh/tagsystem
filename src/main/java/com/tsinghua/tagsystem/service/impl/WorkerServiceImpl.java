@@ -357,6 +357,12 @@ public class WorkerServiceImpl implements WorkerService {
         return true;
     }
 
+    @Override
+    public String getRelationDefinition(String taskId) throws IOException {
+        Task task = taskManager.getByTaskId(taskId);
+        return task.getRelationDefinition();
+    }
+
     void updateTestData(int evalOverviewId, List<Relation> finalList) throws IOException {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();

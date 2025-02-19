@@ -42,6 +42,12 @@ public class ManagerServiceImpl implements ManagerService {
     SubTaskManager subTaskManager;
 
     @Autowired
+    DataInfoMapper dataInfoMapper;
+
+    @Autowired
+    EvalOverviewMapper evalOverviewMapper;
+
+    @Autowired
     WorkerTaskRelaManager workerTaskRelaManager;
 
     String subTaskFile = "";
@@ -89,6 +95,19 @@ public class ManagerServiceImpl implements ManagerService {
                 .build();
         if(!StringUtils.isEmpty(param.getEvalOverviewId())) {
             task.setEvalOverviewId(param.getEvalOverviewId());
+            EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
+            DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
+            JSONArray jsonArray = JSONArray.parseArray(dataInfo.getDataDefinitionInfo());
+            JSONArray newJsonArray = new JSONArray();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String tagName = jsonObject.getString("tagName");
+                JSONObject newJsonObject = new JSONObject();
+                newJsonObject.put("label", tagName);
+                newJsonObject.put("value", tagName);
+                newJsonArray.add(newJsonObject);
+            }
+            task.setRelationDefinition(newJsonArray.toJSONString());
         }
         List<WorkerTaskRela> workerTaskRelaList = new ArrayList<>();
         List<SubTask> subTaskList = new ArrayList<>();

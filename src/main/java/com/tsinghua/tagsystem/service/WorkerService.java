@@ -20,4 +20,6 @@ public interface WorkerService {
     public CheckTaskVO checkTask(String taskId) throws IOException;
 
     public boolean saveCheck(SaveCheckParam param) throws IOException;
+
+    public String getRelationDefinition(String taskId) throws IOException;
 }

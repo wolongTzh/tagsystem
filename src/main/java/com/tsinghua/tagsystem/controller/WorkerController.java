@@ -39,6 +39,12 @@ public class WorkerController {
         return WebUtil.successResult(checkTaskVO);
     }
 
+    @GetMapping(value = "getRelationDefinition")
+    public WebResInfo getRelationDefinition(String taskId) throws IOException {
+        String relationDefinition = workerService.getRelationDefinition(taskId);
+        return WebUtil.successResult(relationDefinition);
+    }
+
     @PostMapping(value = "saveCheck")
     public WebResInfo saveCheck(@RequestBody SaveCheckParam param) throws IOException {
         boolean ret = workerService.saveCheck(param);

@@ -28,4 +28,6 @@ public class Task {
     private String checkWorker;
 
     private Integer evalOverviewId;
+
+    private String relationDefinition;
 }
