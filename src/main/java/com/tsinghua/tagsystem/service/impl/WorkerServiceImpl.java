@@ -359,9 +359,9 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public String getRelationDefinition(String taskId) throws IOException {
-        System.out.println("taskId");
-        System.out.println(taskId);
-        Task task = taskManager.getByTaskId(taskId);
+        WorkerTaskRela workerTaskRela = workerTaskRelaManager.getByRelaId(taskId);
+        SubTask subTask = subTaskManager.getByTaskId(workerTaskRela.getTaskId());
+        Task task = taskManager.getByTaskId(subTask.getParentId());
         return task.getRelationDefinition();
     }
 
