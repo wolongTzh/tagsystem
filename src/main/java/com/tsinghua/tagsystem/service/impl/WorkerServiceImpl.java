@@ -250,6 +250,7 @@ public class WorkerServiceImpl implements WorkerService {
                 }
             }
         }
+        System.out.println(JSON.toJSONString(allRelations));
         for(List<Relation> relations : allRelations) {
             Relation relation = relations.get(0);
             if(judgeNeedCheck(relations)) {
