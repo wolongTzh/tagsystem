@@ -506,6 +506,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public int runTestModelHelp(RunTestModelParam param) throws IOException {
         String url = modelHelpInterface;
+        LlmTask llmTask = llmTaskMapper.selectById(82);
         if(param.getModelHelpType().equals("test")) {
             EvalOverview evalOverview = evalOverviewMapper.selectById(param.getEvalOverviewId());
             DataInfo dataInfo = dataInfoMapper.selectById(evalOverview.getEvalAutoBuildTestId());
@@ -522,10 +523,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
             // 遍历 definition
             String mergedKeywords = "";
+            String tagCollection = "";
             for (Map<String, String> def : definition) {
                 String defTagName = def.get("tagName");
                 String defTagNum = def.get("tagNum");
                 String defTagKeyword = def.get("tagKeyword");
+                tagCollection += defTagName + "、";
                 boolean findTag = false;
                 // 在 current 中查找与 definition 中相同的 tagName
                 for (Map<String, String> cur : current) {
@@ -574,6 +577,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             writer.close();
 
             System.out.println("文件过滤并更新成功。");
+            llmTask.setFormatDescribe("请从下面这段话中提取出来所有的实体，并且分配在这几个标签中（" + tagCollection.substring(0, tagCollection.length()-1) +"），输出格式为json（[{\"entity\": \"实体\", \"label\": \"对应标签\", \"index\":\"该实体在文中是第几次出现\"}]）：\\n[TEXT]");
         }
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         if(param.getModelId() != -1) {
@@ -588,7 +592,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         else {
             param.setModelType(algoInfo.getModelType());
             //TODO:这块的逻辑不够合理
-            param.setLlmTask(llmTaskMapper.selectById(82));
+            param.setLlmTask(llmTask);
+            System.out.println(llmTask.getFormatDescribe());
             param.setToken("6306367a14a96d92d3910a33b6d079a8.kGYlp3ommvTt6fFu");
         }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
