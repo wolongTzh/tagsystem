@@ -482,8 +482,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     public int runTest(RunTestModelParam param) throws IOException {
         String url = customizeInterface;
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
-        if(modelInfo == null) {
-            System.out.println("modelInfo is null");
+        if(modelInfo != null) {
+            System.out.println("modelInfo is not null");
             param.setCmd(modelInfo.getCmd());
             param.setEnvPath(modelInfo.getEnvPath());
             param.setModelPath(modelInfo.getModelPath());
@@ -491,7 +491,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         }
         else {
-            System.out.println("modelInfo is not null");
+            System.out.println("modelInfo is null");
             LlmTask llmTask = llmTaskMapper.selectById(param.getModelId());
             System.out.println(JSON.toJSONString(llmTask));
             param.setLlmTask(llmTask);
