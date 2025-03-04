@@ -520,7 +520,6 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     boolean judgeNeedCheck(List<Relation> relationList) {
-        System.out.println(JSON.toJSONString(relationList));
         String curStatus = relationList.get(0).getStatus();
         String predicate = relationList.get(0).getPredicate();
         for(Relation relation : relationList) {

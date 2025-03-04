@@ -62,6 +62,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String modelHelpInterface;
     String stopTaskInterface;
     String grepTimeElapse;
+    String vllmTaskInterface;
 
     EvalDetailServiceImpl(AlchemistPathConfig config) {
         modelCodePath = config.getModelCodePath();
@@ -79,6 +80,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         trainModelPath = config.getTrainModelPath();
         compareEventInterface = config.getCompareEventInterface();
         modelHelpInterface = config.getModelHelpInterface();
+        vllmTaskInterface = config.getVllmTaskInterface();
     }
 
 
@@ -480,11 +482,19 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     public int runTest(RunTestModelParam param) throws IOException {
         String url = customizeInterface;
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
-        param.setCmd(modelInfo.getCmd());
-        param.setEnvPath(modelInfo.getEnvPath());
-        param.setModelPath(modelInfo.getModelPath());
-        System.out.println(JSON.toJSONString(param));
-        HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        if(modelInfo == null) {
+            param.setCmd(modelInfo.getCmd());
+            param.setEnvPath(modelInfo.getEnvPath());
+            param.setModelPath(modelInfo.getModelPath());
+            System.out.println(JSON.toJSONString(param));
+            HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        }
+        else {
+            LlmTask llmTask = llmTaskMapper.selectById(param.getModelId());
+            param.setLlmTask(llmTask);
+            url = vllmTaskInterface;
+            HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+        }
         return 1;
     }
 
@@ -708,6 +718,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("model_id", modelId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
         modelInfoMapper.deleteById(modelId);
+        llmTaskMapper.deleteById(modelId);
         return 1;
     }
 
