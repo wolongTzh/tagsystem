@@ -483,6 +483,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         String url = customizeInterface;
         ModelInfo modelInfo = modelInfoMapper.selectById(param.getModelId());
         if(modelInfo == null) {
+            System.out.println("modelInfo is null");
             param.setCmd(modelInfo.getCmd());
             param.setEnvPath(modelInfo.getEnvPath());
             param.setModelPath(modelInfo.getModelPath());
@@ -490,9 +491,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         }
         else {
+            System.out.println("modelInfo is not null");
             LlmTask llmTask = llmTaskMapper.selectById(param.getModelId());
+            System.out.println(JSON.toJSONString(llmTask));
             param.setLlmTask(llmTask);
             url = vllmTaskInterface;
+            System.out.println(JSON.toJSONString(param));
             HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
         }
         return 1;
