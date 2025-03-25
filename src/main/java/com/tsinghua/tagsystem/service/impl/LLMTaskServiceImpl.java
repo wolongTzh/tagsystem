@@ -1,13 +1,11 @@
 package com.tsinghua.tagsystem.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
-import com.tsinghua.tagsystem.dao.mapper.DataInfoMapper;
-import com.tsinghua.tagsystem.dao.mapper.EvalLlmDetailMapper;
-import com.tsinghua.tagsystem.dao.mapper.EvalOverviewMapper;
-import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
+import com.tsinghua.tagsystem.dao.mapper.*;
 import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
 import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
@@ -34,6 +32,9 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     LlmTaskMapper llmTaskMapper;
 
     @Autowired
+    EvalDetailMapper evalDetailMapper;
+
+    @Autowired
     EvalOverviewMapper evalOverviewMapper;
 
     @Autowired
@@ -46,12 +47,14 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     String llmCalculateInterface;
     String testDataPath;
     String compareLLMInterface;
+    String vllmScriptInterface;
 
     LLMTaskServiceImpl(AlchemistPathConfig config) {
         llmTaskInterface = config.getLlmTaskInterface();
         llmCalculateInterface = config.getLlmCalculateInterface();
         testDataPath = config.getTestDataPath();
         compareLLMInterface = config.getCompareLLMInterface();
+        vllmScriptInterface = config.getVllmScriptInterface();
     }
 
     @Override
@@ -291,6 +294,22 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         String url = compareLLMInterface;
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(PathCollection.builder().modelResultPath(modelResultPath).testDataPath(testDataPath).build()));
         return "ner";
+    }
+
+    @Override
+    public int vllmTaskScript(String modelResultPath, int testDataId, String scriptPath, int detailId) throws IOException {
+        String testDataPath = dataInfoMapper.selectById(testDataId).getDataPath();
+        JSONObject input = new JSONObject();
+        input.put("model_result_path", modelResultPath);
+        input.put("test_path", testDataPath);
+        input.put("script_path", scriptPath);
+        String url = vllmScriptInterface;
+        String score = HttpUtil.sendPostDataByJson(url, JSON.toJSONString(input));
+        JSONObject output = JSON.parseObject(score);
+        String outScore = "p:" + output.getString("p") + ";r:" + output.getString("r") + ";f1:" + output.getString("f1");
+        EvalDetail evalDetail = evalDetailMapper.selectById(detailId);
+        evalDetail.setEvalScore(outScore);
+        return 1;
     }
 
     @Override

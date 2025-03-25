@@ -33,5 +33,7 @@ public interface LLMTaskService {
 
    public String comparePredictAnswer(int modelId, int testDataId) throws IOException;
 
+   public int vllmTaskScript(String modelResultPath, int testDataId, String scriptPath, int detailId) throws IOException;
+
    public String genLog(int evalOverviewId);
 }

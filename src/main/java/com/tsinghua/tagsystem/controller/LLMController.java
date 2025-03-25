@@ -72,6 +72,14 @@ public class LLMController {
         return WebUtil.successResult(evalDetailId);
     }
 
+    @PostMapping(value = "vllmTaskScript")
+    public WebResInfo vllmTaskScript(String modelResultPath, int testDataId, String scriptPath, int detailId) throws IOException {
+        log.info("into vllmTaskScript");
+        log.info(modelResultPath + " " + testDataId + " " + scriptPath + " " + detailId);
+        int evalDetailId = llmTaskService.vllmTaskScript(modelResultPath, testDataId, scriptPath, detailId);
+        return WebUtil.successResult(evalDetailId);
+    }
+
     @PostMapping(value = "updateStatus")
     public WebResInfo updateStatus(@RequestBody LlmTask llmTask) throws IOException {
         log.info("into llm updateStatus");
