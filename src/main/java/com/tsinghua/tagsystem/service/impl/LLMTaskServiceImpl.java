@@ -307,8 +307,10 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         String score = HttpUtil.sendPostDataByJson(url, JSON.toJSONString(input));
         JSONObject output = JSON.parseObject(score);
         String outScore = "p:" + output.getString("p") + ";r:" + output.getString("r") + ";f1:" + output.getString("f1");
+        System.out.println(outScore);
         EvalDetail evalDetail = evalDetailMapper.selectById(detailId);
         evalDetail.setEvalScore(outScore);
+        evalDetailMapper.updateById(evalDetail);
         return 1;
     }
 
