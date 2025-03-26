@@ -48,5 +48,6 @@ public class DataInfo implements Serializable {
 
     private String dataCurrentInfo;
 
+    private String textInputPath;
 
 }

@@ -47,6 +47,8 @@ public class RunTestModelParam {
 
     String modelPath;
 
+    String textInputPath;
+
     String modelFilePath;
 
     String codeName;

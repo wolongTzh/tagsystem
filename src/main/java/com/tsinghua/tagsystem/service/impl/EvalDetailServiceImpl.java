@@ -495,6 +495,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             LlmTask llmTask = llmTaskMapper.selectById(param.getModelId());
             System.out.println(JSON.toJSONString(llmTask));
             param.setLlmTask(llmTask);
+            param.setTextInputPath(dataInfoMapper.selectById(param.getEvalDataId()).getTextInputPath());
             url = vllmTaskInterface;
             System.out.println(JSON.toJSONString(param));
             HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
