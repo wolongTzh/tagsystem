@@ -394,6 +394,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         dataInfo.setDataCreatorId(param.getEvalUserId());
         dataInfo.setDataCreatorName(param.getEvalUserName());
         dataInfo.setDataPath(testDataPath + param.getEvalUserName() + "-" + dataName + ".json");
+        if(!StringUtils.isEmpty(param.getTextDataPath())) {
+            dataInfo.setTextInputPath(param.getTextDataPath());
+        }
         dataInfo.setDataGenTime(LocalDateTime.now());
         dataInfo.setDataType("EVAL");
         dataInfo.setDataRelaInfo("");

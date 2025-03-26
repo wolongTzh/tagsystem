@@ -20,5 +20,7 @@ public class UploadTestDataParam {
 
     String dataName;
 
+    String textDataPath;
+
     MultipartFile file;
 }
