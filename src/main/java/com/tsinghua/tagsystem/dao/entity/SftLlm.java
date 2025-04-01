@@ -35,12 +35,11 @@ public class SftLlm implements Serializable {
 
     private String status;
 
-    private String stfDataPath;
+    private String sftDataPath;
 
     private Integer userId;
 
     private Integer overviewId;
-
 
     private String systemPrompt;
 }
