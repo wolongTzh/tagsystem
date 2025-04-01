@@ -33,7 +33,7 @@ public class SftLLMServiceImpl implements SftLLMService {
     SftLlmMapper sftLlmMapper;
 
     @Autowired
-    EvalDetailMapper evalDetailMapper;
+    LlmTaskMapper llmTaskMapper;
 
     @Autowired
     EvalOverviewMapper evalOverviewMapper;
@@ -61,7 +61,36 @@ public class SftLLMServiceImpl implements SftLLMService {
     public int runSft(SftLlm sftLlm) throws IOException {
         String url = sftTaskInterface;
         String ckptPath = HttpUtil.sendPostDataByJson(url, JSON.toJSONString(sftLlm));
-        System.out.println(ckptPath);
+        LlmTask llmTask = LlmTask.builder()
+                .llmTaskName(sftLlm.getModelName())
+                .llmCreateTime(sftLlm.getCreateTime())
+                .llmCreateUserId(sftLlm.getUserId())
+                .llmType(sftLlm.getModelType())
+                .llmOutputPath("待开始")
+                .formatDescribe(sftLlm.getSystemPrompt())
+                .evalOverviewId(sftLlm.getOverviewId())
+                .taskType("sft")
+                .build();
+        llmTaskMapper.insert(llmTask);
+        EvalOverview evalOverview = evalOverviewMapper.selectById(sftLlm.getOverviewId());
+        String algoIds = evalOverview.getEvalAlgoIds();
+        String algoNames = evalOverview.getEvalAlgoNames();
+        if(StringUtils.isEmpty(algoIds)) {
+            algoIds = "" + llmTask.getLlmTaskId();
+        }
+        else {
+            algoIds = algoIds + "," + llmTask.getLlmTaskId();
+        }
+        if(StringUtils.isEmpty(algoNames)) {
+            algoNames = llmTask.getLlmTaskName();
+        }
+        else {
+            algoNames = algoNames + "," + llmTask.getLlmTaskName();
+        }
+        evalOverview.setEvalAlgoIds(algoIds);
+        evalOverview.setEvalAlgoNames(algoNames);
+        evalOverviewMapper.updateById(evalOverview);
+        sftLlmMapper.deleteById(sftLlm.getSftId());
         return 1;
     }
 

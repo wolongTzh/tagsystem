@@ -55,5 +55,7 @@ public class LlmTask implements Serializable {
 
     private String systemDescribe;
 
+    private String taskType;
+
 
 }

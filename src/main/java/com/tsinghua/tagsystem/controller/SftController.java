@@ -47,15 +47,6 @@ public class SftController {
         return WebUtil.successResult(evalDetailId);
     }
 
-    @PostMapping(value = "finishSft")
-    public WebResInfo finishSft(@RequestBody FinishLLMTaskParam param) throws IOException {
-        log.info("into llm finishSft");
-        log.info(JSON.toJSONString(param));
-//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
-//        llmTaskService.finishLLMTask(param);
-        return WebUtil.successResult("success");
-    }
-
     @PostMapping(value = "updateSft")
     public WebResInfo updateSft(@RequestBody SftLlm sftLlm) throws IOException {
         log.info("into llm updateSft");
