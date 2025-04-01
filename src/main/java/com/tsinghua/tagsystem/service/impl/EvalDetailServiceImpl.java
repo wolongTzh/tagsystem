@@ -67,6 +67,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     String grepTimeElapse;
     String vllmTaskInterface;
 
+    String sftInferInterface;
+
     EvalDetailServiceImpl(AlchemistPathConfig config) {
         modelCodePath = config.getModelCodePath();
         checkpointPath = config.getCheckpointPath();
@@ -84,6 +86,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         compareEventInterface = config.getCompareEventInterface();
         modelHelpInterface = config.getModelHelpInterface();
         vllmTaskInterface = config.getVllmTaskInterface();
+        sftInferInterface = config.getSftInferInterface();
     }
 
 
@@ -506,9 +509,16 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             System.out.println(JSON.toJSONString(llmTask));
             param.setLlmTask(llmTask);
             param.setTextInputPath(dataInfoMapper.selectById(param.getEvalDataId()).getTextInputPath());
-            url = vllmTaskInterface;
-            System.out.println(JSON.toJSONString(param));
-            HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+            if(llmTask.getTaskType().equals("sft")) {
+                url = sftInferInterface;
+                System.out.println(JSON.toJSONString(param));
+                HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+            }
+            else {
+                url = vllmTaskInterface;
+                System.out.println(JSON.toJSONString(param));
+                HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
+            }
         }
         return 1;
     }
