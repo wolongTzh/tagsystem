@@ -43,6 +43,9 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     LlmTaskMapper llmTaskMapper;
 
     @Autowired
+    SftLlmMapper sftLlmMapper;
+
+    @Autowired
     DataInfoMapper dataInfoMapper;
     @Autowired
     AlgoInfoMapper algoInfoMapper;
@@ -151,6 +154,10 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             }
         }
         evalDetailDecorate.setTestHelpTag(testHelpTag);
+        List<SftLlm> sftLlm = sftLlmMapper.selectList(new QueryWrapper<SftLlm>().eq("overview_id", evalOverviewId));
+        if(sftLlm != null) {
+            evalDetailDecorate.setSftMsg(sftLlm);
+        }
         return evalDetailDecorate;
     }
 
