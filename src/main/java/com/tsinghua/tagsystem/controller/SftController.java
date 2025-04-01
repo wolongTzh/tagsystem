@@ -1,4 +1,4 @@
-package com.tsinghua.tagsystem.controller.utils;
+package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.SftLlm;
