@@ -40,7 +40,7 @@ public class SftController {
     public WebResInfo runSft(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runSft");
         log.info(JSON.toJSONString(runTestModelParam));
-        runTestModelParam.setTaskType("Sft");
+        runTestModelParam.setTaskType("sft");
 //        EvalDetailControllerUtil.validTestModelParam(testModelParam);
 //        evalDetailService.runTestPromote(runTestModelParam);
         int evalDetailId = messageQueue.enqueue(runTestModelParam);
@@ -53,6 +53,15 @@ public class SftController {
         log.info(JSON.toJSONString(param));
 //        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
 //        llmTaskService.finishLLMTask(param);
+        return WebUtil.successResult("success");
+    }
+
+    @PostMapping(value = "updateSft")
+    public WebResInfo updateSft(@RequestBody SftLlm sftLlm) throws IOException {
+        log.info("into llm updateSft");
+        log.info(JSON.toJSONString(sftLlm));
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        sftLLMService.updateSft(sftLlm);
         return WebUtil.successResult("success");
     }
 }

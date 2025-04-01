@@ -6,6 +6,7 @@ import com.tsinghua.tagsystem.dao.entity.ModelInfo;
 import com.tsinghua.tagsystem.dao.mapper.LlmTaskMapper;
 import com.tsinghua.tagsystem.dao.mapper.ModelHelpTagMapper;
 import com.tsinghua.tagsystem.dao.mapper.ModelInfoMapper;
+import com.tsinghua.tagsystem.dao.mapper.SftLlmMapper;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class MessageQueue {
 
     @Autowired
     LlmTaskMapper llmTaskMapper;
+
+    @Autowired
+    SftLlmMapper sftLlmMapper;
 
     private final Queue<RunTestModelParam> queue;
 
@@ -55,6 +59,11 @@ public class MessageQueue {
             modelHelpTag.setOutputPath("排队中");
             modelHelpTagMapper.updateById(modelHelpTag);
             retId = message.getModelHelpTagId();
+        }
+        else if (message.getTaskType().equals("sft")) {
+            message.getSftLlm().setStatus("排队中");
+            sftLlmMapper.updateById(message.getSftLlm());
+            retId = message.getSftLlm().getSftId();
         }
         else {
             int evalDetailId = evalDetailService.addNewScore(EvalDetail.builder()

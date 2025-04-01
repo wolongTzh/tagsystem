@@ -12,4 +12,8 @@ import java.util.List;
 @Service
 public interface SftLLMService {
    public int createSft(SftLlm sftLlm);
+
+   public int runSft(SftLlm sftLlm) throws IOException;
+
+   public int updateSft(SftLlm sftLlm);
 }

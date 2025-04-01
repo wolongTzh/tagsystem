@@ -44,18 +44,10 @@ public class SftLLMServiceImpl implements SftLLMService {
     @Autowired
     DataInfoMapper dataInfoMapper;
 
-    String llmTaskInterface;
-    String llmCalculateInterface;
-    String testDataPath;
-    String compareLLMInterface;
-    String vllmScriptInterface;
+    String sftTaskInterface;
 
     SftLLMServiceImpl(AlchemistPathConfig config) {
-        llmTaskInterface = config.getLlmTaskInterface();
-        llmCalculateInterface = config.getLlmCalculateInterface();
-        testDataPath = config.getTestDataPath();
-        compareLLMInterface = config.getCompareLLMInterface();
-        vllmScriptInterface = config.getVllmScriptInterface();
+        sftTaskInterface = config.getSftTaskInterface();
     }
 
     @Override
@@ -63,5 +55,19 @@ public class SftLLMServiceImpl implements SftLLMService {
         sftLlm.setCreateTime(LocalDateTime.now());
         sftLlmMapper.insert(sftLlm);
         return sftLlm.getSftId();
+    }
+
+    @Override
+    public int runSft(SftLlm sftLlm) throws IOException {
+        String url = sftTaskInterface;
+        String ckptPath = HttpUtil.sendPostDataByJson(url, JSON.toJSONString(sftLlm));
+        System.out.println(ckptPath);
+        return 1;
+    }
+
+    @Override
+    public int updateSft(SftLlm sftLlm) {
+        sftLlmMapper.updateById(sftLlm);
+        return 1;
     }
 }

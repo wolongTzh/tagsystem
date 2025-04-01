@@ -3,6 +3,7 @@ import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.model.params.StartLLMTaskParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
 import com.tsinghua.tagsystem.service.LLMTaskService;
+import com.tsinghua.tagsystem.service.SftLLMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,8 @@ public class TaskProcessor {
 
     @Autowired
     LLMTaskService llmTaskService;
+    @Autowired
+    SftLLMService sftLLMService;
 
     private final ExecutorService executorService;  // 线程池
     private final MessageQueue messageQueue;  // 任务队列
@@ -68,6 +71,9 @@ public class TaskProcessor {
                     }
                     else if (message.getTaskType().equals("modelHelp")) {
                         evalDetailService.runTestModelHelp(message);
+                    }
+                    else if (message.getTaskType().equals("sft")) {
+                        sftLLMService.runSft(message.getSftLlm());
                     }
                     else {
                         System.out.println("no match task type!!");

@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.model.params;
 
 import com.tsinghua.tagsystem.dao.entity.LlmTask;
+import com.tsinghua.tagsystem.dao.entity.SftLlm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -68,4 +69,6 @@ public class RunTestModelParam {
     String token;
 
     LlmTask llmTask;
+
+    SftLlm sftLlm;
 }

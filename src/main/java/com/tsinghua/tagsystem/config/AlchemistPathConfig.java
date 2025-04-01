@@ -56,6 +56,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.llmTaskInterface}")
     private String llmTaskInterface;
 
+    @Value("${AlchemistPath.sftTaskInterface}")
+    private String sftTaskInterface;
+
     @Value("${AlchemistPath.vllmTaskInterface}")
     private String vllmTaskInterface;
 
