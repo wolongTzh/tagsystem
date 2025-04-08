@@ -99,8 +99,39 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Override
     public EvalDetailDecorate getEvalDetail(int evalOverviewId) {
         EvalOverview evalOverview = evalOverviewMapper.selectById(evalOverviewId);
+        List<OverviewDataRelation> overviewDataRelationList = overviewDataRelationMapper.selectList(new QueryWrapper<OverviewDataRelation>().eq("overview_id", evalOverviewId));
+        String testIds = overviewDataRelationList.stream()
+                .map(OverviewDataRelation::getDataId)
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        String testNames = overviewDataRelationList.stream()
+                .map(OverviewDataRelation::getDataName)
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+        List<OverviewModelRelation> overviewModelRelationList = overviewModelRelationMapper.selectList(new QueryWrapper<OverviewModelRelation>().eq("overview_id", evalOverviewId));
+        // 筛选出overviewModelRelationList中所有的modelId字段组成一个字符串，每个id以逗号隔开
+        String modelIds = overviewModelRelationList.stream()
+                .map(OverviewModelRelation::getModelId)
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        String modelNames = overviewModelRelationList.stream()
+                .map(OverviewModelRelation::getModelName)
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+
+        evalOverview.setEvalTestNames(testNames);
+        evalOverview.setEvalAlgoNames(modelNames);
+        evalOverview.setEvalTestIds(testIds);
+        evalOverview.setEvalAlgoIds(modelIds);
+
+        // 筛选出overviewModelRelationList中所有的modelType字段组成一个list<String>
+        String modelTypes = overviewModelRelationList.stream().map(OverviewModelRelation::getModelType).collect(Collectors.joining(","));
+
+
         // 使用该evalOverview构建一个EvalDetailDecorate对象
         EvalDetailDecorate evalDetailDecorate = new EvalDetailDecorate(evalOverview);
+        evalDetailDecorate.setModelTypes(modelTypes);
         List<EvalDetail> evalDetailList = evalDetailMapper.selectList(new QueryWrapper<EvalDetail>().eq("eval_overview_id", evalOverviewId));
         for (EvalDetail evalDetail : evalDetailList) {
             String score = evalDetail.getEvalScore();
