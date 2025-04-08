@@ -14,5 +14,6 @@ public class UploadHugModelParam {
     int evalUserId;
     String evalUserName;
     String hugModelName;
+    int evalOverviewId;
     String hugModelPath;
 }

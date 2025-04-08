@@ -15,6 +15,7 @@ public class UploadModelParam {
     int evalUserId;
     String evalUserName;
     String modelName;
+    int evalOverviewId;
     MultipartFile code;
     MultipartFile env;
     String cmd;

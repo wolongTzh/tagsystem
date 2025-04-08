@@ -44,6 +44,13 @@ public class SftLLMServiceImpl implements SftLLMService {
     @Autowired
     DataInfoMapper dataInfoMapper;
 
+    @Autowired
+    OverviewDataRelationMapper overviewDataRelationMapper;
+
+    @Autowired
+    OverviewModelRelationMapper overviewModelRelationMapper;
+
+
     String sftTaskInterface;
 
     SftLLMServiceImpl(AlchemistPathConfig config) {
@@ -91,6 +98,12 @@ public class SftLLMServiceImpl implements SftLLMService {
         evalOverview.setEvalAlgoNames(algoNames);
         evalOverviewMapper.updateById(evalOverview);
         sftLlmMapper.deleteById(sftLlm.getSftId());
+        overviewModelRelationMapper.insert(OverviewModelRelation.builder()
+                .modelId(llmTask.getLlmTaskId())
+                .overviewId(sftLlm.getOverviewId())
+                .modelName(sftLlm.getModelName())
+                .modelType("LLM-SFT")
+                .build());
         return 1;
     }
 

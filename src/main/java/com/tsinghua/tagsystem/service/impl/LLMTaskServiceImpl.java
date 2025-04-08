@@ -43,6 +43,12 @@ public class LLMTaskServiceImpl implements LLMTaskService {
     @Autowired
     DataInfoMapper dataInfoMapper;
 
+    @Autowired
+    OverviewDataRelationMapper overviewDataRelationMapper;
+
+    @Autowired
+    OverviewModelRelationMapper overviewModelRelationMapper;
+
     String llmTaskInterface;
     String llmCalculateInterface;
     String testDataPath;
@@ -73,6 +79,12 @@ public class LLMTaskServiceImpl implements LLMTaskService {
                 .systemDescribe(createLLMTaskParam.getSystemDescribe())
                 .build();
         llmTaskMapper.insert(llmTask);
+        overviewModelRelationMapper.insert(OverviewModelRelation.builder()
+                .modelId(llmTask.getLlmTaskId())
+                .overviewId(createLLMTaskParam.getEvalOverviewId())
+                .modelName(createLLMTaskParam.getLlmTaskName())
+                .modelType("LLM")
+                .build());
         return llmTask.getLlmTaskId();
     }
 
@@ -145,6 +157,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         evalLlmDetailMapper.delete(new QueryWrapper<EvalLlmDetail>().eq("llm_task_id", modelId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
         llmTaskMapper.deleteById(modelId);
+        overviewModelRelationMapper.delete(new QueryWrapper<OverviewModelRelation>().eq("overview_id", evalOverviewId).eq("model_id", modelId));
         return 1;
     }
 
@@ -178,6 +191,7 @@ public class LLMTaskServiceImpl implements LLMTaskService {
         evalLlmDetailMapper.delete(new QueryWrapper<EvalLlmDetail>().eq("eval_data_id", testDataId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
         dataInfoMapper.deleteById(testDataId);
+        overviewDataRelationMapper.delete(new QueryWrapper<OverviewDataRelation>().eq("overview_id", evalOverviewId).eq("data_id", testDataId));
         return 1;
     }
 
@@ -284,6 +298,11 @@ public class LLMTaskServiceImpl implements LLMTaskService {
             String url = llmCalculateInterface;
             HttpUtil.sendPostDataByJson(url, JSON.toJSONString(llmTaskScoreCalHelperList));
         }
+        overviewDataRelationMapper.insert(OverviewDataRelation.builder()
+                .dataId(dataInfo.getDataId())
+                .overviewId(param.getEvalOverviewId())
+                .dataName(dataName)
+                .build());
         return dataInfo.getDataId();
     }
 

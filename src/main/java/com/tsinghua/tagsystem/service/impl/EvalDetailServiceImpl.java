@@ -50,6 +50,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     @Autowired
     AlgoInfoMapper algoInfoMapper;
 
+    @Autowired
+    OverviewDataRelationMapper overviewDataRelationMapper;
+
+    @Autowired
+    OverviewModelRelationMapper overviewModelRelationMapper;
+
     String modelCodePath;
     String checkpointPath;
     String testDataPath;
@@ -390,6 +396,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
         evalOverviewMapper.update(null, overviewWrapper);
         modelInfoMapper.update(null, modelWrapper);
+        overviewModelRelationMapper.insert(OverviewModelRelation.builder()
+                .modelId(modelId)
+                .overviewId(evalOverviewId)
+                .modelName(modelName)
+                .modelType("SLM")
+                .build());
         return 1;
     }
 
@@ -411,6 +423,11 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         dataInfo.setDataType("EVAL");
         dataInfo.setDataRelaInfo("");
         dataInfoMapper.insert(dataInfo);
+        overviewDataRelationMapper.insert(OverviewDataRelation.builder()
+                .dataId(dataInfo.getDataId())
+                .overviewId(param.getEvalOverviewId())
+                .dataName(dataName)
+                .build());
         return dataInfo.getDataId();
     }
 
@@ -433,6 +450,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setCmd(param.getCmd());
         modelInfo.setModelVersion("V1");
         modelInfoMapper.insert(modelInfo);
+        overviewModelRelationMapper.insert(OverviewModelRelation.builder()
+                .modelId(modelInfo.getModelId())
+                .overviewId(param.getEvalOverviewId())
+                .modelName(modelName)
+                .modelType("SLM")
+                .build());
         return modelInfo.getModelId();
     }
 
@@ -452,6 +475,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         AlgoInfo algoInfo = algoInfoMapper.selectOne(new QueryWrapper<AlgoInfo>().eq("eval_overview_id", param.getEvalOverviewId()));
         modelInfo.setAlgoId(algoInfo.getAlgoId());
         modelInfoMapper.insert(modelInfo);
+        overviewModelRelationMapper.insert(OverviewModelRelation.builder()
+                .modelId(modelInfo.getModelId())
+                .overviewId(param.getEvalOverviewId())
+                .modelName(checkpointName)
+                .modelType("SLM")
+                .build());
         return modelInfo.getModelId();
     }
 
@@ -465,6 +494,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         modelInfo.setModelPath(param.getHugModelPath());
         modelInfo.setAlgoId(null);
         modelInfoMapper.insert(modelInfo);
+        overviewModelRelationMapper.insert(OverviewModelRelation.builder()
+                .modelId(modelInfo.getModelId())
+                .overviewId(param.getEvalOverviewId())
+                .modelName(param.getHugModelName())
+                .modelType("SLM")
+                .build());
         return modelInfo.getModelId();
     }
 
@@ -744,6 +779,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         evalOverviewMapper.updateById(evalOverview);
         modelInfoMapper.deleteById(modelId);
         llmTaskMapper.deleteById(modelId);
+        overviewModelRelationMapper.delete(new QueryWrapper<OverviewModelRelation>().eq("overview_id", evalOverviewId).eq("model_id", modelId));
         return 1;
     }
 
@@ -794,6 +830,7 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         evalDetailMapper.delete(new QueryWrapper<EvalDetail>().eq("eval_data_id", testDataId).eq("eval_overview_id", evalOverviewId));
         evalOverviewMapper.updateById(evalOverview);
         dataInfoMapper.deleteById(testDataId);
+        overviewDataRelationMapper.delete(new QueryWrapper<OverviewDataRelation>().eq("overview_id", evalOverviewId).eq("data_id", testDataId));
         return 1;
     }
 
