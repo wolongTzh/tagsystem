@@ -44,7 +44,8 @@ public class WebsiteServiceImpl implements WebsiteService {
         runBatchInfo.setModelType(overviewModelRelation.getModelType());
         runBatchInfo.setStatus("未开始");
         runBatchInfoManager.save(runBatchInfo);
-        runBatchInfo.setDocPath("/home/tz/copy-code/web_generate/run_batch/" + runBatchInfo.getRbiId());
+        runBatchInfo.setDocPath("/home/tz/copy-code/web_generate/run_batch/" + runBatchInfo.getRbiId() + "/docx");
+        runBatchInfo.setScriptPath("/home/tz/copy-code/web_generate/run_batch/" + runBatchInfo.getRbiId() + "/" + runBatchInfo.getScriptPath());
         runBatchInfoManager.updateById(runBatchInfo);
         return runBatchInfo.getRbiId();
     }
