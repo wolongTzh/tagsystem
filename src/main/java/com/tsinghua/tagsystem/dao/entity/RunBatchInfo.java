@@ -44,5 +44,6 @@ public class RunBatchInfo implements Serializable {
 
     private String scriptPath;
 
+    private String taskName;
 
 }
