@@ -59,6 +59,9 @@ public class AlchemistPathConfig {
     @Value("${AlchemistPath.sftTaskInterface}")
     private String sftTaskInterface;
 
+    @Value("${AlchemistPath.runBatchInterface}")
+    private String runBatchInterface;
+
     @Value("${AlchemistPath.sftInferInterface}")
     private String sftInferInterface;
 

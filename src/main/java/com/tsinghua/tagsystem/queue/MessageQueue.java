@@ -9,6 +9,7 @@ import com.tsinghua.tagsystem.dao.mapper.ModelInfoMapper;
 import com.tsinghua.tagsystem.dao.mapper.SftLlmMapper;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.service.EvalDetailService;
+import com.tsinghua.tagsystem.service.WebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.LinkedList;
@@ -31,6 +32,9 @@ public class MessageQueue {
 
     @Autowired
     SftLlmMapper sftLlmMapper;
+
+    @Autowired
+    WebsiteService websiteService;
 
     private final Queue<RunTestModelParam> queue;
 
@@ -64,6 +68,11 @@ public class MessageQueue {
             message.getSftLlm().setStatus("排队中");
             sftLlmMapper.updateById(message.getSftLlm());
             retId = message.getSftLlm().getSftId();
+        }
+        else if (message.getTaskType().equals("runBatch")) {
+            message.getRunBatchInfo().setStatus("排队中");
+            websiteService.updateRunBatchById(message.getRunBatchInfo());
+            retId = message.getRunBatchInfo().getRbiId();
         }
         else {
             int evalDetailId = evalDetailService.addNewScore(EvalDetail.builder()

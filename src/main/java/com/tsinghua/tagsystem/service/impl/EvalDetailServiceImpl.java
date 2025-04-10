@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.mapper.*;
+import com.tsinghua.tagsystem.manager.RunBatchInfoManager;
+import com.tsinghua.tagsystem.manager.WebsiteInfoManager;
 import com.tsinghua.tagsystem.model.ModelHelpTagDTO;
 import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
@@ -55,6 +57,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
 
     @Autowired
     OverviewModelRelationMapper overviewModelRelationMapper;
+
+    @Autowired
+    RunBatchInfoManager runBatchInfoManager;
+
+    @Autowired
+    WebsiteInfoManager websiteInfoManager;
 
     String modelCodePath;
     String checkpointPath;
@@ -197,6 +205,14 @@ public class EvalDetailServiceImpl implements EvalDetailService {
         List<SftLlm> sftLlm = sftLlmMapper.selectList(new QueryWrapper<SftLlm>().eq("overview_id", evalOverviewId));
         if(sftLlm != null) {
             evalDetailDecorate.setSftMsg(sftLlm);
+        }
+        List<RunBatchInfo> runBatchInfoList = runBatchInfoManager.list(new QueryWrapper<RunBatchInfo>().eq("overview_id", evalOverviewId));
+        if(runBatchInfoList.size() > 0) {
+            evalDetailDecorate.setRunBatchInfoList(runBatchInfoList);
+        }
+        List<WebsiteInfo> websiteInfoList = websiteInfoManager.list(new QueryWrapper<WebsiteInfo>().eq("overview_id", evalOverviewId));
+        if(websiteInfoList.size() > 0) {
+            evalDetailDecorate.setWebsiteInfoList(websiteInfoList);
         }
         return evalDetailDecorate;
     }

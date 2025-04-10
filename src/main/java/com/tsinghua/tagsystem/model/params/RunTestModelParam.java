@@ -1,6 +1,7 @@
 package com.tsinghua.tagsystem.model.params;
 
 import com.tsinghua.tagsystem.dao.entity.LlmTask;
+import com.tsinghua.tagsystem.dao.entity.RunBatchInfo;
 import com.tsinghua.tagsystem.dao.entity.SftLlm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,4 +72,6 @@ public class RunTestModelParam {
     LlmTask llmTask;
 
     SftLlm sftLlm;
+
+    RunBatchInfo runBatchInfo;
 }

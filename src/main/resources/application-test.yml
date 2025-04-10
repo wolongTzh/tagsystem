@@ -46,6 +46,7 @@ AlchemistPath:
   vllmScriptInterface: http://192.168.3.39:8081/eval_vllm_script
   sftTaskInterface: http://192.168.3.39:8081/eval_sft_task
   sftInferInterface: http://192.168.3.39:8081/eval_sft_infer
+  runBatchInterface: http://192.168.3.39:8081/run_batch_task
   llmCalculateInterface: http://192.168.3.39:8081/llm_calculate
   grepTimeElapse: http://192.168.3.39:8081/grep_time_elapse
 
