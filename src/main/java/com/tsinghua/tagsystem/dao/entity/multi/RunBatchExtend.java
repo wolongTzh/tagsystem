@@ -12,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder(toBuilder = true)
 public class RunBatchExtend extends RunBatchInfo {
 
     LlmTask llmTask;
