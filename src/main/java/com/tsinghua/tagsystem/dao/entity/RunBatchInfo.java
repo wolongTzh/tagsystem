@@ -2,9 +2,12 @@ package com.tsinghua.tagsystem.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
@@ -17,8 +20,9 @@ import java.io.Serializable;
  * @since 2025-04-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class RunBatchInfo implements Serializable {
 
     private static final long serialVersionUID=1L;
