@@ -52,7 +52,7 @@ public class WebsiteController {
         return WebUtil.successResult(websiteService.insertWebsiteTask(websiteInfo));
     }
 
-    @PostMapping(value = "getAllDB")
+    @GetMapping(value = "getAllDB")
     public WebResInfo getAllDB(int overviewId) throws IOException {
         log.info("into llm getAllDB");
         log.info(JSON.toJSONString(overviewId));
