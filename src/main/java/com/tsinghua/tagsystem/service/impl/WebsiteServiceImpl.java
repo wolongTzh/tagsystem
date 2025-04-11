@@ -6,22 +6,23 @@ import com.tsinghua.tagsystem.config.AlchemistPathConfig;
 import com.tsinghua.tagsystem.dao.entity.*;
 import com.tsinghua.tagsystem.dao.entity.multi.RunBatchExtend;
 import com.tsinghua.tagsystem.dao.mapper.*;
-import com.tsinghua.tagsystem.manager.LlmTaskManager;
-import com.tsinghua.tagsystem.manager.ModelInfoManager;
-import com.tsinghua.tagsystem.manager.OverviewModelRelationManager;
-import com.tsinghua.tagsystem.manager.RunBatchInfoManager;
+import com.tsinghua.tagsystem.manager.*;
 import com.tsinghua.tagsystem.service.WebsiteService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class WebsiteServiceImpl implements WebsiteService {
 
     @Autowired
     RunBatchInfoManager runBatchInfoManager;
+
+    @Autowired
+    WebsiteInfoManager websiteInfoManager;
 
     @Autowired
     OverviewModelRelationManager overviewModelRelationManager;
@@ -77,5 +78,20 @@ public class WebsiteServiceImpl implements WebsiteService {
         runBatchInfo.setStatus("已完成");
         runBatchInfoManager.updateById(runBatchInfo);
         return 1;
+    }
+
+    @Override
+    public int insertWebsiteTask(WebsiteInfo websiteInfo) {
+        websiteInfoManager.save(websiteInfo);
+        websiteInfo.setIndexPath("/home/tz/copy-code/web_generate/website/" + websiteInfo.getWebId() + "/index.html");
+        websiteInfo.setCodePath("/home/tz/copy-code/web_generate/website/" + websiteInfo.getWebId() + "/website.tar.gz");
+        websiteInfoManager.updateById(websiteInfo);
+        return websiteInfo.getWebId();
+    }
+
+    @Override
+    public List<RunBatchInfo> getAllDB(int overviewId) {
+        List<RunBatchInfo> runBatchInfoList = runBatchInfoManager.list(new QueryWrapper<RunBatchInfo>().eq("overview_id", overviewId));
+        return runBatchInfoList;
     }
 }

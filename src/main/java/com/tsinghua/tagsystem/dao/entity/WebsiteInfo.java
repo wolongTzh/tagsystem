@@ -32,5 +32,7 @@ public class WebsiteInfo implements Serializable {
 
     private String codePath;
 
+    private String template;
+
 
 }

@@ -2,6 +2,7 @@ package com.tsinghua.tagsystem.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.tsinghua.tagsystem.dao.entity.RunBatchInfo;
+import com.tsinghua.tagsystem.dao.entity.WebsiteInfo;
 import com.tsinghua.tagsystem.model.WebResInfo;
 import com.tsinghua.tagsystem.model.params.RunTestModelParam;
 import com.tsinghua.tagsystem.queue.MessageQueue;
@@ -41,5 +42,21 @@ public class WebsiteController {
 //        evalDetailService.runTestPromote(runTestModelParam);
         int evalDetailId = messageQueue.enqueue(runTestModelParam);
         return WebUtil.successResult(evalDetailId);
+    }
+
+    @PostMapping(value = "createWebsiteTask")
+    public WebResInfo createWebsiteTask(WebsiteInfo websiteInfo) throws IOException {
+        log.info("into llm createWebsiteTask");
+        log.info(JSON.toJSONString(websiteInfo));
+//        EvalOverviewControllerUtil.validDisplayParam(userId);
+        return WebUtil.successResult(websiteService.insertWebsiteTask(websiteInfo));
+    }
+
+    @PostMapping(value = "getAllDB")
+    public WebResInfo getAllDB(int overviewId) throws IOException {
+        log.info("into llm getAllDB");
+        log.info(JSON.toJSONString(overviewId));
+//        EvalOverviewControllerUtil.validDisplayParam(userId);
+        return WebUtil.successResult(websiteService.getAllDB(overviewId));
     }
 }
