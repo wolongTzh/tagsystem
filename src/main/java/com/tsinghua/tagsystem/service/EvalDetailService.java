@@ -72,6 +72,8 @@ public interface EvalDetailService {
 
     String getStatus(int evalDetailId);
 
+    String getLogs(int evalDetailId);
+
     String getTrainStatus(int modelId);
 
     String getModelHelpStatus(int modelHelpId);

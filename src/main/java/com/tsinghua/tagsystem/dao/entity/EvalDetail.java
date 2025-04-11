@@ -57,5 +57,9 @@ public class EvalDetail implements Serializable {
 
     private String modelResultPath;
 
+    private String logsPath;
+
+
+
 
 }

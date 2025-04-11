@@ -258,6 +258,14 @@ public class EvalDetailController {
         return WebUtil.successResult(status);
     }
 
+    @PostMapping(value = "getLogs")
+    public WebResInfo getLogs(int evalDetailId) throws IOException {
+        log.info("into getLogs");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        String logs = evalDetailService.getLogs(evalDetailId);
+        return WebUtil.successResult(logs);
+    }
+
     @PostMapping(value = "getTrainStatus")
     public WebResInfo getTrainStatus(int modelId) throws IOException {
         log.info("into getTrainStatus");

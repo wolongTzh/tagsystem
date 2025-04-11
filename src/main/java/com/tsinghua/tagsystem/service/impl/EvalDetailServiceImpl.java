@@ -896,6 +896,12 @@ public class EvalDetailServiceImpl implements EvalDetailService {
     }
 
     @Override
+    public String getLogs(int evalDetailId) {
+        EvalDetail evalDetail = evalDetailMapper.selectById(evalDetailId);
+        return evalDetail.getLogsPath();
+    }
+
+    @Override
     public String getTrainStatus(int modelId) {
         ModelInfo modelInfo = modelInfoMapper.selectById(modelId);
         String score = modelInfo.getStatus();
