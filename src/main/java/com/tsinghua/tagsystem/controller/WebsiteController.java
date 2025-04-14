@@ -41,9 +41,9 @@ public class WebsiteController {
         return WebUtil.successResult(websiteService.updateRunBatchById(runBatchInfo));
     }
 
-    @PostMapping(value = "updateRunBatchTask")
-    public WebResInfo updateRunBatchTask(int rbiId) throws IOException {
-        log.info("into llm updateRunBatchTask");
+    @PostMapping(value = "deleteRunBatch")
+    public WebResInfo deleteRunBatch(int rbiId) throws IOException {
+        log.info("into llm deleteRunBatch");
         log.info(JSON.toJSONString(rbiId));
 //        EvalOverviewControllerUtil.validDisplayParam(userId);
         return WebUtil.successResult(websiteService.deleteRunBatch(rbiId));
