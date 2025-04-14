@@ -26,7 +26,7 @@ public class RunBatchExtend extends RunBatchInfo {
         this.setDbName(runBatchInfo.getDbName());
         this.setScriptPath(runBatchInfo.getScriptPath());
         this.setModelId(runBatchInfo.getModelId());
-        this.setImageOutputPath(runBatchInfo.getImageOutputPath());
+        this.setOriginOutputPath(runBatchInfo.getOriginOutputPath());
         this.setJsonOutputPath(runBatchInfo.getJsonOutputPath());
         this.setOverviewId(runBatchInfo.getOverviewId());
         this.setTaskName(runBatchInfo.getTaskName());
