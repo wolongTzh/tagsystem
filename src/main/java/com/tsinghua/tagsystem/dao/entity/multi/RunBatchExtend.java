@@ -17,4 +17,18 @@ public class RunBatchExtend extends RunBatchInfo {
 
     LlmTask llmTask;
     ModelInfo modelInfo;
+
+    public RunBatchExtend(RunBatchInfo runBatchInfo){
+        this.setRbiId(runBatchInfo.getRbiId());
+        this.setStatus(runBatchInfo.getStatus());
+        this.setDocPath(runBatchInfo.getDocPath());
+        this.setModelType(runBatchInfo.getModelType());
+        this.setDbName(runBatchInfo.getDbName());
+        this.setScriptPath(runBatchInfo.getScriptPath());
+        this.setModelId(runBatchInfo.getModelId());
+        this.setImageOutputPath(runBatchInfo.getImageOutputPath());
+        this.setJsonOutputPath(runBatchInfo.getJsonOutputPath());
+        this.setOverviewId(runBatchInfo.getOverviewId());
+        this.setTaskName(runBatchInfo.getTaskName());
+    }
 }

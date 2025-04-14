@@ -62,7 +62,7 @@ public class WebsiteServiceImpl implements WebsiteService {
         String url = runBatchInterface;
         runBatchInfo.setStatus("正在运行");
         runBatchInfoManager.updateById(runBatchInfo);
-        RunBatchExtend runBatchInfoExtend = (RunBatchExtend) runBatchInfo;
+        RunBatchExtend runBatchInfoExtend = new RunBatchExtend(runBatchInfo);
         if(runBatchInfo.getModelType().contains("LLM")) {
             runBatchInfoExtend.setLlmTask(llmTaskManager.getOne(new QueryWrapper<LlmTask>().eq("llm_task_id", runBatchInfo.getModelId())));
         }
@@ -91,7 +91,7 @@ public class WebsiteServiceImpl implements WebsiteService {
 
     @Override
     public List<RunBatchInfo> getAllDB(int overviewId) {
-        List<RunBatchInfo> runBatchInfoList = runBatchInfoManager.list(new QueryWrapper<RunBatchInfo>().eq("overview_id", overviewId));
+        List<RunBatchInfo> runBatchInfoList = runBatchInfoManager.list(new QueryWrapper<RunBatchInfo>().eq("overview_id", overviewId).eq("status", "已完成"));
         return runBatchInfoList;
     }
 }
