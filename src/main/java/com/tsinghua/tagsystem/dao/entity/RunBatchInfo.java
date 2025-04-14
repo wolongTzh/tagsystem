@@ -42,7 +42,7 @@ public class RunBatchInfo implements Serializable {
 
     private String status;
 
-    private String imageOutputPath;
+    private String originOutputPath;
 
     private String dbName;
 
