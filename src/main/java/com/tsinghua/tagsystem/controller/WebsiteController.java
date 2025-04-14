@@ -33,6 +33,14 @@ public class WebsiteController {
         return WebUtil.successResult(websiteService.insertRunBatchTask(runBatchInfo));
     }
 
+    @PostMapping(value = "updateRunBatchTask")
+    public WebResInfo updateRunBatchTask(RunBatchInfo runBatchInfo) throws IOException {
+        log.info("into llm updateRunBatchTask");
+        log.info(JSON.toJSONString(runBatchInfo));
+//        EvalOverviewControllerUtil.validDisplayParam(userId);
+        return WebUtil.successResult(websiteService.updateRunBatchById(runBatchInfo));
+    }
+
     @PostMapping(value = "runTestRunBatch")
     public WebResInfo runTestModel(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTestRunBatch");
