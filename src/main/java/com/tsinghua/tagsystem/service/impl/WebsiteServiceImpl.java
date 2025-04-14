@@ -76,6 +76,8 @@ public class WebsiteServiceImpl implements WebsiteService {
             runBatchInfoExtend.setModelInfo(modelInfoManager.getOne(new QueryWrapper<ModelInfo>().eq("model_id", runBatchInfo.getModelId())));
         }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(runBatchInfoExtend));
+        runBatchInfo.setStatus("已完成");
+        runBatchInfoManager.updateById(runBatchInfo);
         return 1;
     }
 
