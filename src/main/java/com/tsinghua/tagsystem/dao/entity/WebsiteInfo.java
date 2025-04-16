@@ -34,5 +34,7 @@ public class WebsiteInfo implements Serializable {
 
     private String template;
 
+    private String websiteName;
+
 
 }
