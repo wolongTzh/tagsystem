@@ -52,9 +52,6 @@ public class SftLLMServiceImpl implements SftLLMService {
     @Autowired
     OverviewModelRelationMapper overviewModelRelationMapper;
 
-    @Autowired
-    MessageQueue messageQueue;
-
 
     String sftTaskInterface;
 
@@ -110,6 +107,7 @@ public class SftLLMServiceImpl implements SftLLMService {
                 .modelType("LLM-SFT")
                 .build());
         if(!StringUtils.isEmpty(sftLlm.getTestName())) {
+            String runUrl = "http://192.168.3.39:8084/eval/detail/runTest/";
             DataInfo dataInfo = dataInfoMapper.selectById(sftLlm.getTestId());
             RunTestModelParam runTestModelParam = RunTestModelParam.builder()
                     .evalOverviewId(llmTask.getEvalOverviewId())
@@ -121,7 +119,7 @@ public class SftLLMServiceImpl implements SftLLMService {
                     .evalUserId(llmTask.getLlmCreateUserId())
                     .evalUserName(llmTask.getLlmCreateUserName())
                     .build();
-            messageQueue.enqueue(runTestModelParam);
+            HttpUtil.sendPostDataByJson(runUrl, JSON.toJSONString(runTestModelParam));
         }
         return 1;
     }
