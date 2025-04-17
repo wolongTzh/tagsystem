@@ -74,6 +74,7 @@ public class SftLLMServiceImpl implements SftLLMService {
                 .llmTaskName(sftLlm.getModelName())
                 .llmCreateTime(sftLlm.getCreateTime())
                 .llmCreateUserId(sftLlm.getUserId())
+                .llmCreateUserName(sftLlm.getUserName())
                 .llmType(ckptPath)
                 .llmOutputPath("待开始")
                 .formatDescribe(sftLlm.getSystemPrompt())

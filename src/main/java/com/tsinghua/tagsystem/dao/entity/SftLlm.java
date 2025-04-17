@@ -46,4 +46,6 @@ public class SftLlm implements Serializable {
     private Integer testId;
 
     private String testName;
+
+    private String userName;
 }
