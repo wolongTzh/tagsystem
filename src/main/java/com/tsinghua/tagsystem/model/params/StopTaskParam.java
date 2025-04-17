@@ -20,4 +20,8 @@ public class StopTaskParam {
     String taskType;
 
     String modelPath;
+
+    String logPath;
+
+    String progressPath;
 }

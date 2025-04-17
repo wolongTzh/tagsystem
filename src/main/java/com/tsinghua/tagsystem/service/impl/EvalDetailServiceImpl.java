@@ -739,6 +739,8 @@ public class EvalDetailServiceImpl implements EvalDetailService {
             EvalDetail evalDetail = evalDetailMapper.selectById(param.getEvalDetailId());
             String imageName = evalDetail.getImageName();
             param.setImageName(imageName);
+            param.setLogPath(evalDetail.getLogsPath());
+            param.setProgressPath("/home/tz/sxt/swift/progress/" + param.getEvalDetailId() + ".txt");
             evalDetailMapper.deleteById(param.getEvalDetailId());
         }
         HttpUtil.sendPostDataByJson(url, JSON.toJSONString(param));
