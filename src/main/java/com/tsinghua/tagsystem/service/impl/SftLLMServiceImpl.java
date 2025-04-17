@@ -9,6 +9,7 @@ import com.tsinghua.tagsystem.dao.mapper.*;
 import com.tsinghua.tagsystem.model.LLMTaskScoreCalHelper;
 import com.tsinghua.tagsystem.model.PathCollection;
 import com.tsinghua.tagsystem.model.params.*;
+import com.tsinghua.tagsystem.queue.MessageQueue;
 import com.tsinghua.tagsystem.service.LLMTaskService;
 import com.tsinghua.tagsystem.service.SftLLMService;
 import com.tsinghua.tagsystem.utils.HttpUtil;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -49,6 +51,9 @@ public class SftLLMServiceImpl implements SftLLMService {
 
     @Autowired
     OverviewModelRelationMapper overviewModelRelationMapper;
+
+    @Autowired
+    MessageQueue messageQueue;
 
 
     String sftTaskInterface;
@@ -104,7 +109,20 @@ public class SftLLMServiceImpl implements SftLLMService {
                 .modelName(sftLlm.getModelName())
                 .modelType("LLM-SFT")
                 .build());
-
+        if(!StringUtils.isEmpty(sftLlm.getTestName())) {
+            DataInfo dataInfo = dataInfoMapper.selectById(sftLlm.getTestId());
+            RunTestModelParam runTestModelParam = RunTestModelParam.builder()
+                    .evalOverviewId(llmTask.getEvalOverviewId())
+                    .modelId(llmTask.getLlmTaskId())
+                    .modelName(llmTask.getLlmTaskName())
+                    .evalDataId(sftLlm.getTestId())
+                    .dataPath(dataInfo.getDataPath())
+                    .evalDataName(dataInfo.getDataName())
+                    .evalUserId(llmTask.getLlmCreateUserId())
+                    .evalUserName(llmTask.getLlmCreateUserName())
+                    .build();
+            messageQueue.enqueue(runTestModelParam);
+        }
         return 1;
     }
 

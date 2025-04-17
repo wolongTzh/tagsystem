@@ -43,7 +43,7 @@ public class SftLlm implements Serializable {
 
     private String systemPrompt;
 
-    private String testId;
-    
+    private Integer testId;
+
     private String testName;
 }
