@@ -130,4 +130,10 @@ public class SftLLMServiceImpl implements SftLLMService {
         sftLlmMapper.updateById(sftLlm);
         return 1;
     }
+
+    @Override
+    public String getLogs(int sftId) {
+        SftLlm sftLlm = sftLlmMapper.selectById(sftId);
+        return sftLlm.getLogPath();
+    }
 }

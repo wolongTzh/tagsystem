@@ -16,4 +16,6 @@ public interface SftLLMService {
    public int runSft(SftLlm sftLlm) throws IOException;
 
    public int updateSft(SftLlm sftLlm);
+
+   String getLogs(int sftId);
 }

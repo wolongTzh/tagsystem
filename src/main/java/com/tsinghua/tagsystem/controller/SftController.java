@@ -55,4 +55,12 @@ public class SftController {
         sftLLMService.updateSft(sftLlm);
         return WebUtil.successResult("success");
     }
+
+    @PostMapping(value = "getLogs")
+    public WebResInfo getLogs(int sftId) throws IOException {
+        log.info("into getLogs");
+//        EvalDetailControllerUtil.validUpdateScoreParam(evalDetail);
+        String logs = sftLLMService.getLogs(sftId);
+        return WebUtil.successResult(logs);
+    }
 }
