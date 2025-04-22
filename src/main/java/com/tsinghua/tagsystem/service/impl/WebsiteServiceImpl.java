@@ -64,6 +64,12 @@ public class WebsiteServiceImpl implements WebsiteService {
     }
 
     @Override
+    public int deleteWebsite(int websiteId) {
+        websiteInfoManager.removeById(websiteId);
+        return 1;
+    }
+
+    @Override
     public int runBatchTask(RunBatchInfo runBatchInfo) throws IOException {
         String url = runBatchInterface;
         runBatchInfo.setStatus("正在运行");

@@ -48,4 +48,6 @@ public class SftLlm implements Serializable {
     private String testName;
 
     private String userName;
+
+    private String logPath;
 }

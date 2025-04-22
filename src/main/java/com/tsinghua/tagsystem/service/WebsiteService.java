@@ -16,6 +16,8 @@ public interface WebsiteService {
 
    int deleteRunBatch(int rbiId);
 
+   int deleteWebsite(int websiteId);
+
    int runBatchTask(RunBatchInfo runBatchInfo) throws IOException;
 
    int finishRunBatchTask(RunBatchInfo runBatchInfo) throws IOException;

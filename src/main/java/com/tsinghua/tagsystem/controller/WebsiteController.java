@@ -49,6 +49,14 @@ public class WebsiteController {
         return WebUtil.successResult(websiteService.deleteRunBatch(rbiId));
     }
 
+    @PostMapping(value = "deleteWebsite")
+    public WebResInfo deleteWebsite(int websiteId) throws IOException {
+        log.info("into llm deleteWebsite");
+        log.info(JSON.toJSONString(websiteId));
+//        EvalOverviewControllerUtil.validDisplayParam(userId);
+        return WebUtil.successResult(websiteService.deleteWebsite(websiteId));
+    }
+
     @PostMapping(value = "runTestRunBatch")
     public WebResInfo runTestModel(@RequestBody RunTestModelParam runTestModelParam) throws IOException {
         log.info("into runTestRunBatch");
