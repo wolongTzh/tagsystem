@@ -134,6 +134,9 @@ public class SftLLMServiceImpl implements SftLLMService {
     @Override
     public String getLogs(int sftId) {
         SftLlm sftLlm = sftLlmMapper.selectById(sftId);
+        if(sftLlm == null) {
+            return "已完成";
+        }
         return sftLlm.getLogPath();
     }
 }
