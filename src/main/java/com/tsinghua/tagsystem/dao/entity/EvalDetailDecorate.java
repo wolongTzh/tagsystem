@@ -55,6 +55,7 @@ public class EvalDetailDecorate extends EvalOverview {
         this.setEvalTestNames(evalOverview.getEvalTestNames());
         this.setEvalAlgoIds(evalOverview.getEvalAlgoIds());
         this.setEvalAlgoNames(evalOverview.getEvalAlgoNames());
+        this.setEvalIndicators(evalOverview.getEvalIndicators());
     }
 
     //重写它的toString方法，使得其可以输出所继承的EvalOverview类里面的全部属性,还有evalDetailList里面的内容
