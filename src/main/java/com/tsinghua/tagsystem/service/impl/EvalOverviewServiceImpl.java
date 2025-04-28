@@ -98,6 +98,7 @@ public class EvalOverviewServiceImpl implements EvalOverviewService {
                 .evalOverviewTime(LocalDateTime.now())
                 .token(evalOverviewParam.getToken())
                 .llmUpType(evalOverviewParam.getLlmUpType())
+                .evalIndicators(evalOverviewParam.getEvalIndicators())
                 .build();
         evalOverviewMapper.insert(evalOverview);
         OverviewUserRela overviewUserRela = OverviewUserRela.builder()

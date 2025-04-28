@@ -65,5 +65,5 @@ public class EvalOverview implements Serializable {
 
     public String fee;
 
-
+    public String evalIndicators;
 }
